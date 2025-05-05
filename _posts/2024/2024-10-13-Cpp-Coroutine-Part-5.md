@@ -77,19 +77,12 @@ struct sync_task<>
 		}
 		auto final_suspend() noexcept
 		{
-			struct final_awaiter
+			struct final_awaiter : std::suspend_always
 			{
 				promise_type& promise;
-				bool await_ready() const noxcept
-				{
-					return bool(promise.next);
-				}
 				std::coroutine_handle<> await_suspend() const noexcept
 				{
-					return promise.next;
-				}
-				void await_resume() const noexcept
-				{
+					return promise.next ? promise.next : std::noop_coroutine();
 				}
 			};
 			return final_awaiter{ *this };
