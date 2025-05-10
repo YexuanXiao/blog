@@ -222,48 +222,10 @@ for (let element of document.body.querySelectorAll('div.highlight')) {
 	icon.innerText = ` ${bra2Full(element.className.substring(begin, end))}`
 	header.appendChild(icon)
 	const code = element.querySelector('.highlight')
-	code.firstChild.style.borderRadius = '0 0 6px 6px'
-	code.firstChild.style.lineHeight = '1.15em'
-	code.firstChild.style.padding = '0 1.5em'
 	const button = document.createElement('span')
-	button.className = 'sw sw-document'
+	button.className = 'sw sw-document copy-code'
 	header.appendChild(button)
 	element.insertBefore(header, code)
-	button.addEventListener('click', async () => {
-		try {
-			await navigator.clipboard.writeText(code.textContent.trim())
-			render('{% if site.i18n.l2dmessage.copyok %}{{ site.i18n.l2dmessage.copyok }}{% else %}Copy completed!{% endif %}')
-		} catch (err) {
-			console.error('Failed to copy: ', err)
-			render('{% if site.i18n.l2dmessage.copyfail %}{{ site.i18n.l2dmessage.copyfail }}{% else %}Failed to copy.{% endif %}')
-		}
-	})
-}
-
-// fix some missing place
-for (let element of document.body.querySelectorAll('pre>code[class]')) {
-	const code = element
-	element = element.parentNode
-	element.style.borderRadius = '0 0 6px 6px'
-	element.style.lineHeight = '1.15em'
-	element.style.padding = '0 1.5em'
-	const father = document.createElement('div')
-	father.className = 'message is-primary mt-3 mb-0'
-	father.style.borderRadius = '6px'
-	const header = document.createElement('div')
-	header.className = 'message-header'
-	const begin = code.className.indexOf('language') + 9
-	const icon = document.createElement('span')
-	icon.className = 'sw sw-code is-capitalized'
-	icon.setAttribute('aria-hidden', 'true')
-	icon.innerText = ` ${bra2Full(code.className.substring(begin, code.className.length))}`
-	header.appendChild(icon)
-	const button = document.createElement('span')
-	button.className = 'sw sw-document'
-	header.appendChild(button)
-	father.appendChild(header)
-	element.parentNode.insertBefore(father, element)
-	father.appendChild(element)
 	button.addEventListener('click', async () => {
 		try {
 			await navigator.clipboard.writeText(code.textContent.trim())
