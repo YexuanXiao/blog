@@ -17,7 +17,13 @@
 .post-text code {
 	font-family: Operator Mono, Cascadia Code, Noto Sans Mono, Roboto Mono, SFMono-Regular, Liberation Mono, Menlo, Microsoft YaHei UI, SF Pro Text, SF Pro SC, Samsung Sans, Noto Sans, monospace;
 	user-select: text;
-	font-size: .85em
+	padding: .1em .25em .1em .25em;
+    vertical-align: .1em
+}
+.post-text a.footnote {
+    border: solid 1px;
+    padding: 0 2px 1px 2px;
+    font-size: .85em
 }
 .post-text code.language-plaintext {
 	user-select: none

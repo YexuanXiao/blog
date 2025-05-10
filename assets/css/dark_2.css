@@ -30,8 +30,7 @@ body a {
 #navbar, #navbar>*, #navbar-menu, a.navbar-item.is-active, a.navbar-item:focus, a.navbar-item:focus-within, a.navbar-item:hover {
 	background-color: #000!important
 }
-.hero.is-dark, #search-panel>input {
-	color: #d3d3d3!important;
+.hero.is-dark, .message, #search-panel>input {
 	background-color: #101013!important
 }
 span.tag, a.tag, span.tag:visited, a.tag:visited {

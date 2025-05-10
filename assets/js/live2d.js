@@ -19,7 +19,8 @@ window.Noire = new Pio({
 		{ selector: 'a[href="/about"]', text: '这是属于我们的故事！' },
 		{ selector: 'pre.highlight', text: '这处代码对你有帮助吗？有任何意见都可以提出~' },
 		{ selector: '.card a', type: 'link' },
-		{ selector: 'article a', type: 'read' }
+		{ selector: 'article a.footnote', transform : (elem) => { return `想阅读第 ${elem.href.slice(4)} 个脚注吗？` } },
+		{ selector: 'article a:not(.footnote)', type: 'read' }
 		]
 	},
 	button: {

@@ -72,6 +72,31 @@ for (const element of document.querySelectorAll('.navbar-burger')) {
 	})
 }
 
+// footnote dynamic popup tooltips
+for (const element of document.querySelectorAll('a.footnote')) {
+	const id = element.innerText
+	const target = element.parentNode
+	const content = document.getElementById(`fn:${id}`)
+	const message = document.createElement('div')
+	message.className = 'message is-small'
+	message.style.position = 'absolute'
+	message.style.display = 'none'
+	const messageBody = document.createElement('p')
+	messageBody.className = 'message-body'
+	messageBody.innerText = content.firstElementChild.firstChild.nodeValue.trimEnd()
+	message.appendChild(messageBody)
+	target.parentNode.appendChild(message)
+	const article = document.querySelector('.post-text')
+	target.addEventListener('mouseover', () => {
+		message.style.display = ''
+		message.style.width = `${article.clientWidth}px`
+		message.style.marginTop = `-${message.clientHeight + 26}px`
+	})
+	target.addEventListener('mouseout', () => {
+		message.style.display = 'none'
+	})
+}
+
 // check search bar value to display search-menu
 function checkInput() {
 	closeMenu(2)
@@ -129,7 +154,6 @@ document.body.addEventListener('click', (event) => {
 }
 
 // conversion language's brachylogy to full name
-
 function bra2Full(language) {
 	language = language.toLowerCase()
 	switch (language) {
@@ -184,7 +208,6 @@ function bra2Full(language) {
 }
 
 // add a button for <pre> to copy code to clipboard
-
 for (let element of document.body.querySelectorAll('div.highlight')) {
 	element = element.parentNode
 	element.className = `${element.className} message is-primary mt-3 mb-0`
