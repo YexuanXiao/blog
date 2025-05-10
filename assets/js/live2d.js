@@ -19,10 +19,10 @@ window.Noire = new Pio({
 		{ selector: 'a[href="/about"]', text: '这是属于我们的故事！' },
 		{ selector: '.card a:not(.tag)', type: 'link' },
 		{ selector: '.pagination a', type: 'link' },
-		{ selector: 'article.post-text pre.highlight', text: '这处代码对你有帮助吗？有任何意见都可以提出~' },
+		{ selector: 'a.tag', transform: (elem) => { return `想查找所有有关 ${elem.textContent.trim()} 的文章吗？` } },
+		{ selector: 'article.post-text pre.highlight', text: '这段代码对你有帮助吗？有任何意见都可以提出~' },
 		{ selector: 'article.post-text a.footnote', transform: (elem) => { return `想阅读第 ${elem.href.slice(4)} 个脚注吗？` } },
-		{ selector: 'article.post-text a:not(.footnote,.reversefootnote)', type: 'read' },
-		{ selector: 'a.tag', transform: (elem) => { return `想查找所有有关 ${elem.href.slice(elem.href.indexOf('#') + 1)} 的文章吗？` } }
+		{ selector: 'article.post-text a:not(.footnote,.reversefootnote)', type: 'read' }
 		]
 	},
 	button: {
