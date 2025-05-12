@@ -6,7 +6,9 @@
 }
 .post-text pre {
 	margin-bottom: 1em;
-	padding: 0
+	padding: 0 1em;
+	line-height: 1.25em;
+	font-size: .85em
 }
 .post-text ul div.highlighter-rouge, .post-text ol div.highlighter-rouge {
 	margin: 1em 0 1em -1em
@@ -29,11 +31,8 @@
 	user-select: none
 }
 @media screen and (max-width:768px) {
-	.post-text code {
-		font-size: .85em
-	}
 	.post-text table {
-		font-size: .75em
+		font-size: .85em
 	}
 }
 .post-text code::selection, .post-text code>span::selection {
