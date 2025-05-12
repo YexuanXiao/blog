@@ -8,27 +8,16 @@
 	margin-bottom: 1em;
 	padding: 0 1em;
 	line-height: 1.25em;
-	font-size: .85em
+	font-size: .85em;
+	user-select: text
 }
-.post-text ul div.highlighter-rouge, .post-text ol div.highlighter-rouge {
-	margin: 1em 0 1em -1em
-}
-.post-text .highlight, .post-text blockquote, .post-text code.language-plaintext {
+.post-text div.highlight, .post-text blockquote {
 	border-radius: 6px
-}
-.post-text code {
-	font-family: Operator Mono, Cascadia Code, Noto Sans Mono, Roboto Mono, SFMono-Regular, Liberation Mono, Menlo, Microsoft YaHei UI, SF Pro Text, SF Pro SC, Samsung Sans, Noto Sans, monospace;
-	user-select: text;
-	padding: .1em .25em .2em .25em;
-    vertical-align: .1em
 }
 .post-text a.footnote {
     border: solid 1px;
     padding: 0 2px 1px 2px;
     font-size: .85em
-}
-.post-text code.language-plaintext {
-	user-select: none
 }
 @media screen and (max-width:768px) {
 	.post-text table {
@@ -117,7 +106,7 @@
 	list-style-type: none
 }
 .post-text li+li {
-    margin-top: .25em;
+    margin-top: .25em
 }
 .post-text img[title=candark] {
 	filter: invert(0)

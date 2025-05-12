@@ -26,6 +26,12 @@ body, button, input, optgroup, select, textarea {
 	width: calc(20% + 200px);
 	height: auto
 }
+article code {
+	font-family: Operator Mono, Cascadia Code, Noto Sans Mono, Roboto Mono, SFMono-Regular, Liberation Mono, Menlo, Microsoft YaHei UI, SF Pro Text, SF Pro SC, Samsung Sans, Noto Sans, monospace;
+	padding: .1em .25em .2em .25em;
+    vertical-align: .1em;
+	border-radius: 6px
+}
 
 /* fix pagination styles */
 .is-hidden-tablet.pagination-previous, .is-hidden-tablet.pagination-next {
