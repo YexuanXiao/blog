@@ -2,7 +2,7 @@
 	layout: null
 ---
 'use strict';
-// Copyright 2021 YexuanXiao under the MIT license
+/* 2020-2025 YexuanXiao under the MIT License */
 
 // for the random quote in the title
 (async () => {
@@ -15,33 +15,6 @@
 		setTimeout(() => { render(randLine) }, 100000)
 	}
 })()
-
-// darkmode method
-function changeTheme() {
-	const darkmodeCss = document.getElementById('darkmode-css')
-	if (sessionStorage.getItem('darktheme') !== 'true') {
-		darkmodeCss.rel = 'stylesheet'
-		sessionStorage.setItem('darktheme', 'true')
-		render('{% if site.i18n.l2dmessage.dark %}{{ site.i18n.l2dmessage.dark }}{% else %}Change to darkmode!{% endif %}')
-	} else {
-		darkmodeCss.rel = ''
-		sessionStorage.setItem('darktheme', 'false')
-		render('{% if site.i18n.l2dmessage.light %}{{ site.i18n.l2dmessage.light }}{% else %}Change to lightmode!{% endif %}')
-	}
-}
-
-// initlize darkmode button
-{
-	const container = document.createElement('div')
-	const btn = document.createElement('input')
-	document.body.appendChild(container)
-	container.id = 'btn-container'
-	container.appendChild(btn)
-	btn.addEventListener('click', changeTheme)
-	btn.type = 'button'
-	btn.value = '🌓'
-	btn.style.cssText = 'background-color: transparent !important; border: none; font-size: 25px; z-index: 999; position: fixed; right: 10%; bottom: 10%; font-family: segoeweb; color: #767676'
-}
 
 // function for control search manu and navbar menu display or not
 // 0 for hide search-menu

@@ -1,4 +1,4 @@
-/* © 2020 YexuanXiao LICENSE: mysteriouspreserve.com/LICENSE */
+/* 2020-2025 YexuanXiao under the MIT License */
 /* define article content styles. */
 
 .no-blog>p:not(:has(img)) {
@@ -19,7 +19,7 @@
 .post-text code {
 	font-family: Operator Mono, Cascadia Code, Noto Sans Mono, Roboto Mono, SFMono-Regular, Liberation Mono, Menlo, Microsoft YaHei UI, SF Pro Text, SF Pro SC, Samsung Sans, Noto Sans, monospace;
 	user-select: text;
-	padding: .1em .25em .1em .25em;
+	padding: .1em .25em .2em .25em;
     vertical-align: .1em
 }
 .post-text a.footnote {

@@ -77,8 +77,6 @@ i18n:
     friends: 友情链接
     more: 更多...
   l2dmessage:
-    dark: 已经切换为深色主题！
-    light: 已经切换为浅色主题！
     search: 正在搜索
     copyok: 已成功复制到剪贴板！
     copyfail: 复制到剪贴板失败！

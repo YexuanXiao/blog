@@ -1,11 +1,13 @@
+/* 2020-2025 YexuanXiao under the MIT License */
 /* define code highlights*/
 .highlight,pre.highlight{color:#437ae1 !important}
 .highlight .hll{background:#282c34 !important}
-.highlight .c{color:#5c6370 !important;font-style:italic !important}
 .highlight .err{color:#ff4ead !important;background-color:#21001224 !important}
 .highlight .k{color:#ca15ff !important}.highlight .l{color:#60d70a !important}
 .highlight .n{color:#437ae1 !important}.highlight .o{color:#437ae1 !important}
-.highlight .p{color:#437ae1 !important}.highlight .cm{color:#5c6370 !important;font-style:italic !important}
+.highlight .p{color:#437ae1 !important}
+.highlight .c{color:#5c6370 !important;font-style:italic !important}
+.highlight .cm{color:#5c6370 !important;font-style:italic !important}
 .highlight .cp{color:#5c6370 !important;font-style:italic !important}
 .highlight .c1{color:#5c6370 !important;font-style:italic !important}
 .highlight .cs{color:#5c6370 !important;font-style:italic !important}

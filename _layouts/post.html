@@ -77,4 +77,7 @@ layout: default
 		</p>
 	</div>
 	{% include post-pagination.html %}
+	{% if site.giscus.enable == true and page.layout == 'post' %}
+	<div class="giscus"></div>
+	{% endif %}
 </div>

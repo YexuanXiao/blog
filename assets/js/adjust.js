@@ -1,5 +1,5 @@
 'use strict';
-// Copyright 2020 YexuanXiao under the MIT license
+/* 2020-2025 YexuanXiao under the MIT License */
 {
 	const postText = document.body.querySelectorAll('.post-text')
 	const postTextWidth = postText.offsetWidth

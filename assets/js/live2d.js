@@ -1,6 +1,7 @@
 ---
     layout: null
 ---
+/* 2020-2025 YexuanXiao under the MIT License */
 import Pio from '//static.nykz.org/Single/Pio.js'
 Pio.CreateContainerToBody({{ site.live2d.width }}, {{ site.live2d.height }})
 window.Noire = new Pio({
@@ -10,7 +11,6 @@ window.Noire = new Pio({
 		touch: ['呀······！你在摸哪里啊！', '你、这······，不注意点分寸我真的要生气了哦', '等下，现在不是吐槽的时候！！！'],
 		custom: [
 		{ selector: '#author', text: '想了解我的主人吗？哼哼，我的主人可是很厉害的！' },
-		{ selector: '#btn-container', text: '点击这里可以切换主题颜色！' },
 		{ selector: '#musicbox', text: '想听音乐吗？' },
 		{ selector: '#search-panel', text: '在这里可以搜索文章！' },
 		{ selector: '#tagbox header', text: '想通过标签寻找文章吗？' },
@@ -30,7 +30,6 @@ window.Noire = new Pio({
 		home: false,
 		night:false
 	},
-	night: 'changeTheme()',
 	model: [
 		{% if site.live2d.enable == true %}{% for module in site.live2d.modules %}{% if forloop.last == true %} '{{ module }}' {% else %} '{{ module }}', {% endif %}{% endfor %}{% endif %}
 	],

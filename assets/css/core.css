@@ -1,4 +1,9 @@
+/* 2020-2025 YexuanXiao under the MIT License */
 /* define page layouts*/
+
+:root {
+	color-scheme: light dark
+}
 body {
 	max-width: 100%;
 	user-select: none;
