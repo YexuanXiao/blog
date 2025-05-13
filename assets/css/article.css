@@ -5,13 +5,15 @@
 	text-indent: 2ic
 }
 .post-text pre {
-	margin-bottom: 1em;
+	margin-bottom: .5em;
 	padding: 0 1em;
 	line-height: 1.25em;
 	font-size: .85em;
-	user-select: text
+	user-select: text;
+	overflow-y: hidden;
+	border-radius: 4px
 }
-.post-text div.highlight, .post-text blockquote {
+.post-text blockquote {
 	border-radius: 6px
 }
 .post-text a.footnote {

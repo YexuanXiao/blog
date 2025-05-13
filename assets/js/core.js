@@ -183,8 +183,7 @@ function bra2Full(language) {
 // add a button for <pre> to copy code to clipboard
 for (let element of document.body.querySelectorAll('div.highlight')) {
 	element = element.parentNode
-	element.className = `${element.className} message is-primary mt-3 mb-0`
-	element.style.borderRadius = '6px'
+	element.className = `${element.className} message is-primary`
 	const header = document.createElement('div')
 	header.className = 'message-header'
 	const begin = element.className.indexOf('language') + 9
