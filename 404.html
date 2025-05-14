@@ -19,7 +19,8 @@ permalink: /404
 			background: #fff; user-select: none} a { text-decoration: none }
 			@media (prefers-color-scheme: dark) { body { background: #000!important } }
 			.container { display: flex; margin-top: 20vh; justify-content: center }
-			.title { font-size: 10vw; font-weight: bold; margin: 0 }
+			.backto { margin: 20px; color: #08F; font-weight: 600; font-size: 14px;
+			display: none } .title { font-size: 10vw; font-weight: bold; margin: 0 }
 			.subtitle { font-size: 28px; margin: 5vw } h4 {color: #646464 }
 			@media (max-width:768px) { .subtitle { font-size: 16px!important }
 			h4 { margin-top: 10vh } } .subtitle,.title { color: #646464; line-height: 1.4 } 
@@ -27,16 +28,15 @@ permalink: /404
 			.button { background: 0 0; text-align: center; font-size: 14px; cursor: pointer;
 			padding: 0 16px; border: 1px solid; border-radius: 3px; line-height: 32px;
 			border-color: #08F; background: #08F; color: #fff; margin-top: 20px }
+			.button:hover { background: #0077e6; border-color: #0077e6 }
 			.button:focus { box-shadow: 0 0 0 2px #fff,0 0 0 4px rgba(0,132,255,.3);
 			outline: 0; transition: box-shadow .3s }
-			.button:hover { background: #0077e6; border-color: #0077e6 } 
-			.backto { margin: 20px; color: #08F; font-weight: 600; font-size: 14px }
 		</style>
 		<div class="container">
 			<div class="text">
 				<h1 class="title">404</h1>
 				<p class="subtitle">Whoops, that page is gone.</p>
-				<input class="button" type="button" value="Home">
+				<a class="button" href="/">Home</a>
 				<div class="backto">
 					<span>or return in</span>
 					<span id="second">10</span>
@@ -51,10 +51,8 @@ permalink: /404
 			</div>
 		</div>
 		<script>
+			document.querySelector('.backto').style.display = 'block'
 			document.body.addEventListener('dragstart', () => {})
-			document.body.querySelector('.button').addEventListener('click', () => {
-				location.replace('/')
-			})
 			const num = document.getElementById('second')
 			let count = 10
 			let id = setInterval(()=>{
