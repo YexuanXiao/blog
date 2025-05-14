@@ -34,13 +34,12 @@ function closeMenu(x) {
 	}
 }
 
-// add dynamic menu button on vertical device form bulma official site
-for (const element of document.querySelectorAll('.navbar-burger')) {
-	element.addEventListener('click', () => {
-		const target = element.dataset.target
-		const $target = document.getElementById(target)
-		element.classList.toggle('is-active')
-		$target.classList.toggle('is-active')
+// add dynamic menu button on vertical device
+{
+	const burger = document.getElementById('search-panel').nextElementSibling
+	const menu = document.getElementById('menu-toggle')
+	burger.addEventListener('click', () => {
+		menu.checked = !burger.classList.toggle('is-active')
 		closeMenu(0)
 	})
 }
