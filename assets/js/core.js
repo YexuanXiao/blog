@@ -45,10 +45,10 @@ function closeMenu(x) {
 }
 
 // footnote dynamic popup tooltips
-for (const element of document.querySelectorAll('a.footnote')) {
-	const id = element.innerText
-	const target = element.parentNode
-	const content = document.getElementById(`fn:${id}`)
+for (const sup of document.querySelectorAll('sup.footnote-ref')) {
+	const anchor = sup.firstElementChild;
+	const id = anchor.innerText
+	const content = document.getElementById(`fn${id}`)
 	const message = document.createElement('div')
 	message.className = 'message is-small'
 	message.style.position = 'absolute'
@@ -57,14 +57,14 @@ for (const element of document.querySelectorAll('a.footnote')) {
 	messageBody.className = 'message-body'
 	messageBody.innerText = content.firstElementChild.firstChild.nodeValue.trimEnd()
 	message.appendChild(messageBody)
-	target.parentNode.appendChild(message)
+	sup.parentNode.appendChild(message)
 	const article = document.querySelector('.post-text')
-	target.addEventListener('mouseover', () => {
+	sup.addEventListener('mouseover', () => {
 		message.style.display = ''
 		message.style.width = `${article.clientWidth}px`
 		message.style.marginTop = `-${message.clientHeight + 24}px`
 	})
-	target.addEventListener('mouseout', () => {
+	sup.addEventListener('mouseout', () => {
 		message.style.display = 'none'
 	})
 }
@@ -133,47 +133,33 @@ function bra2Full(language) {
 			return 'Assembly'
 		case 'cpp':
 		case 'c++':
+		case 'cxx':
 			return 'C++'
 		case 'cuda':
 			return 'CUDA C++'
 		case 'csharp':
 		case 'cs':
 			return 'C#'
-		case 'css':
-			return 'CSS'
 		case 'fsharp':
 			return 'F#'
-		case 'hlsl':
-			return 'HLSL'
-		case 'html':
-			return 'HTML'
 		case 'javascript':
 		case 'js':
 			return 'JavaScript'
-		case 'json':
-			return 'JSON'
-		case 'php':
-			return 'PHP'
 		case 'plaintext':
-			return 'Plain Text'
+			return 'Text'
 		case 'powershell':
 			return 'PowerShell'
-		case 'sql':
-			return 'SQL'
+		case 'rs':
+		case 'rust':
+			return 'Rust'
+		case 'ruby':
+			return 'Ruby'
 		case 'ts':
 		case 'typescript':
 			return 'TypeScript'
 		case 'vb':
 		case 'visualbasic':
-			return 'Visual Basic'
-		case 'xaml':
-			return 'XAML'
-		case 'xml':
-			return 'XML'
-		case 'yaml':
-			return 'YAML'
-		case 'yml':
-			return 'YML'
+			return 'VisualBasic'
 		default:
 			return language.toUpperCase()
 	}

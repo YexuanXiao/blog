@@ -9,7 +9,7 @@ plugins: [jekyll-paginate,jekyll-commonmark]
 markdown: CommonMark
 
 commonmark:
-  options: ["FOOTNOTES"]
+  options: ["UNSAFE", "FOOTNOTES"]
   extensions: ["strikethrough", "autolink", "table"]
 
 defaults:

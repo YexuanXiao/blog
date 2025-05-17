@@ -22,8 +22,8 @@ window.Noire = new Pio({
 		{ selector: 'a.tag', transform: (elem) => { return `想查找所有有关 ${elem.textContent.trim()} 的文章吗？` } },
 		{ selector: 'article.post-text span.copy-code', text: '点击可以复制代码！希望这段代码对你有帮助~' },
 		{ selector: 'article.post-text pre.highlight', text: '这段代码对你有帮助吗？有任何意见都可以提出~' },
-		{ selector: 'article.post-text a.footnote', transform: (elem) => { return `想阅读第 ${elem.textContent} 个脚注吗？` } },
-		{ selector: 'article.post-text a:not(.footnote,.reversefootnote)', type: 'read' }
+		{ selector: 'article.post-text sup.footnote-ref', transform: (elem) => { return `想阅读第 ${elem.textContent} 个脚注吗？` } },
+		{ selector: 'article.post-text a:not(sup>a,.footnote-backref)', type: 'read' }
 		]
 	},
 	button: {

@@ -16,7 +16,7 @@
 .post-text blockquote {
 	border-radius: 6px
 }
-.post-text a.footnote {
+.post-text sup.footnote-ref>a {
     border: solid 1px;
     padding: 0 2px 1px 2px;
     font-size: .85em
@@ -106,9 +106,6 @@
 }
 .post-text ul ul ul {
 	list-style-type: none
-}
-.post-text li+li {
-    margin-top: .25em
 }
 .post-text img[title=candark] {
 	filter: invert(0)
