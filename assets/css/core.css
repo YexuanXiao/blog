@@ -181,6 +181,7 @@ article code {
 	font-family: "segoeweb";
 	font-size: .85em;
 	text-rendering: auto;
+	vertical-align: .1em;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale
 }
