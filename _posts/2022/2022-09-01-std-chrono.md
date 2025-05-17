@@ -31,16 +31,16 @@ template<
 
 标准库预定义了一些 `duration` 特化的别名用于方便使用：
 
-+ `std::chrono::nanoseconds`  (C++11)
-+ `std::chrono::microseconds` (C++11)
-+ `std::chrono::milliseconds` (C++11)
-+ `std::chrono::seconds`      (C++11)
-+ `std::chrono::minutes`      (C++11)
-+ `std::chrono::hours`        (C++11)
-+ `std::chrono::days`         (C++20)
-+ `std::chrono::weeks`        (C++20)
-+ `std::chrono::months`       (C++20)
-+ `std::chrono::years`        (C++20)
+- `std::chrono::nanoseconds`  (C++11)
+- `std::chrono::microseconds` (C++11)
+- `std::chrono::milliseconds` (C++11)
+- `std::chrono::seconds`      (C++11)
+- `std::chrono::minutes`      (C++11)
+- `std::chrono::hours`        (C++11)
+- `std::chrono::days`         (C++20)
+- `std::chrono::weeks`        (C++20)
+- `std::chrono::months`       (C++20)
+- `std::chrono::years`        (C++20)
 
 MSVC 的实现中，从 `days` 开始 `Rep` 的类型是 `int`，更小的单位使用 `long long`，保证计算不会溢出。
 
@@ -77,12 +77,12 @@ int main() {
 
 C++14 起，为了方便使用 `duration`，标准库提供了一系列字面量：
 
-+ `operator""h`   表示小时的 `duration` 字面量
-+ `operator""min` 表示分钟的 `duration` 字面量
-+ `operator""s`   表示秒的   `duration` 字面量
-+ `operator""ms`  表示毫秒的 `duration` 字面量
-+ `operator""us`  表示微秒的 `duration` 字面量
-+ `operator""ns`  表示纳秒的 `duration` 字面量
+- `operator""h`   表示小时的 `duration` 字面量
+- `operator""min` 表示分钟的 `duration` 字面量
+- `operator""s`   表示秒的   `duration` 字面量
+- `operator""ms`  表示毫秒的 `duration` 字面量
+- `operator""us`  表示微秒的 `duration` 字面量
+- `operator""ns`  表示纳秒的 `duration` 字面量
 
 ### `std::chrono::system_clock` 和 `std::chrono::steady_clock`
 

@@ -4,7 +4,7 @@ date: "2022-04-28 00:36:00"
 tags: [C++]
 category: blog
 ---
-C++17 对标准库补充了一些非常使用的容器（C++20 起 std::string_view 就不能叫容器了，因为其不持有对象，准确的叫法是视图），`std::string_view` 就是其中之一，`std::string_view` 是个只读的字符串视图，解决了传统 C 字符串的孱弱和减少了额外的 `std::string` 构造。
+C++17 对标准库补充了一些非常使用的容器（C++20 起 std::string\_view 就不能叫容器了，因为其不持有对象，准确的叫法是视图），`std::string_view` 就是其中之一，`std::string_view` 是个只读的字符串视图，解决了传统 C 字符串的孱弱和减少了额外的 `std::string` 构造。
 
 <!-- more -->
 
@@ -38,21 +38,21 @@ std::basic_string_view& operator=( const basic_string_view& view ) noexcept = de
 
 `std::basic_string_view` 支持随机访问容器的大部分操作，但是是只读的。同时还支持如下操作：
 
-+ `remove_prefix` 以后移起点收缩视图
-+ `remove_suffix` 以前移终点收缩视图
-+ `swap` 交换内容
-+ `copy` 复制字符
-+ `substr` 返回子串
-+ `compare` 比较二个视图
-+ `starts_with` 检查 `string_view` 是否始于给定前缀 (C++20)
-+ `ends_with` 检查 `string_view` 是否终于给定后缀 (C++20)
-+ `contains` 检查字符串视图是否含有给定的子串或字符 (C++23)
-+ `find` 在视图中查找字符
-+ `rfind` 寻找子串的最后一次出现
-+ `find_first_of` 查找字符的首次出现
-+ `find_last_of` 查找字符的最后一次出现
-+ `find_first_not_of` 查找字符的首次不出现
-+ `find_last_not_of` 查找字符的最后一次不出现
+- `remove_prefix` 以后移起点收缩视图
+- `remove_suffix` 以前移终点收缩视图
+- `swap` 交换内容
+- `copy` 复制字符
+- `substr` 返回子串
+- `compare` 比较二个视图
+- `starts_with` 检查 `string_view` 是否始于给定前缀 (C++20)
+- `ends_with` 检查 `string_view` 是否终于给定后缀 (C++20)
+- `contains` 检查字符串视图是否含有给定的子串或字符 (C++23)
+- `find` 在视图中查找字符
+- `rfind` 寻找子串的最后一次出现
+- `find_first_of` 查找字符的首次出现
+- `find_last_of` 查找字符的最后一次出现
+- `find_first_not_of` 查找字符的首次不出现
+- `find_last_not_of` 查找字符的最后一次不出现
 
 `std::basic_string_view` 典型的用于如下场景：
 

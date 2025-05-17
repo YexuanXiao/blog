@@ -4,8 +4,7 @@ date: "2022-03-28 09:41:00"
 tags: [C++]
 category: blog
 ---
-
-我在编写代码的过程中曾经注意到 `const` 成员函数、`const` 参数函数，它们于非 `const` 重载版本可以拥有类似但是不同的语义（使用不用的函数定义），产生不同的效果（`const` 与否都可以带来额外性能的提高， **并没有优劣之分** ）。`const` 是由 Bjarne Stroustrup 在 C++ 早期设计引入的：K&R C 中并没有 `const` 的概念，而 Bjarne 发现缺少 `const` 会存在一个实现缺陷以及二个语义缺陷。
+我在编写代码的过程中曾经注意到 `const` 成员函数、`const` 参数函数，它们于非 `const` 重载版本可以拥有类似但是不同的语义（使用不用的函数定义），产生不同的效果（`const` 与否都可以带来额外性能的提高，**并没有优劣之分**）。`const` 是由 Bjarne Stroustrup 在 C++ 早期设计引入的：K\&R C 中并没有 `const` 的概念，而 Bjarne 发现缺少 `const` 会存在一个实现缺陷以及二个语义缺陷。
 
 <!-- more -->
 
@@ -13,7 +12,7 @@ category: blog
 2. 使用 const 传递参数可表达一种不变的概念，防止对变量进行意外的更改
 3. 使用 const 可表达常量，用于常量表达式
 
-ANSI C 相比 K&R C 采纳了前两点，但是 ANSI C 中 `const` 仍然不能表示常量，K&R C 和 ANSI C 必须用字面值来表示常量。
+ANSI C 相比 K\&R C 采纳了前两点，但是 ANSI C 中 `const` 仍然不能表示常量，K\&R C 和 ANSI C 必须用字面值来表示常量。
 
 Bjarne 设计 `const` 的目的大致就是为了解决如上问题 [^1] 。
 

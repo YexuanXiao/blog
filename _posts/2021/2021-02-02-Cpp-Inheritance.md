@@ -35,25 +35,23 @@ class A: public Base1, public Base2 {};
 - protected 继承: private 无法直接访问，public 变为 protected。
 - private 继承: private 无法直接访问，public 和 protected 变为 private。
 
-
 同时，派生类可以通过基类 public 权限的成员函数访问基类中 private 权限的成员。
 
 <br>
 
-|方式\基类| public | protected | private |
+|方式\\基类| public | protected | private |
 |:-:|:-:|:-:|:-:|
-| public | public | protected | * |
-| protected | protected | protected | * |
-| private | private | private | * |
+| public | public | protected | \* |
+| protected | protected | protected | \* |
+| private | private | private | \* |
 
 <br>
 
-|访问\权限| public | protected | private |
+|访问\\权限| public | protected | private |
 |:-:|:-:|:-:|:-:|
 | 本类 | 是 | 是 | 是 |
 | 派生类 | 是 | 是 | 否 |
 | 外部 | 是 | 否 | 否 |
-
 
 一般来说，继承权限尽量使用 public。
 
@@ -62,7 +60,7 @@ class A: public Base1, public Base2 {};
 - 对基类来说 private 和 protected 在访问权限上是一样的。
 - 派生类无法访承基类的 private，可以访承基类的 protected。
 
-***通俗的说，protected 是继承后可以访问的 private。***
+_**通俗的说，protected 是继承后可以访问的 private。**_
 
 ### 成员继承规律
 
@@ -83,7 +81,6 @@ class A: public Base1, public Base2 {};
 对于多继承而言，如果两个基类中有成员变量或者成员函数重名，那么需要使用作用域去区分。
 
 如果遇到 A 是 B，C 的基类，B，C 又是 D 的基类的情况，那么对于 A 中的成员来说，在 D 中就有 2 份。为了解决这个问题，引入虚继承的方式继承 A 类：
-
 
 ```cpp
 

@@ -10,7 +10,7 @@ category: blog
 
 初始化列表的语法如下：
 
-```class-name parameter-list(optional)except-spec(optional)attr(optional){}```
+`class-name parameter-list(optional)except-spec(optional)attr(optional){}`
 
 ```cpp
 
@@ -38,7 +38,7 @@ class B :public A {
 
 初始化的动作发生在执行函数体之前，并且初始化顺序根据成员在类中的顺序而不是初始化列表中的顺序，一般初始化列表的顺序和类中顺序一致。
 
-和普通函数一样，构造函数也支持默认实参，不过需要注意一件事：***带默认实参的构造函数不能在类外使用作用域运算符定义***。
+和普通函数一样，构造函数也支持默认实参，不过需要注意一件事：_**带默认实参的构造函数不能在类外使用作用域运算符定义**_。
 
 对于 C++ 来说，struct 和 class 都可以声明一个类，但是在 C 中没有类的概念，只有 struct 结构体。当一个类所有成员都是 public，没有使用类内初始化，没有构造函数，没有基类也没有使用虚函数，此时可以使用初始化列表的形式初始化成员。
 

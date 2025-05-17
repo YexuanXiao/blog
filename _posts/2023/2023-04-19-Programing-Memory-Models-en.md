@@ -10,12 +10,10 @@ category: blog
 
 <!-- more -->
 
-\(_[Memory Models](mm), Part 2_\)
+(_[Memory Models](mm), Part 2_)
 
 Posted on Tuesday, July 6, 2021.
 
-* toc
-{:toc}
 
 Programming language memory models answer the question of what behaviors parallel programs can rely on to share memory between their threads. For example, consider this program in a C-like language, where both `x` and `done` start out zeroed.
 
@@ -27,21 +25,21 @@ done = 1;             print(x);
 
 ```
 
-The program attempts to send a message in `x` from thread 1 to thread 2, using `done` as the signal that the message is ready to be received. If thread 1 and thread 2, each running on its own dedicated processor, both run to completion, is this program guaranteed to finish and print 1, as intended\? The programming language memory model answers that question and others like it.
+The program attempts to send a message in `x` from thread 1 to thread 2, using `done` as the signal that the message is ready to be received. If thread 1 and thread 2, each running on its own dedicated processor, both run to completion, is this program guaranteed to finish and print 1, as intended? The programming language memory model answers that question and others like it.
 
 Although each programming language differs in the details, a few general answers are true of essentially all modern multithreaded languages, including C, C++, Go, Java, JavaScript, Rust, and Swift:
 
-* First, if `x` and `done` are ordinary variables, then thread 2's loop may never stop. A common compiler optimization is to load a variable into a register at its first use and then reuse that register for future accesses to the variable, for as long as possible. If thread 2 copies `done` into a register before thread 1 executes, it may keep using that register for the entire loop, never noticing that thread 1 later modifies `done`.
-* Second, even if thread 2's loop does stop, having observed `done` `==` `1`, it may still print that `x` is 0. Compilers often reorder program reads and writes based on optimization heuristics or even just the way hash tables or other intermediate data structures end up being traversed while generating code. The compiled code for thread 1 may end up writing to `x` after `done` instead of `before`, or the compiled code for thread 2 may end up reading `x` before the loop.
+- First, if `x` and `done` are ordinary variables, then thread 2's loop may never stop. A common compiler optimization is to load a variable into a register at its first use and then reuse that register for future accesses to the variable, for as long as possible. If thread 2 copies `done` into a register before thread 1 executes, it may keep using that register for the entire loop, never noticing that thread 1 later modifies `done`.
+- Second, even if thread 2's loop does stop, having observed `done` `==` `1`, it may still print that `x` is 0. Compilers often reorder program reads and writes based on optimization heuristics or even just the way hash tables or other intermediate data structures end up being traversed while generating code. The compiled code for thread 1 may end up writing to `x` after `done` instead of `before`, or the compiled code for thread 2 may end up reading `x` before the loop.
 
 Given how broken this program is, the obvious question is how to fix it.
 
-Modern languages provide special functionality, in the form of _atomic variables_ or _atomic operations_, to allow a program to synchronize its threads. If we make `done` an atomic variable \(or manipulate it using atomic operations, in languages that take that approach\), then our program is guaranteed to finish and to print 1. Making `done` atomic has many effects:
+Modern languages provide special functionality, in the form of _atomic variables_ or _atomic operations_, to allow a program to synchronize its threads. If we make `done` an atomic variable (or manipulate it using atomic operations, in languages that take that approach), then our program is guaranteed to finish and to print 1. Making `done` atomic has many effects:
 
-* The compiled code for thread 1 must make sure that the write to `x` completes and is visible to other threads before the write to `done` becomes visible.
-* The compiled code for thread 2 must \(re\)read `done` on every iteration of the loop.
-* The compiled code for thread 2 must read from `x` after the reads from `done`.
-* The compiled code must do whatever is necessary to disable hardware optimizations that might reintroduce any of those problems.
+- The compiled code for thread 1 must make sure that the write to `x` completes and is visible to other threads before the write to `done` becomes visible.
+- The compiled code for thread 2 must (re)read `done` on every iteration of the loop.
+- The compiled code for thread 2 must read from `x` after the reads from `done`.
+- The compiled code must do whatever is necessary to disable hardware optimizations that might reintroduce any of those problems.
 
 The end result of making `done` atomic is that the program behaves as we want, successfully passing the value in `x` from thread 1 to thread 2.
 
@@ -51,11 +49,11 @@ As an aside, these atomic variables or atomic operations would more properly be 
 
 The programming language memory model specifies the exact details of what is required from programmers and from compilers, serving as a contract between them. The general features sketched above are true of essentially all modern languages, but it is only recently that things have converged to this point: in the early 2000s, there was significantly more variation. Even today there is significant variation among languages on second-order questions, including:
 
-* What are the ordering guarantees for atomic variables themselves\?
-* Can a variable be accessed by both atomic and non-atomic operations\?
-* Are there synchronization mechanisms besides atomics\?
-* Are there atomic operations that don't synchronize\?
-* Do programs with races have any guarantees at all\?
+- What are the ordering guarantees for atomic variables themselves?
+- Can a variable be accessed by both atomic and non-atomic operations?
+- Are there synchronization mechanisms besides atomics?
+- Are there atomic operations that don't synchronize?
+- Do programs with races have any guarantees at all?
 
 After some preliminaries, the rest of this post examines how different languages answer these and related questions, along with the paths they took to get there. The post also highlights the many false starts along the way, to emphasize that we are still very much learning what works and what does not.
 
@@ -69,7 +67,7 @@ It is difficult to make completely general statements comparing different memory
 
 > _Litmus Test: Message Passing_
 >
-> Can this program see `r1` `=` `1`, `r2` `=` `0`\?
+> Can this program see `r1` `=` `1`, `r2` `=` `0`?
 
 ```c
 
@@ -81,25 +79,25 @@ y = 1                 r2 = x
 
 > On sequentially consistent hardware: no.
 >
-> On x86 \(or other TSO\): no.
+> On x86 (or other TSO): no.
 >
 > On ARM/POWER: _yes\!_
 >
 > In any modern compiled language using ordinary variables: _yes\!_
 
-As in the previous post, we assume every example starts with all shared variables set to zero. The name `r`_N_ denotes private storage like a register or function-local variable; the other names like `x` and `y` are distinct, shared \(global\) variables. We ask whether a particular setting of registers is possible at the end of an execution. When answering the litmus test for hardware, we assume that there's no compiler to reorder what happens in the thread: the instructions in the listings are directly translated to assembly instructions given to the processor to execute.
+As in the previous post, we assume every example starts with all shared variables set to zero. The name `r`_N_ denotes private storage like a register or function-local variable; the other names like `x` and `y` are distinct, shared (global) variables. We ask whether a particular setting of registers is possible at the end of an execution. When answering the litmus test for hardware, we assume that there's no compiler to reorder what happens in the thread: the instructions in the listings are directly translated to assembly instructions given to the processor to execute.
 
-The outcome `r1` `=` `1`, `r2` `=` `0` corresponds to the original program's thread 2 finishing its loop \(`done` is `y`\) but then printing 0. This result is not possible in any sequentially consistent interleaving of the program operations. For an assembly language version, printing 0 is not possible on x86, although it is possible on more relaxed architectures like ARM and POWER due to reordering optimizations in the processors themselves. In a modern language, the reordering that can happen during compilation makes this outcome possible no matter what the underlying hardware.
+The outcome `r1` `=` `1`, `r2` `=` `0` corresponds to the original program's thread 2 finishing its loop (`done` is `y`) but then printing 0. This result is not possible in any sequentially consistent interleaving of the program operations. For an assembly language version, printing 0 is not possible on x86, although it is possible on more relaxed architectures like ARM and POWER due to reordering optimizations in the processors themselves. In a modern language, the reordering that can happen during compilation makes this outcome possible no matter what the underlying hardware.
 
-Instead of guaranteeing sequential consistency, as we mentioned earlier, today's processors guarantee a property called [“data-race-free sequential-consistency”, or DRF-SC](hwmm#drf) \(sometimes also written SC-DRF\). A system guaranteeing DRF-SC must define specific instructions called _synchronizing instructions_, which provide a way to coordinate different processors \(equivalently, threads\). Programs use those instructions to create a “happens before” relationship between code running on one processor and code running on another.
+Instead of guaranteeing sequential consistency, as we mentioned earlier, today's processors guarantee a property called [“data-race-free sequential-consistency”, or DRF-SC](hwmm#drf) (sometimes also written SC-DRF). A system guaranteeing DRF-SC must define specific instructions called _synchronizing instructions_, which provide a way to coordinate different processors (equivalently, threads). Programs use those instructions to create a “happens before” relationship between code running on one processor and code running on another.
 
 For example, here is a depiction of a short execution of a program on two threads; as usual, each is assumed to be on its own dedicated processor:
 
 ![](//static.nykz.org/blog/images/mem-order/mem-adve-4.png "candark")
 
-We saw this program in the previous post too. Thread 1 and thread 2 execute a synchronizing instruction S\(a\). In this particular execution of the program, the two S\(a\) instructions establish a happens-before relationship from thread 1 to thread 2, so the W\(x\) in thread 1 happens before the R\(x\) in thread 2.
+We saw this program in the previous post too. Thread 1 and thread 2 execute a synchronizing instruction S(a). In this particular execution of the program, the two S(a) instructions establish a happens-before relationship from thread 1 to thread 2, so the W(x) in thread 1 happens before the R(x) in thread 2.
 
-Two events on different processors that are _not_ ordered by happens-before might occur at the same moment: the exact order is unclear. We say they execute _concurrently_. A data race is when a write to a variable executes concurrently with a read or another write of that same variable. Processors that provide DRF-SC \(all of them, these days\) guarantee that programs _without_ data races behave as if they were running on a sequentially consistent architecture. This is the fundamental guarantee that makes it possible to write correct multithreaded assembly programs on modern processors.
+Two events on different processors that are _not_ ordered by happens-before might occur at the same moment: the exact order is unclear. We say they execute _concurrently_. A data race is when a write to a variable executes concurrently with a read or another write of that same variable. Processors that provide DRF-SC (all of them, these days) guarantee that programs _without_ data races behave as if they were running on a sequentially consistent architecture. This is the fundamental guarantee that makes it possible to write correct multithreaded assembly programs on modern processors.
 
 As we saw earlier, DRF-SC is also the fundamental guarantee that modern languages have adopted to make it possible to write correct multithreaded programs in higher-level languages.
 
@@ -126,9 +124,9 @@ In the hardware post, we looked at coherence as an example of something that ARM
 
 > _Litmus Test: Coherence_
 >
-> Can this program see `r1` `=` `1`, `r2` `=` `2`, `r3` `=` `2`, `r4` `=` `1`\?
+> Can this program see `r1` `=` `1`, `r2` `=` `2`, `r3` `=` `2`, `r4` `=` `1`?
 >
-> \(Can Thread 3 see `x` `=` `1` before `x` `=` `2` while Thread 4 sees the reverse\?\)
+> (Can Thread 3 see `x` `=` `1` before `x` `=` `2` while Thread 4 sees the reverse?)
 
 ```c
 
@@ -140,7 +138,7 @@ x = 1          x = 2          r1 = x         r3 = x
 
 > On sequentially consistent hardware: no.
 >
-> On x86 \(or other TSO\): no.
+> On x86 (or other TSO): no.
 >
 > On ARM/POWER: no.
 >
@@ -187,15 +185,15 @@ if (!c) {
 
 ```
 
-Is this a safe compiler optimization\? In a single-threaded program, yes. In a multithreaded program in which `x` is shared with another thread when `c` is false, no: the optimization would introduce a race on `x` that was not present in the original program.
+Is this a safe compiler optimization? In a single-threaded program, yes. In a multithreaded program in which `x` is shared with another thread when `c` is false, no: the optimization would introduce a race on `x` that was not present in the original program.
 
 This example is derived from one in Hans Boehm's 2004 paper, “[Threads Cannot Be Implemented As a Library](https://www.hpl.hp.com/techreports/2004/HPL-2004-209.pdf),” which makes the case that languages cannot be silent about the semantics of multithreaded execution.
 
 The programming language memory model is an attempt to precisely answer these questions about which optimizations are allowed and which are not. By examining the history of attempts at writing these models over the past couple decades, we can learn what worked and what didn't, and get a sense of where things are headed.
 
-## Original Java Memory Model \(1996\) {#java96}
+## Original Java Memory Model (1996) {#java96}
 
-Java was the first mainstream language to try to write down what it guaranteed to multithreaded programs. It included mutexes and defined the memory ordering requirements they implied. It also included “volatile” atomic variables: all the reads and writes of volatile variables were required to execute in program order directly in main memory, making the operations on volatile variables behave in a sequentially consistent manner. Finally, Java also specified \(or at least attempted to specify\) the behavior of programs with data races. One part of this was to mandate a form of coherence for ordinary variables, which we will examine more below. Unfortunately, this attempt, in the first edition of the [_Java Language Specification_ \(1996\)](http://titanium.cs.berkeley.edu/doc/java-langspec-1.0.pdf), had at least two serious flaws. They are easy to explain with the benefit of hindsight and using the preliminaries we've already set down. At the time, they were far less obvious.
+Java was the first mainstream language to try to write down what it guaranteed to multithreaded programs. It included mutexes and defined the memory ordering requirements they implied. It also included “volatile” atomic variables: all the reads and writes of volatile variables were required to execute in program order directly in main memory, making the operations on volatile variables behave in a sequentially consistent manner. Finally, Java also specified (or at least attempted to specify) the behavior of programs with data races. One part of this was to mandate a form of coherence for ordinary variables, which we will examine more below. Unfortunately, this attempt, in the first edition of the [_Java Language Specification_ (1996)](http://titanium.cs.berkeley.edu/doc/java-langspec-1.0.pdf), had at least two serious flaws. They are easy to explain with the benefit of hindsight and using the preliminaries we've already set down. At the time, they were far less obvious.
 
 ### Atomics need to synchronize {#atomics}
 
@@ -238,25 +236,25 @@ Coherence is easier for hardware to provide than for compilers because hardware 
 
 Bill Pugh identified this and other problems in his 1999 paper “[Fixing the Java Memory Model](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.17.7914&rep=rep1&type=pdf).”
 
-## New Java Memory Model \(2004\) {#java04}
+## New Java Memory Model (2004) {#java04}
 
-Because of these problems, and because the original Java Memory Model was difficult even for experts to understand, Pugh and others started an effort to define a new memory model for Java. That model became JSR-133 and was adopted in Java 5.0, released in 2004. The canonical reference is “[The Java Memory Model](http://rsim.cs.uiuc.edu/Pubs/popl05.pdf)” \(2005\), by Jeremy Manson, Bill Pugh, and Sarita Adve, with additional details in [Manson's Ph.D. thesis](https://drum.lib.umd.edu/bitstream/handle/1903/1949/umi-umd-1898.pdf;jsessionid=4A616CD05E44EA7D47B6CF4A91B6F70D?sequence=1). The new model follows the DRF-SC approach: Java programs that are data-race-free are guaranteed to execute in a sequentially consistent manner.
+Because of these problems, and because the original Java Memory Model was difficult even for experts to understand, Pugh and others started an effort to define a new memory model for Java. That model became JSR-133 and was adopted in Java 5.0, released in 2004. The canonical reference is “[The Java Memory Model](http://rsim.cs.uiuc.edu/Pubs/popl05.pdf)” (2005), by Jeremy Manson, Bill Pugh, and Sarita Adve, with additional details in [Manson's Ph.D. thesis](https://drum.lib.umd.edu/bitstream/handle/1903/1949/umi-umd-1898.pdf;jsessionid=4A616CD05E44EA7D47B6CF4A91B6F70D?sequence=1). The new model follows the DRF-SC approach: Java programs that are data-race-free are guaranteed to execute in a sequentially consistent manner.
 
 ### Synchronizing atomics and other operations {#sync}
 
 As we saw earlier, to write a data-race-free program, programmers need synchronization operations that can establish happens-before edges to ensure that one thread does not write a non-atomic variable concurrently with another thread reading or writing it. In Java, the main synchronization operations are:
 
-* The creation of a thread happens before the first action in the thread.
-* An unlock of mutex _m_ happens before any subsequent lock of _m_.
-* A write to volatile variable _v_ happens before any subsequent read of _v_.
+- The creation of a thread happens before the first action in the thread.
+- An unlock of mutex _m_ happens before any subsequent lock of _m_.
+- A write to volatile variable _v_ happens before any subsequent read of _v_.
 
-What does “subsequent” mean\? Java defines that all lock, unlock, and volatile variable accesses behave as if they ocurred in some sequentially consistent interleaving, giving a total order over all those operations in the entire program. “Subsequent” means later in that total order. That is: the total order over lock, unlock, and volatile variable accesses defines the meaning of subsequent, then subsequent defines which happens-before edges are created by a particular execution, and then the happens-before edges define whether that particular execution had a data race. If there is no race, then the execution behaves in a sequentially consistent manner.
+What does “subsequent” mean? Java defines that all lock, unlock, and volatile variable accesses behave as if they ocurred in some sequentially consistent interleaving, giving a total order over all those operations in the entire program. “Subsequent” means later in that total order. That is: the total order over lock, unlock, and volatile variable accesses defines the meaning of subsequent, then subsequent defines which happens-before edges are created by a particular execution, and then the happens-before edges define whether that particular execution had a data race. If there is no race, then the execution behaves in a sequentially consistent manner.
 
 The fact that the volatile accesses must act as if in some total ordering means that in the [store buffer litmus test](hwmm#x86), you can’t end up with `r1` `=` `0` and `r2` `=` `0`:
 
 > _Litmus Test: Store Buffering_
 >
-> Can this program see `r1` `=` `0`, `r2` `=` `0`\?
+> Can this program see `r1` `=` `0`, `r2` `=` `0`?
 
 ```java
 
@@ -268,7 +266,7 @@ r1 = y                r2 = x
 
 > On sequentially consistent hardware: no.
 >
-> On x86 \(or other TSO\): _yes\!_
+> On x86 (or other TSO): _yes\!_
 >
 > On ARM/POWER: _yes\!_
 >
@@ -282,20 +280,20 @@ There is an important but subtle point here: the total order over all the synchr
 
 DRF-SC only guarantees sequentially consistent behavior to programs with no data races. The new Java memory model, like the original, defined the behavior of racy programs, for a number of reasons:
 
-* To support Java’s general security and safety guarantees.
-* To make it easier for programmers to find mistakes.
-* To make it harder for attackers to exploit problems, because the damage possible due to a race is more limited.
-* To make it clearer to programmers what their programs do.
+- To support Java’s general security and safety guarantees.
+- To make it easier for programmers to find mistakes.
+- To make it harder for attackers to exploit problems, because the damage possible due to a race is more limited.
+- To make it clearer to programmers what their programs do.
 
-Instead of relying on coherence, the new model reused the happens-before relation \(already used to decide whether a program had a race at all\) to decide the outcome of racing reads and writes.
+Instead of relying on coherence, the new model reused the happens-before relation (already used to decide whether a program had a race at all) to decide the outcome of racing reads and writes.
 
-The specific rules for Java are that for word-sized or smaller variables, a read of a variable \(or field\) _x_ must see the value stored by some single write to _x_. A write to _x_ can be observed by a read _r_ provided _r_ does not happen before _w_. That means _r_ can observe writes that happen before _r_ \(but that aren’t also overwritten before _r_\), and it can observe writes that race with _r_.
+The specific rules for Java are that for word-sized or smaller variables, a read of a variable (or field) _x_ must see the value stored by some single write to _x_. A write to _x_ can be observed by a read _r_ provided _r_ does not happen before _w_. That means _r_ can observe writes that happen before _r_ (but that aren’t also overwritten before _r_), and it can observe writes that race with _r_.
 
-Using happens-before in this way, combined with synchronizing atomics \(volatiles\) that could establish new happens-before edges, was a major improvement over the original Java memory model. It provided more useful guarantees to the programmer, and it made a large number of important compiler optimizations definitively allowed. This work is still the memory model for Java today. That said, it’s also still not quite right: there are problems with this use of happens-before for trying to define the semantics of racy programs.
+Using happens-before in this way, combined with synchronizing atomics (volatiles) that could establish new happens-before edges, was a major improvement over the original Java memory model. It provided more useful guarantees to the programmer, and it made a large number of important compiler optimizations definitively allowed. This work is still the memory model for Java today. That said, it’s also still not quite right: there are problems with this use of happens-before for trying to define the semantics of racy programs.
 
 ### Happens-before does not rule out incoherence {#incoherence}
 
-The first problem with happens-before for defining program semantics has to do with coherence \(again\!\). \(The following example is taken from Jaroslav Ševčík and David Aspinall's paper, “[On the Validity of Program Transformations in the Java Memory Model](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.112.1790&rep=rep1&type=pdf)” \(2007\).\)
+The first problem with happens-before for defining program semantics has to do with coherence (again!). (The following example is taken from Jaroslav Ševčík and David Aspinall's paper, “[On the Validity of Program Transformations in the Java Memory Model](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.112.1790&rep=rep1&type=pdf)” (2007).)
 
 Here’s a program with three threads. Let’s assume that Thread 1 and Thread 2 are known to finish before Thread 3 starts.
 
@@ -342,11 +340,11 @@ For more about this example and others, see Ševčík and Aspinall's paper.
 
 ### Happens-before does not rule out acausality {#acausality}
 
-That last example turns out to have been the easy problem. Here’s a harder problem. Consider this litmus test, using ordinary \(not volatile\) Java variables:
+That last example turns out to have been the easy problem. Here’s a harder problem. Consider this litmus test, using ordinary (not volatile) Java variables:
 
 > _Litmus Test: Racy Out Of Thin Air Values_
 >
-> Can this program see `r1` `=` `42`, `r2` `=` `42`\?
+> Can this program see `r1` `=` `42`, `r2` `=` `42`?
 
 ```java
 
@@ -356,11 +354,11 @@ y = r1                x = r2
 
 ```
 
-> \(Obviously not\!\)
+> (Obviously not!)
 
-All the variables in this program start out zeroed, as always, and then this program effectively runs `y` `=` `x` in one thread and `x` `=` `y` in the other thread. Can `x` and `y` end up being 42\? In real life, obviously not. But why not\? The memory model turns out not to disallow this result.
+All the variables in this program start out zeroed, as always, and then this program effectively runs `y` `=` `x` in one thread and `x` `=` `y` in the other thread. Can `x` and `y` end up being 42? In real life, obviously not. But why not? The memory model turns out not to disallow this result.
 
-Suppose hypothetically that “`r1` `=` `x`” did read 42. Then “`y` `=` `r1`” would write 42 to `y`, and then the racing “`r2` `=` `y`” could read 42, causing the “`x` `=` `r2`” to write 42 to `x`, and that write races with \(and is therefore observable by\) the original “`r1` `=` `x`,” appearing to justify the original hypothetical. In this example, 42 is called an out-of-thin-air value, because it appeared without any justification but then justified itself with circular logic. What if the memory had formerly held a 42 before its current 0, and the hardware incorrectly speculated that it was still 42\? That speculation might become a self-fulfilling prophecy. \(This argument seemed more far-fetched before [Spectre and related attacks](https://spectreattack.com/) showed just how aggressively hardware speculates. Even so, no hardware invents out-of-thin-air values this way.\)
+Suppose hypothetically that “`r1` `=` `x`” did read 42. Then “`y` `=` `r1`” would write 42 to `y`, and then the racing “`r2` `=` `y`” could read 42, causing the “`x` `=` `r2`” to write 42 to `x`, and that write races with (and is therefore observable by) the original “`r1` `=` `x`,” appearing to justify the original hypothetical. In this example, 42 is called an out-of-thin-air value, because it appeared without any justification but then justified itself with circular logic. What if the memory had formerly held a 42 before its current 0, and the hardware incorrectly speculated that it was still 42? That speculation might become a self-fulfilling prophecy. (This argument seemed more far-fetched before [Spectre and related attacks](https://spectreattack.com/) showed just how aggressively hardware speculates. Even so, no hardware invents out-of-thin-air values this way.)
 
 It seems clear that this program cannot end with `r1` and `r2` set to 42, but happens-before doesn’t by itself explain why this can’t happen. That suggests again that there’s a certain incompleteness. The new Java Memory Model spends a lot of time addressing this incompleteness, about which more shortly.
 
@@ -368,7 +366,7 @@ This program has a race—the reads of `x` and `y` are racing against writes in 
 
 > _Litmus Test: Non-Racy Out Of Thin Air Values_
 >
-> Can this program see `r1` `=` `42`, `r2` `=` `42`\?
+> Can this program see `r1` `=` `42`, `r2` `=` `42`?
 
 ```java
 
@@ -379,7 +377,7 @@ if (r1 == 42)         if (r2 == 42)
 
 ```
 
-> \(Obviously not\!\)
+> (Obviously not!)
 
 Since `x` and `y` start out zero, any sequentially consistent execution is never going to execute the writes, so this program has no writes, so there are no races. Once again, though, happens-before alone does not exclude the possibility that, hypothetically, `r1` `=` `x` sees the racing not-quite-write, and then following from that hypothetical, the conditions both end up true and `x` and `y` are both 42 at the end. This is another kind of out-of-thin-air value, but this time in a program with no race. Any model guaranteeing DRF-SC must guarantee that this program only sees all zeros at the end, yet happens-before doesn't explain why.
 
@@ -387,11 +385,11 @@ The Java memory model spends a lot of words that I won’t go into to try to exc
 
 > Prohibiting such causality violations in a way that does not also prohibit other desired optimizations turned out to be surprisingly difficult. … After many proposals and five years of spirited debate, the current model was approved as the best compromise. … Unfortunately, this model is very complex, was known to have some surprising behaviors, and has recently been shown to have a bug.
 
-\(Adve and Boehm, “[Memory Models: A Case For Rethinking Parallel Languages and Hardware](https://cacm.acm.org/magazines/2010/8/96610-memory-models-a-case-for-rethinking-parallel-languages-and-hardware/fulltext),” August 2010\)
+(Adve and Boehm, “[Memory Models: A Case For Rethinking Parallel Languages and Hardware](https://cacm.acm.org/magazines/2010/8/96610-memory-models-a-case-for-rethinking-parallel-languages-and-hardware/fulltext),” August 2010)
 
-## C++11 Memory Model \(2011\) {#cpp}
+## C++11 Memory Model (2011) {#cpp}
 
-Let’s put Java to the side and examine C++. Inspired by the apparent success of Java's new memory model, many of the same people set out to define a similar memory model for C++, eventually adopted in C++11. Compared to Java, C++ deviated in two important ways. First, C++ makes no guarantees at all for programs with data races, which would seem to remove the need for much of the complexity of the Java model. Second, C++ provides three kinds of atomics: strong synchronization \(“sequentially consistent”\), weak synchronization \(“acquire/release”, coherence-only\), and no synchronization \(“relaxed”, for hiding races\). The relaxed atomics reintroduced all of Java's complexity about defining the meaning of what amount to racy programs. The result is that the C++ model is more complicated than Java's yet less helpful to programmers.
+Let’s put Java to the side and examine C++. Inspired by the apparent success of Java's new memory model, many of the same people set out to define a similar memory model for C++, eventually adopted in C++11. Compared to Java, C++ deviated in two important ways. First, C++ makes no guarantees at all for programs with data races, which would seem to remove the need for much of the complexity of the Java model. Second, C++ provides three kinds of atomics: strong synchronization (“sequentially consistent”), weak synchronization (“acquire/release”, coherence-only), and no synchronization (“relaxed”, for hiding races). The relaxed atomics reintroduced all of Java's complexity about defining the meaning of what amount to racy programs. The result is that the C++ model is more complicated than Java's yet less helpful to programmers.
 
 C++11 also defined atomic fences as an alternative to atomic variables, but they are not as commonly used and I'm not going to discuss them.
 
@@ -399,14 +397,14 @@ C++11 also defined atomic fences as an alternative to atomic variables, but they
 
 Unlike Java, C++ gives no guarantees to programs with races. Any program with a race anywhere in it falls into “[undefined behavior](https://blog.regehr.org/archives/213).” A racing access in the first microseconds of program execution is allowed to cause arbitrary errant behavior hours or days later. This is often called “DRF-SC or Catch Fire”: if the program is data-race free it runs in a sequentially consistent manner, and if not, it can do anything at all, including catch fire.
 
-For a longer presentation of the arguments for DRF-SC or Catch Fire, see Boehm, “[Memory Model Rationales](http://open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2176.html#undefined)” \(2007\) and Boehm and Adve, “[Foundations of the C++ Concurrency Memory Model](https://www.hpl.hp.com/techreports/2008/HPL-2008-56.pdf)” \(2008\).
+For a longer presentation of the arguments for DRF-SC or Catch Fire, see Boehm, “[Memory Model Rationales](http://open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2176.html#undefined)” (2007) and Boehm and Adve, “[Foundations of the C++ Concurrency Memory Model](https://www.hpl.hp.com/techreports/2008/HPL-2008-56.pdf)” (2008).
 
 Briefly, there are four common justifications for this position:
 
-* C and C++ are already rife with undefined behavior, corners of the language where compiler optimizations run wild and users had better not wander or else. What's the harm in one more\?
-* Existing compilers and libraries were written with no regard to threads, breaking racy programs in arbitrary ways. It would be too difficult to find and fix all the problems, or so the argument goes, although it is unclear how those unfixed compilers and libraries are meant to cope with relaxed atomics.
-* Programmers who really know what they are doing and want to avoid undefined behavior can use the relaxed atomics.
-* Leaving race semantics undefined allows an implementation to detect and diagnose races and stop execution.
+- C and C++ are already rife with undefined behavior, corners of the language where compiler optimizations run wild and users had better not wander or else. What's the harm in one more?
+- Existing compilers and libraries were written with no regard to threads, breaking racy programs in arbitrary ways. It would be too difficult to find and fix all the problems, or so the argument goes, although it is unclear how those unfixed compilers and libraries are meant to cope with relaxed atomics.
+- Programmers who really know what they are doing and want to avoid undefined behavior can use the relaxed atomics.
+- Leaving race semantics undefined allows an implementation to detect and diagnose races and stop execution.
 
 Personally, the last justification is the only one I find compelling, although I observe that it is possible to say “race detectors are allowed” without also saying “one race on an integer can invalidate your entire program.”
 
@@ -462,11 +460,11 @@ int main() {
 
 If you were a modern C++ compiler like Clang, you might think about this program as follows:
 
-* In `main`, clearly `Do` is either null or `EraseAll`.
-* If `Do` is `EraseAll`, then `Do()` is the same as `EraseAll()`.
-* If `Do` is null, then `Do()` is undefined behavior, which I can implement however I want, including as `EraseAll()` unconditionally.
-* Therefore I can optimize the indirect call `Do()` down to the direct call `EraseAll()`.
-* I might as well inline `EraseAll` while I'm here.
+- In `main`, clearly `Do` is either null or `EraseAll`.
+- If `Do` is `EraseAll`, then `Do()` is the same as `EraseAll()`.
+- If `Do` is null, then `Do()` is undefined behavior, which I can implement however I want, including as `EraseAll()` unconditionally.
+- Therefore I can optimize the indirect call `Do()` down to the direct call `EraseAll()`.
+- I might as well inline `EraseAll` while I'm here.
 
 The end result is that Clang optimizes the program down to:
 
@@ -480,13 +478,13 @@ int main() {
 
 You have to admit: next to this example, the possibility that the local variable `i` might suddenly stop being less than 2 halfway through the body of `if` `(i` `<` `2)` does not seem out of place.
 
-In essence, modern C and C++ compilers assume no programmer would dare attempt undefined behavior. A programmer writing a program with a bug\? _[Inconceivable\!](https://www.youtube.com/watch?v=qhXjcZdk5QQ)_
+In essence, modern C and C++ compilers assume no programmer would dare attempt undefined behavior. A programmer writing a program with a bug? _[Inconceivable\!](https://www.youtube.com/watch?v=qhXjcZdk5QQ)_
 
 Like I said, in new languages I think we should aim higher.
 
 ### Acquire/release atomics {#acqrel}
 
-C++ adopted sequentially consistent atomic variables much like \(new\) Java’s volatile variables \(no relation to C++ volatile\). In our message passing example, we can declare `done` as
+C++ adopted sequentially consistent atomic variables much like (new) Java’s volatile variables (no relation to C++ volatile). In our message passing example, we can declare `done` as
 
 `atomic<int> done;`
 
@@ -520,7 +518,7 @@ To show the difference, here’s the store buffer example again:
 
 > _Litmus Test: Store Buffering_
 >
-> Can this program see `r1` `=` `0`, `r2` `=` `0`\?
+> Can this program see `r1` `=` `0`, `r2` `=` `0`?
 
 ```cpp
 
@@ -532,15 +530,15 @@ r1 = y                r2 = x
 
 > On sequentially consistent hardware: no.
 >
-> On x86 \(or other TSO\): _yes\!_
+> On x86 (or other TSO): _yes\!_
 >
 > On ARM/POWER: _yes\!_
 >
-> On Java \(using volatiles\): no.
+> On Java (using volatiles): no.
 >
-> On C++11 \(sequentially consistent atomics\): no.
+> On C++11 (sequentially consistent atomics): no.
 >
-> On C++11 \(acquire/release atomics\): _yes\!_
+> On C++11 (acquire/release atomics): _yes\!_
 
 The C++ sequentially consistent atomics match Java's volatile. But the acquire-release atomics impose no relationship between the orderings for `x` and the orderings for `y`. In particular, it is allowed for the program to behave as if `r1` `=` `y` happened before `y` `=` `1` while at the same time `r2` `=` `x` happened before `x` `=` `1`, allowing `r1` `=` `0`, `r2` `=` `0` in contradiction of whole-program sequential consistency. These probably exist only because they are free on x86.
 
@@ -575,13 +573,13 @@ void Cond::wait() {
 
 ```
 
-The important part about this code is that `notify` sets `done` before checking `waiting`, while `wait` sets `waiting` before checking `done`, so that concurrent calls to `notify` and `wait` cannot result in `notify` returning immediately and `wait` sleeping. But with C++ acquire/release atomics, they can. And they probably would only some fraction of time, making the bug very hard to reproduce and diagnose. \(Worse, on some architectures like 64-bit ARM, the best way to implement acquire/release atomics is as sequentially consistent atomics, so you might write code that works fine on 64-bit ARM and only discover it is incorrect when porting to other systems.\)
+The important part about this code is that `notify` sets `done` before checking `waiting`, while `wait` sets `waiting` before checking `done`, so that concurrent calls to `notify` and `wait` cannot result in `notify` returning immediately and `wait` sleeping. But with C++ acquire/release atomics, they can. And they probably would only some fraction of time, making the bug very hard to reproduce and diagnose. (Worse, on some architectures like 64-bit ARM, the best way to implement acquire/release atomics is as sequentially consistent atomics, so you might write code that works fine on 64-bit ARM and only discover it is incorrect when porting to other systems.)
 
 With this understanding, “acquire/release” is an unfortunate name for these atomics, since the sequentially consistent ones do just as much acquiring and releasing. What's different about these is the loss of sequential consistency. It might have been better to call these “coherence” atomics. Too late.
 
 ### Relaxed atomics {#relaxed}
 
-C++ did not stop with the merely coherent acquire/release atomics. It also introduced non-synchronizing atomics, called relaxed atomics \(`memory_order_relaxed`\). These atomics have no synchronizing effect at all—they create no happens-before edges—and they have no ordering guarantees at all either. In fact, there is no difference between a relaxed atomic read/write and an ordinary read/write except that a race on relaxed atomics is not considered a race and cannot catch fire.
+C++ did not stop with the merely coherent acquire/release atomics. It also introduced non-synchronizing atomics, called relaxed atomics (`memory_order_relaxed`). These atomics have no synchronizing effect at all—they create no happens-before edges—and they have no ordering guarantees at all either. In fact, there is no difference between a relaxed atomic read/write and an ordinary read/write except that a race on relaxed atomics is not considered a race and cannot catch fire.
 
 Much of the complexity of the revised Java memory model arises from defining the behavior of programs with data races. It would be nice if C++'s adoption of DRF-SC or Catch Fire—effectively disallowing programs with data races—meant that we could throw away all those strange examples we looked at earlier, so that the C++ language spec would end up simpler than Java's. Unfortunately, including the relaxed atomics ends up preserving all those concerns, meaning the C++11 spec ended up no simpler than Java's.
 
@@ -589,7 +587,7 @@ Like Java's memory model, the C++11 memory model also ended up incorrect. Consid
 
 > _Litmus Test: Non-Racy Out Of Thin Air Values_
 >
-> Can this program see `r1` `=` `42`, `r2` `=` `42`\?
+> Can this program see `r1` `=` `42`, `r2` `=` `42`?
 
 ```cpp
 
@@ -600,13 +598,13 @@ if (r1 == 42)         if (r2 == 42)
 
 ```
 
-> \(Obviously not\!\)  
+> (Obviously not!)
 >
-> C++11 \(ordinary variables\): no.
+> C++11 (ordinary variables): no.
 >
-> C++11 \(relaxed atomics\): _yes\!_
+> C++11 (relaxed atomics): _yes\!_
 
-In their paper “[Common Compiler Optimisations are Invalid in the C11 Memory Model and what we can do about it](https://fzn.fr/readings/c11comp.pdf)” \(2015\), Viktor Vafeiadis and others showed that the C++11 specification guarantees that this program must end with `x` and `y` set to zero when `x` and `y` are ordinary variables. But if `x` and `y` are relaxed atomics, then, strictly speaking, the C++11 specification does not rule out that `r1` and `r2` might both end up 42. \(Surprise\!\)
+In their paper “[Common Compiler Optimisations are Invalid in the C11 Memory Model and what we can do about it](https://fzn.fr/readings/c11comp.pdf)” (2015), Viktor Vafeiadis and others showed that the C++11 specification guarantees that this program must end with `x` and `y` set to zero when `x` and `y` are ordinary variables. But if `x` and `y` are relaxed atomics, then, strictly speaking, the C++11 specification does not rule out that `r1` and `r2` might both end up 42. (Surprise!)
 
 See the paper for the details, but at a high level, the C++11 spec had some formal rules trying to disallow out-of-thin-air values, combined with some vague words to discourage other kinds of problematic values. Those formal rules were the problem, so C++14 dropped them and left only the vague words. Quoting the rationale for removing them, the C++11 formulation turned out to be “both insufficient, in that it leaves it largely impossible to reason about programs with `memory_order_relaxed`, and seriously harmful, in that it arguably disallows all reasonable implementations of `memory_order_relaxed` on architectures like ARM and POWER.”
 
@@ -614,9 +612,9 @@ To recap, Java tried to exclude all acausal executions formally and failed. Then
 
 In fact, a paper by Mark Batty and others from 2015 titled “[The Problem of Programming Language Concurrency Semantics](https://www.cl.cam.ac.uk/~jp622/the_problem_of_programming_language_concurrency_semantics.pdf)” gave this sobering assessment:
 
-> Disturbingly, 40+ years after the first relaxed-memory hardware was introduced \(the IBM 370/158MP\), the field still does not have a credible proposal for the concurrency semantics of any general-purpose high-level language that includes high-performance shared-memory concurrency primitives.
+> Disturbingly, 40+ years after the first relaxed-memory hardware was introduced (the IBM 370/158MP), the field still does not have a credible proposal for the concurrency semantics of any general-purpose high-level language that includes high-performance shared-memory concurrency primitives.
 
-Even defining the semantics of weakly-ordered _hardware_ \(ignoring the complications of software and compiler optimization\) is not going terribly well. A paper by Sizhuo Zhang and others in 2018 titled “[Constructing a Weak Memory Model](https://arxiv.org/abs/1805.07886)” recounted more recent events:
+Even defining the semantics of weakly-ordered _hardware_ (ignoring the complications of software and compiler optimization) is not going terribly well. A paper by Sizhuo Zhang and others in 2018 titled “[Constructing a Weak Memory Model](https://arxiv.org/abs/1805.07886)” recounted more recent events:
 
 > Sarkar _et_ _al_. published an operational model for POWER in 2011, and Mador-Haim et al. published an axiomatic model that was proven to match the operational model in 2012. However, in 2014, Alglave _et_ _al_. showed that the original operational model, as well as the corresponding axiomatic model, ruled out a newly observed behavior on POWER machines. For another instance, in 2016, Flur _et_ _al_. gave an operational model for ARM, with no corresponding axiomatic model. One year later, ARM released a revision in their ISA manual explicitly forbidding behaviors allowed by Flur's model, and this resulted in another proposed ARM memory model. Clearly, formalizing weak memory models empirically is error-prone and challenging.
 
@@ -628,29 +626,29 @@ C11 adopted the C++11 memory model as well, making it the C/C++11 memory model.
 
 [Rust 1.0.0 in 2015](https://doc.rust-lang.org/std/sync/atomic/) and [Swift 5.3 in 2020](https://github.com/apple/swift-evolution/blob/master/proposals/0282-atomics.md) both adopted the C/C++ memory model in its entirety, with DRF-SC or Catch Fire and all the atomic types and atomic fences.
 
-It is not surprising that both of these languages adopted the C/C++ model, since they are built on a C/C++ compiler toolchain \(LLVM\) and emphasize close integration with C/C++ code.
+It is not surprising that both of these languages adopted the C/C++ model, since they are built on a C/C++ compiler toolchain (LLVM) and emphasize close integration with C/C++ code.
 
 ## Hardware Digression: Efficient Sequentially Consistent Atomics {#sc}
 
 Early multiprocessor architectures had a variety of synchronization mechanisms and memory models, with varying degrees of usability. In this diversity, the efficiency of different synchronization abstractions depended on how well they mapped to what the architecture provided. To construct the abstraction of sequentially consistent atomic variables, sometimes the only choice was to use barriers that did more and were far more expensive than strictly necessary, especially on ARM and POWER.
 
-With C, C++, and Java all providing this same abstraction of sequentially consistent synchronizing atomics, it behooves hardware designers to make that abstraction efficient. The ARMv8 architecture \(both 32- and 64-bit\) introduced `ldar` and `stlr` load and store instructions, providing a direct implementation. In a talk in 2017, Herb Sutter [claimed that IBM had approved him saying](https://youtu.be/KeLBd2EJLOU?t=3432) that they intended future POWER implementations to have some kind of more efficient support for sequentially consistent atomics as well, giving programmers “less reason to use relaxed atomics.” I can't tell whether that happened, although here in 2021, POWER has turned out to be much less relevant than ARMv8.
+With C, C++, and Java all providing this same abstraction of sequentially consistent synchronizing atomics, it behooves hardware designers to make that abstraction efficient. The ARMv8 architecture (both 32- and 64-bit) introduced `ldar` and `stlr` load and store instructions, providing a direct implementation. In a talk in 2017, Herb Sutter [claimed that IBM had approved him saying](https://youtu.be/KeLBd2EJLOU?t=3432) that they intended future POWER implementations to have some kind of more efficient support for sequentially consistent atomics as well, giving programmers “less reason to use relaxed atomics.” I can't tell whether that happened, although here in 2021, POWER has turned out to be much less relevant than ARMv8.
 
 The effect of this convergence is that sequentially consistent atomics are now well understood and can be efficiently implemented on all major hardware platforms, making them a good target for programming language memory models.
 
-## JavaScript Memory Model \(2017\) {#javascript}
+## JavaScript Memory Model (2017) {#javascript}
 
 You might think that JavaScript, a notoriously single-threaded language, would not need to worry about a memory model for what happens when code runs in parallel on multiple processors. I certainly did. But you and I would be wrong.
 
-JavaScript has web workers, which allow running code in another thread. As originally conceived, workers only communicated with the main JavaScript thread by explicit message copying. With no shared writable memory, there was no need to consider issues like data races. However, ECMAScript 2017 \(ES2017\) added the `SharedArrayBuffer` object, which lets the main thread and workers share a block of writable memory. Why do this\? In an [early draft of the proposal](https://github.com/tc39/ecmascript_sharedmem/blob/master/historical/Spec_JavaScriptSharedMemoryAtomicsandLocks.pdf), the first reason listed is compiling multithreaded C++ code to JavaScript.
+JavaScript has web workers, which allow running code in another thread. As originally conceived, workers only communicated with the main JavaScript thread by explicit message copying. With no shared writable memory, there was no need to consider issues like data races. However, ECMAScript 2017 (ES2017) added the `SharedArrayBuffer` object, which lets the main thread and workers share a block of writable memory. Why do this? In an [early draft of the proposal](https://github.com/tc39/ecmascript_sharedmem/blob/master/historical/Spec_JavaScriptSharedMemoryAtomicsandLocks.pdf), the first reason listed is compiling multithreaded C++ code to JavaScript.
 
 Of course, having shared writable memory also requires defining atomic operations for synchronization and a memory model. JavaScript deviates from C++ in three important ways:
 
-* First, it limits the atomic operations to just sequentially consistent atomics. Other atomics can be compiled to sequentially consistent atomics with perhaps a loss in efficiency but no loss in correctness, and having only one kind simplifies the rest of the system.
+- First, it limits the atomic operations to just sequentially consistent atomics. Other atomics can be compiled to sequentially consistent atomics with perhaps a loss in efficiency but no loss in correctness, and having only one kind simplifies the rest of the system.
 
-* Second, JavaScript does not adopt “DRF-SC or Catch Fire.” Instead, like Java, it carefully defines the possible results of racy accesses. The rationale is much the same as Java, in particular security. Allowing a racy read to return any value at all allows \(arguably encourages\) implementations to return unrelated data, which could lead to [leaking private data at run time](https://github.com/tc39/ecmascript_sharedmem/blob/master/DISCUSSION.md#races-leaking-private-data-at-run-time).
+- Second, JavaScript does not adopt “DRF-SC or Catch Fire.” Instead, like Java, it carefully defines the possible results of racy accesses. The rationale is much the same as Java, in particular security. Allowing a racy read to return any value at all allows (arguably encourages) implementations to return unrelated data, which could lead to [leaking private data at run time](https://github.com/tc39/ecmascript_sharedmem/blob/master/DISCUSSION.md#races-leaking-private-data-at-run-time).
 
-* Third, in part because JavaScript provides semantics for racy programs, it defines what happens when atomic and non-atomic operations are used on the same memory location, as well as when the same memory location is accessed using different-sized accesses.
+- Third, in part because JavaScript provides semantics for racy programs, it defines what happens when atomic and non-atomic operations are used on the same memory location, as well as when the same memory location is accessed using different-sized accesses.
 
 Precisely defining the behavior of racy programs leads to the usual complexities of relaxed memory semantics and how to disallow out-of-thin-air reads and the like. In addition to those challenges, which are mostly the same as elsewhere, the ES2017 definition had two interesting bugs that arose from a mismatch with the semantics of the new ARMv8 atomic instructions. These examples are adapted from Conrad Watt _et_ _al_.'s 2020 paper “[Repairing and Mechanising the JavaScript Relaxed Memory Model](https://www.cl.cam.ac.uk/~jp622/repairing_javascript.pdf).”
 
@@ -658,7 +656,7 @@ As we noted in the previous section, ARMv8 added `ldar` and `stlr` instructions 
 
 > _Litmus Test: ES2017 racy reads on ARMv8_
 >
-> Can this program \(using atomics\) see `r1` `=` `0`, `r2` `=` `1`\?
+> Can this program (using atomics) see `r1` `=` `0`, `r2` `=` `1`?
 
 ```js
 
@@ -669,25 +667,25 @@ r1 = y                x = 2 (non-atomic)
 
 ```
 
-> C++: yes \(data race, can do anything at all\).
+> C++: yes (data race, can do anything at all).
 >
 > Java: the program cannot be written.
 >
 > ARMv8 using `ldar`/`stlr`: yes.
 >
-> ES2017: _no\!_ \(contradicting ARMv8\)
+> ES2017: _no\!_ (contradicting ARMv8)
 
 In this program, all the reads and writes are sequentially consistent atomics with the exception of `x` `=` `2`: thread 1 writes `x` `=` `1` using an atomic store, but thread 2 writes `x` `=` `2` using a non-atomic store. In C++, this is a data race, so all bets are off. In Java, this program cannot be written: `x` must either be declared `volatile` or not; it can't be accessed atomically only sometimes. In ES2017, the memory model turns out to disallow `r1` `=` `0`, `r2` `=` `1`. If `r1` `=` `y` reads 0, thread 1 must complete before thread 2 begins, in which case the non-atomic `x` `=` `2` would seem to happen after and overwrite the `x` `=` `1`, causing the atomic `r2` `=` `x` to read 2. This explanation seems entirely reasonable, but it is not the way ARMv8 processors work.
 
 It turns out that, for the equivalent sequence of ARMv8 instructions, the non-atomic write to `x` can be reordered ahead of the atomic write to `y`, so that this program does in fact produce `r1` `=` `0`, `r2` `=` `1`. This is not a problem in C++, since the race means the program can do anything at all, but it is a problem for ES2017, which limits racy behaviors to a set of outcomes that does not include `r1` `=` `0`, `r2` `=` `1`.
 
-Since it was an explicit goal of ES2017 to use the ARMv8 instructions to implement the sequentially consistent atomic operations, Watt _et_ _al_. reported that their suggested fixes, slated to be included in the next revision of the standard, would weaken the racy behavior constraints just enough to allow this outcome. \(It is unclear to me whether at the time “next revision” meant ES2020 or ES2021.\)
+Since it was an explicit goal of ES2017 to use the ARMv8 instructions to implement the sequentially consistent atomic operations, Watt _et_ _al_. reported that their suggested fixes, slated to be included in the next revision of the standard, would weaken the racy behavior constraints just enough to allow this outcome. (It is unclear to me whether at the time “next revision” meant ES2020 or ES2021.)
 
 Watt _et_ _al_.'s suggested changes also included a fix to a second bug, first identified by Watt, Andreas Rossberg, and Jean Pichon-Pharabod, wherein a data-race-free program was _not_ given sequentially consistent semantics by the ES2017 specification. That program is given by:
 
 > _Litmus Test: ES2017 data-race-free program_
 >
-> Can this program \(using atomics\) see `r1` `=` `1`, `r2` `=` `2`\?
+> Can this program (using atomics) see `r1` `=` `1`, `r2` `=` `2`?
 
 ```js
 
@@ -706,11 +704,11 @@ x = 1                 x = 2
 >
 > Java: the program cannot be written.
 >
-> ES2017: _yes\!_ \(violating DRF-SC\).
+> ES2017: _yes\!_ (violating DRF-SC).
 
 In this program, all the reads and writes are sequentially consistent atomics with the exception of `r2` `=` `x`, as marked. This program is data-race-free: the non-atomic read, which would have to be involved in any data race, only executes when `r1` `=` `1`, which proves that thread 1's `x` `=` `1` happens before the `r1` `=` `x` and therefore also before the `r2` `=` `x`. DRF-SC means that the program must execute in a sequentially consistent manner, so that `r1` `=` `1`, `r2` `=` `2` is impossible, but the ES2017 specification allowed it.
 
-The ES2017 specification of program behavior was therefore simultaneously too strong \(it disallowed real ARMv8 behavior for racy programs\) and too weak \(it allowed non-sequentially consistent behavior for race-free programs\). As noted earlier, these mistakes are fixed. Even so, this is yet another reminder about how subtle it can be to specify the semantics of both data-race-free and racy programs exactly using happens-before, as well as how subtle it can be to match up language memory models with the underlying hardware memory models.
+The ES2017 specification of program behavior was therefore simultaneously too strong (it disallowed real ARMv8 behavior for racy programs) and too weak (it allowed non-sequentially consistent behavior for race-free programs). As noted earlier, these mistakes are fixed. Even so, this is yet another reminder about how subtle it can be to specify the semantics of both data-race-free and racy programs exactly using happens-before, as well as how subtle it can be to match up language memory models with the underlying hardware memory models.
 
 It is encouraging that at least for now JavaScript has avoided adding any other atomics besides the sequentially consistent ones and has resisted “DRF-SC or Catch Fire.” The result is a memory model valid as a C/C++ compilation target but much closer to Java.
 
@@ -718,11 +716,11 @@ It is encouraging that at least for now JavaScript has avoided adding any other 
 
 Looking at C, C++, Java, JavaScript, Rust, and Swift, we can make the following observations:
 
-* They all provide sequentially consistent synchronizing atomics for coordinating the non-atomic parts of a parallel program.
-* They all aim to guarantee that programs made data-race-free using proper synchronization behave as if executed in a sequentially consistent manner.
-* Java resisted adding weak \(acquire/release\) synchronizing atomics until Java 9 introduced `VarHandle`. JavaScript has avoided adding them as of this writing.
-* They all provide a way for programs to execute “intentional” data races without invalidating the rest of the program. In C, C++, Rust, and Swift, that mechanism is relaxed, non-synchronizing atomics, a special form of memory access. In Java, that mechanism is either ordinary memory access or the Java 9 `VarHandle` “plain” access mode. In JavaScript, that mechanism is ordinary memory access.
-* None of the languages have found a way to formally disallow paradoxes like out-of-thin-air values, but all informally disallow them.
+- They all provide sequentially consistent synchronizing atomics for coordinating the non-atomic parts of a parallel program.
+- They all aim to guarantee that programs made data-race-free using proper synchronization behave as if executed in a sequentially consistent manner.
+- Java resisted adding weak (acquire/release) synchronizing atomics until Java 9 introduced `VarHandle`. JavaScript has avoided adding them as of this writing.
+- They all provide a way for programs to execute “intentional” data races without invalidating the rest of the program. In C, C++, Rust, and Swift, that mechanism is relaxed, non-synchronizing atomics, a special form of memory access. In Java, that mechanism is either ordinary memory access or the Java 9 `VarHandle` “plain” access mode. In JavaScript, that mechanism is ordinary memory access.
+- None of the languages have found a way to formally disallow paradoxes like out-of-thin-air values, but all informally disallow them.
 
 Meanwhile, processor manufacturers seem to have accepted that the abstraction of sequentially consistent synchronizing atomics is important to implement efficiently and are starting to do so: ARMv8 and RISC-V both provide direct support.
 

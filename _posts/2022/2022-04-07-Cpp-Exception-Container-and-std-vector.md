@@ -4,7 +4,6 @@ date: "2022-04-07 22:57:00"
 tags: [C++]
 category: blog
 ---
-
 之前几篇文章中讲述了如何通过 RAII 设计出异常安全的类，但是有一个问题被（故意的）忽略掉了，那就是容器类的异常安全：容器需要在动态储存区构造一组对象，但是如何保证当第 n 个对象构造时发生异常，前 `n - 1` 个对象不发生内存泄漏？最傻瓜的方法是使用一个额外的迭代器，将已经构造的对象和未构造的对象进行划分，然后在 `try` 中进行构造，在 `catch` 中对已构造的对象进行析构，然后重新抛出异常，但是这种设计显然造成了额外的负担，因此，标准库使用了一种额外的设计来避免显式在容器的构造函数中使用 `try` 块。
 
 <!-- more -->
@@ -172,13 +171,13 @@ vector<T, A>::vector(size_type n, const T& val, const A& a)
 
 ```
 
-注意，`vector_base` 是 `vector` 的 **成员**，同时 `vector_base` 自身是个异常安全的 Handle 类，那么 `vector` 的内存分配过程就是异常安全的。
+注意，`vector_base` 是 `vector` 的**成员**，同时 `vector_base` 自身是个异常安全的 Handle 类，那么 `vector` 的内存分配过程就是异常安全的。
 
 如果 `vector` 直接操纵 `vector_base` 的成员，那么就做不到这一点，这也是标准库容器保证内存分配异常安全的关键。
 
 `std::uninitialized_fill` 是标准库提供的一个函数模板，实现如下 [^3]：
 
-[^3]: 参考 [cppreference: std::uninitialized_fill](https://zh.cppreference.com/w/cpp/memory/uninitialized_fill)。
+[^3]: 参考 [cppreference: std::uninitialized\_fill](https://zh.cppreference.com/w/cpp/memory/uninitialized_fill)。
 
 ```cpp
 

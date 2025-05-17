@@ -34,8 +34,8 @@ void InitializeWindowMinSize(winrt::Microsoft::UI::Xaml::Window const& window) {
 
 ```
 
-原理实际上非常简单，但网上对于真正可用的代码却都是缄默不语，所幸找到了 PowerToys 相关的项目中的 **历史提交** 里的 Workaround [Settings UI](https://github.com/WinUICommunity/SettingsUI/blob/eaa1dd28c73aea7366cceeca485342e6edf389d6/src/SettingsUI/Tools/Helpers/WindowHelper/WindowHelper.ReSizeWindow.cs)。
+原理实际上非常简单，但网上对于真正可用的代码却都是缄默不语，所幸找到了 PowerToys 相关的项目中的**历史提交**里的 Workaround [Settings UI](https://github.com/WinUICommunity/SettingsUI/blob/eaa1dd28c73aea7366cceeca485342e6edf389d6/src/SettingsUI/Tools/Helpers/WindowHelper/WindowHelper.ReSizeWindow.cs)。
 
-之所以强调 **历史提交** 是因为它已经被删了，PowerToys 目前实际上也没有这个特性。
+之所以强调**历史提交**是因为它已经被删了，PowerToys 目前实际上也没有这个特性。
 
 用法很简单，把 362 和 170 改成自己想要的宽和高即可，然后调用 `InitializeWindowMinSize`。不过这本身是 workaround，所以这个方法实际上不怎么好用，因为依赖一个全局变量，假设你想要限制不同窗口有不同的最小大小，则行不通，不过如果你的应用和 UWP 一样使用单一窗口则还算可用。

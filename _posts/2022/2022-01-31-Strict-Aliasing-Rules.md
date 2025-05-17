@@ -4,7 +4,6 @@ date: "2022-01-30 21:04:00"
 tags: [C++,STL]
 category: blog
 ---
-
 C++ 的一大特性是能够通过指针直接管理内存，但是 C++ 提供的一些高级抽象存在着额外的内存布局规则，只有在满足严格别名规则的情况下，才能保证正确访问。虽然在大部分情况下，指针的错误转换能得到正确的结果，但是不正确的转换常常是隐含的 bug，编译器不对此做任何的保证，特别是在使用激进的优化策略时，常常会导致程序出现错误，所以了解严格别名规则是非常有意义且重要的。
 
 <!-- more -->
@@ -20,7 +19,7 @@ float d = *(float*)(&a);
 
 这段代码在大部分编译器的默认配置下都是可以直接编译通过的，但是很明显，d 的值是没意义的。
 
-大部分人也都能理解这其中的不同，因为 `int` 和 `float` 并不是一个 **兼容** 类型，需要使用额外的复杂计算才能使得 `d` 能够正确储存 `a` 的值。
+大部分人也都能理解这其中的不同，因为 `int` 和 `float` 并不是一个**兼容**类型，需要使用额外的复杂计算才能使得 `d` 能够正确储存 `a` 的值。
 
 再有如下例子：
 
@@ -52,11 +51,11 @@ int main()
 
 给定一个拥有有效类型 `T1` 的对象，使用相异类型的 `T2` 左值表达式（典型的是解引用指针）访问它在以下情况下是有效的：
 
-+ `T2` 和 `T1` 是兼容类型。
-+ `T2` 是与 `T1` 兼容的类型的 cv 限定版本。
-+ `T2` 是与 `T1` 兼容的类型的有符号或无符号版本。
-+ `T2` 是聚合体或联合体类型，其成员中包含一个前述类型（包含、递归包含、子聚合体或被包含的联合体的成员）。
-+ `T2` 是字符类型（ `char`、`signed char` 或 `unsigned char` ）。
+- `T2` 和 `T1` 是兼容类型。
+- `T2` 是与 `T1` 兼容的类型的 cv 限定版本。
+- `T2` 是与 `T1` 兼容的类型的有符号或无符号版本。
+- `T2` 是聚合体或联合体类型，其成员中包含一个前述类型（包含、递归包含、子聚合体或被包含的联合体的成员）。
+- `T2` 是字符类型（ `char`、`signed char` 或 `unsigned char` ）。
 
 例如：
 
@@ -119,7 +118,7 @@ C 标准委员会的解决方案是使用严格别名规则和 `restrict` 关键
 
 #### 缺陷报告 P0593R6
 
-已经纳入标准[^2] 的缺陷报告 [P0593R6 Implicit creation of objects for low-level object manipulation](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0593r6.html) 指出，如下代码 **存在未定义行为**：
+已经纳入标准[^2] 的缺陷报告 [P0593R6 Implicit creation of objects for low-level object manipulation](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0593r6.html) 指出，如下代码**存在未定义行为**：
 
 [^2]: [P2131R0](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p2131r0.html) 确认了 P0593R6 已经纳入标准。
 
@@ -156,7 +155,7 @@ X* make_x() {
 
 换句话说，C++ 中只有使用了 `new` 表达式，才做到了在内存中构造对象。
 
-> An *object* is created by a definition, by a *new-expression*, when implicitly changing the active member of a union, or when a temporary object is created.
+> An _object_ is created by a definition, by a _new-expression_, when implicitly changing the active member of a union, or when a temporary object is created.
 
 P0593R6 中还指出了如下问题：
 
@@ -172,7 +171,7 @@ void process(Stream* stream) {
 
 ```
 
-许多程序试图访问一段来自网络或者文件的比特流，虽然你确定 #1 处的强制转换是合法的，但是这不代表它满足 C++ 对 **对象** 和解引用的要求。
+许多程序试图访问一段来自网络或者文件的比特流，虽然你确定 \#1 处的强制转换是合法的，但是这不代表它满足 C++ 对**对象**和解引用的要求。
 
 解决方法是使用 C++17 的 `std::byte` 或者使用 `unsigned char` 作为中间类型，并且使得解引用指针的行为作用在一个真正被构造出来的对象上。
 
@@ -231,11 +230,11 @@ int main() {
 
 P0593R6 进行了一种修正：将某些内存操作认定为隐式创造对象：
 
-+ 创建一个 `char`、`unsigned char` 或 `std::byte` 的数组
-+ 调用 `malloc`、`calloc`、`realloc` 或任何名为 `operator new` 或 `operator new[]` 的函数
-+ `std::allocator<T>::allocate(n)` 隐式地在其返回的存储空间中创建了一个 `T[n]` 对象；`allocator` 的要求使得其他分配器的实现也必须如此
-+ 使用 `memcpy`，`memmove`，`std::bitcast`
-+ 非标准内存分配器，如 `mmap` 或者 `VirtualAlloc`
+- 创建一个 `char`、`unsigned char` 或 `std::byte` 的数组
+- 调用 `malloc`、`calloc`、`realloc` 或任何名为 `operator new` 或 `operator new[]` 的函数
+- `std::allocator<T>::allocate(n)` 隐式地在其返回的存储空间中创建了一个 `T[n]` 对象；`allocator` 的要求使得其他分配器的实现也必须如此
+- 使用 `memcpy`，`memmove`，`std::bitcast`
+- 非标准内存分配器，如 `mmap` 或者 `VirtualAlloc`
 
 此修正并不改变 `reinterpret_cast`，即强制类型转换不认为存在隐式创建。
 

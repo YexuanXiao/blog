@@ -16,7 +16,7 @@ Cloudflare 最近推出了电子邮件转发服务，可以把自己域名的电
 
 然后更改该域的 DNS，增加一个名称为 @ 的 TXT 记录，内容为 `v=spf1 include:outlook.com ~all`，如果 Cloudflare 已经帮你自动生成了一个以 `v=spf1` 开头的 TXT 记录，就把这个记录改成上面的内容（实际上就是添加了一句 `include:outlook.com`）。注意，不要添加 DMARC 记录，如果 Cloudflare 默认生成了一个 DMARC 记录，需要删掉，否则会导致收件方认为你的电子邮件是虚假的（如果有可以正确添加 DMARC 的方式，请联系我）。
 
-最后进入 [Microsoft 账户 \| 你的个人档案](//account.microsoft.com/profile)，点击编辑账户信息，添加电子邮件，地址填写 Cloudflare 电子邮件转发的源地址，然后按照提示验证电子邮件是你所有，这时候验证邮件就会被转发到 Outlook 中，进行验证即可。个人建议使用相同的电子邮件前缀。
+最后进入 [Microsoft 账户 | 你的个人档案](//account.microsoft.com/profile)，点击编辑账户信息，添加电子邮件，地址填写 Cloudflare 电子邮件转发的源地址，然后按照提示验证电子邮件是你所有，这时候验证邮件就会被转发到 Outlook 中，进行验证即可。个人建议使用相同的电子邮件前缀。
 
 这样别人给你的域名邮箱地址发送的邮件都会发到 Outlook，如果需要回复，或者使用该邮件地址发送邮件，只需要使用 Outlook 客户端或者网页版，更改发件人地址即可。
 

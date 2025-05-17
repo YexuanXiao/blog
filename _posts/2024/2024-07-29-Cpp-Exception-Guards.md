@@ -24,9 +24,9 @@ category: blog
 
 典型的守卫包括 `lock_guard`，`unique_lock`，以及 `unique_ptr`。
 
-### lock_guard
+### lock\_guard
 
-lock_guard 的典型实现如下：
+lock\_guard 的典型实现如下：
 
 ```cpp
 
@@ -69,7 +69,7 @@ void run_task(mutex& m, task_queue& q)
 
 ```
 
-`lock_guard l{m};` 能保证在 #1 抛出异常时，自动解锁；即使 #1 永不抛出异常，`l` 的存在也可以避免漏写解锁导致死锁的错误；在 #1 存在使用 `return;` 提前返回时，这种模式也能避免多次写出 `m.unlock()`，减少重复。
+`lock_guard l{m};` 能保证在 \#1 抛出异常时，自动解锁；即使 \#1 永不抛出异常，`l` 的存在也可以避免漏写解锁导致死锁的错误；在 \#1 存在使用 `return;` 提前返回时，这种模式也能避免多次写出 `m.unlock()`，减少重复。
 
 但以上代码有致命缺陷：`l` 会在 `task` 执行后才被析构，会导致代码变成串行执行。这种代码典型的出现在使用独立的锁保护一个线程不安全的结构时。
 
@@ -182,7 +182,7 @@ void run_task(mutex& m, task_queue& q)
 
 注意这个 `unique_lock` 实现只是一个为了完成功能的最简版本，稍后会完善它。
 
-### unique_lock
+### unique\_lock
 
 上一节的结尾实现了一个 `unique_lock`，但实际上它称不上是 `lock`，因为它没有 `lock` 成员函数。
 
@@ -334,7 +334,7 @@ public:
 
 到现在，不难发现，`unique_lock` 居然也是句柄类！
 
-### allocate_guard
+### allocate\_guard
 
 `allocate_guard` 这个词可能很多人没听过，不过，实际上它非常常见而且经验丰富的人大概率已经独自发明过了。
 
@@ -424,7 +424,7 @@ public:
 
 ```
 
-这段代码实际上是错误的，因为如果 #2 处调用 `T` 的构造函数抛出异常，之前分配的 `p_` 就会泄漏。
+这段代码实际上是错误的，因为如果 \#2 处调用 `T` 的构造函数抛出异常，之前分配的 `p_` 就会泄漏。
 
 因此，通常的改进方式如下：
 
@@ -483,9 +483,9 @@ void emplace_(U&& u)
 
 ```
 
-此时，在 #2 抛出异常后，`allocate_guard` 就会保护 `p_`，不发生泄漏，并且不使用 `catch(...)` 和 `throw;`。
+此时，在 \#2 抛出异常后，`allocate_guard` 就会保护 `p_`，不发生泄漏，并且不使用 `catch(...)` 和 `throw;`。
 
-实际上之前文章中介绍过的 `std::uninitialized_copy` 函数也可以使用相同的手法代替，这里留给读者做思考题。在我实现的 [basic_json](https://github.com/yexuanXiao/basic_json/) 中，就同时用到了这两种手法。
+实际上之前文章中介绍过的 `std::uninitialized_copy` 函数也可以使用相同的手法代替，这里留给读者做思考题。在我实现的 [basic\_json](https://github.com/yexuanXiao/basic_json/) 中，就同时用到了这两种手法。
 
 认真思考的读者可能已经发现：标准库的 `std::unique_ptr` 有相同的函数，实际上就是 `allocate_guard`！
 
@@ -544,9 +544,9 @@ class allocate_guard
 
 仔细思考的读者可能已经回忆到了，之前我的文章中讲过的 `vector_base` 与之非常类似，这不是巧合。
 
-### unique_ptr
+### unique\_ptr
 
-读到这里，相信读者一定彻底学会了 unique_ptr，因此这一节讨论的是一些非常细致，微妙的问题。
+读到这里，相信读者一定彻底学会了 unique\_ptr，因此这一节讨论的是一些非常细致，微妙的问题。
 
 上述各种守卫以及不完整版 `unique_lock`，对比 `vector_base`、`std::unique_ptr` 以及完整版 `unique_lock`有什么区别？
 

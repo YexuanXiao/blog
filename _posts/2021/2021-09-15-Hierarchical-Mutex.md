@@ -4,10 +4,9 @@ date: "2021-09-15 18:41:00"
 tags: [C++, docs]
 category: blog
 ---
-C++ 并发编程实战第二版展示了一种 C++ 多线程设计技巧 hierarchical_mutex，由于书中对此解释比较混乱，在此做个笔记。
+C++ 并发编程实战第二版展示了一种 C++ 多线程设计技巧 hierarchical\_mutex，由于书中对此解释比较混乱，在此做个笔记。
 
 <!-- more -->
-
 
 `hierarchical_mutex` 可以理解为是一种半自动的 `std::lock`，`std::lock` 是使用原子操作去防止死锁，保证顺序，而 `hierarchical_mutex` 是使用数字顺序作为层次保证互斥器的逻辑顺序正确从而防止死锁。
 
@@ -66,16 +65,16 @@ thread_local size_t
 
 `hierarchical_mutex` 中有 3 个数字记录，分别是：
 
-1. this_thread_hierarchy_value：初始化为最大值，每一个线程独有一份
-2. hierarchy_value：手动指派的层次数，构造时传入
-3. previous_hierarchy_value：this_thread_hierarchy_value 的互斥临时备份
+1. this\_thread\_hierarchy\_value：初始化为最大值，每一个线程独有一份
+2. hierarchy\_value：手动指派的层次数，构造时传入
+3. previous\_hierarchy\_value：this\_thread\_hierarchy\_value 的互斥临时备份
 
 `hierarchical_mutex` 有 4 个公开成员函数，分别是：
 
-+ 构造函数：将 `2` 初始化为传入的数值，并将 `3` 初始化为 0，这是由于 `3` 只是 `1` 的临时备份，所以构造时无实际意义。
-+ lock：检查 `3` 是否大于 `2`，如果大于 `2`，则上锁并且将 `1` 备份到 `3`，并把 `1` 更新为 `2`。
-+ unlock：由于 lock 把 1 更新为 2，所以解锁时理应二者相等，如果不相等则一定存在其他错误，如果相等，则将备份用的 `3` 赋给 `1`，并进行解锁。
-+ try_lock：同 lock，不过加了一个判断，避免重复上锁。
+- 构造函数：将 `2` 初始化为传入的数值，并将 `3` 初始化为 0，这是由于 `3` 只是 `1` 的临时备份，所以构造时无实际意义。
+- lock：检查 `3` 是否大于 `2`，如果大于 `2`，则上锁并且将 `1` 备份到 `3`，并把 `1` 更新为 `2`。
+- unlock：由于 lock 把 1 更新为 2，所以解锁时理应二者相等，如果不相等则一定存在其他错误，如果相等，则将备份用的 `3` 赋给 `1`，并进行解锁。
+- try\_lock：同 lock，不过加了一个判断，避免重复上锁。
 
 回到最初的话题，设计互斥器的目的是为了保证指令按需执行操作特定的对象，设计分层互斥器的目的是为了避免死锁。
 

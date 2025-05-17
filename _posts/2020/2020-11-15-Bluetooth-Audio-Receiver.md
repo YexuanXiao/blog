@@ -10,7 +10,7 @@ category: blog
 
 ![20201114220100](https://tvax1.sinaimg.cn/large/005ZJ4a1ly1gkp2zjnsw1j30hw0hft8q.jpg "candark")
 
-![Screenshot_20201114-215502_Settings](https://tva3.sinaimg.cn/large/005ZJ4a1ly1gkp2zvf45hj31402gwtfd.jpg "candark")
+![Screenshot\_20201114-215502\_Settings](https://tva3.sinaimg.cn/large/005ZJ4a1ly1gkp2zvf45hj31402gwtfd.jpg "candark")
 
 这款软件非常简洁，只需要在双方连接蓝牙后，选择蓝牙设备，点击开始链接，此时手机上就可以将Windows 10 电脑当作蓝牙音频输入设备，实现在手机上选歌，电脑上播放。
 

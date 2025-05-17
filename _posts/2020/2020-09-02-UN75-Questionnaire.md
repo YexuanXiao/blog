@@ -19,12 +19,11 @@ English: https://un75.online
 
 <p class="big" align="center">新冠病毒提醒了跨界、跨部门、跨时代合作的重要性。联合国秘书长安东尼奥·古特雷斯表示：</p>
 
->“在这场危机期间及危机之后，我们所做的一切都必须着重于建设更加平等、包容和可持续的经济和社会共同体，以应对重大流行疾病、气候变化以及我们面临的重大其他全球挑战。”
+> “在这场危机期间及危机之后，我们所做的一切都必须着重于建设更加平等、包容和可持续的经济和社会共同体，以应对重大流行疾病、气候变化以及我们面临的重大其他全球挑战。”
 
 <p class="big" align="center">您的问卷调查回答将为当前和未来的全球优先事项提供重要信息。</p>
 
-
-![2020-09-01_235541](https://tvax2.sinaimg.cn/mw690/005ZJ4a1ly1gibns1oc8dj31gp5ymdyq.jpg)
+![2020-09-01\_235541](https://tvax2.sinaimg.cn/mw690/005ZJ4a1ly1gibns1oc8dj31gp5ymdyq.jpg)
 
 <script>
 document.addEventListener('scroll', () => {

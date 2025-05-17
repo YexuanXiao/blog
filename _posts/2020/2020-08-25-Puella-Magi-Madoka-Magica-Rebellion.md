@@ -17,11 +17,9 @@ tags: [anime,jottings]
 
 <iframe src="//player.bilibili.com/player.html?aid=669265168&amp;cid=227722922&amp;page=1&amp;high_quality=1&amp;danmaku=0" allowfullscreen="allowfullscreen" width="100%" height="450" scrolling="no" frameborder="0" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts" class="bilivideo"></iframe>
 
-
 介绍：
 
 [魔法少女小圆剧场版 叛逆的物语](https://mysteriouspreserve.com/by-talk/2020/07/20/Puella-Magi-Madoka-Magica-Rebellion/)
-
 
 目前 Bilibili 购买了国内的网络播放权，可以去 Bilibili 观看整部电影。
 

@@ -28,7 +28,6 @@ category: blog
 
 ## 换算公式
 
-现在可以得到 比特率 = 波特率 * log <sub>2</sub> (L)，其中 L 为每个有效信号负载的信息量（Symbol）。
-
+现在可以得到 比特率 = 波特率 \* log <sub>2</sub> (L)，其中 L 为每个有效信号负载的信息量（Symbol）。
 
 参考：https://zh.wikipedia.org/wiki/%E6%B3%A2%E7%89%B9%E7%8E%87

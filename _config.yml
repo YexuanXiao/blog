@@ -5,7 +5,12 @@ permalink: pretty
 paginate: 7
 paginate_path: '/page/:num'
 excerpt_separator: '<!-- more -->'
-plugins: [jekyll-paginate]
+plugins: [jekyll-paginate,jekyll-commonmark]
+markdown: CommonMark
+
+commonmark:
+  options: ["FOOTNOTES"]
+  extensions: ["strikethrough", "autolink", "table"]
 
 defaults:
   -

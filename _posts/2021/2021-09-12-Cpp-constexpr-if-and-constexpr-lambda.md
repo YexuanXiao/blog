@@ -46,7 +46,7 @@ void variadicPrint(T head, Ts... tail)
 
 ```
 
-实际上这就是让编译器只在 tail > 0 的时候才递归的展开自身。
+实际上这就是让编译器只在 tail \> 0 的时候才递归的展开自身。
 
 C++17 开始，当一个常量表达式中允许对其捕获或引入的每个数据成员进行初始化时，lambda表达式可以被声明为constexpr 或在常量表达式中使用（默认constexpr）。
 
@@ -86,8 +86,6 @@ int main()
 }
 
 ```
-
-
 
 <div class="ref-label">参考：</div>
 <div class="ref-list">

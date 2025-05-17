@@ -75,7 +75,7 @@ class Greeter {
 
 和 C++ 类似的是，构造函数也没有泛型参数和返回值。
 
-很不幸的是，TypeScript 可能是为了减轻 JavaScript 学习者的负担，派生类调用基类构造并没有选择 C++ 和 C# 的先进方式，而是选择了与 JavaScript 兼容，使用了和 Java 一样的方式，通过在派生类的函数体第一句上使用 `super` 代表基类构造函数来完成基类的构造。所以 JavaScript 和 Java 没有关系这句话是假的。2015 年还抄 Java 的这个特性，看得出来 ECMAScript 委员会真的很没品。
+很不幸的是，TypeScript 可能是为了减轻 JavaScript 学习者的负担，派生类调用基类构造并没有选择 C++ 和 C\# 的先进方式，而是选择了与 JavaScript 兼容，使用了和 Java 一样的方式，通过在派生类的函数体第一句上使用 `super` 代表基类构造函数来完成基类的构造。所以 JavaScript 和 Java 没有关系这句话是假的。2015 年还抄 Java 的这个特性，看得出来 ECMAScript 委员会真的很没品。
 
 TypeScript 还支持 getter 和 setter：
 
@@ -192,7 +192,7 @@ TypeScript 的函数也是属性的一种，函数也是对象，由于 [Type-on
 
 TypeScript 支持成员可见性，使用类似 C++ 的 `protected`，`private` 和 `public` 来控制成员是否对外部或者派生类可见。
 
-幸运的是，ECMAScript 不支持成员可见性，所以 TypeScript 不需要向 ECMAScript 妥协：若类 `Base` 存在受保护成员 `p`，则外部不可以直接访问 `p`；`Derived` 继承 `Base`，则 `Derived` 的成员函数不能通过 `Base` 的引用访问 `p`，但可以通过 `Dervied` 的引用访问 `p`。C# 和 C++ 遵循相同的规则，而 Java 允许此时通过 Base 的引用访问 `p`。
+幸运的是，ECMAScript 不支持成员可见性，所以 TypeScript 不需要向 ECMAScript 妥协：若类 `Base` 存在受保护成员 `p`，则外部不可以直接访问 `p`；`Derived` 继承 `Base`，则 `Derived` 的成员函数不能通过 `Base` 的引用访问 `p`，但可以通过 `Dervied` 的引用访问 `p`。C\# 和 C++ 遵循相同的规则，而 Java 允许此时通过 Base 的引用访问 `p`。
 
 和 C++ 类似，基类的受保护成员的可见性可以被修改，而基类的私有成员则不可见。
 
@@ -219,7 +219,7 @@ class FileRep extends FileSystemObject {
 
 #### 静态成员
 
-和 C++ 类似，TypeScript 也支持静态成员。静态成员可以控制可见性，使用和 C# 一样的访问方式。
+和 C++ 类似，TypeScript 也支持静态成员。静态成员可以控制可见性，使用和 C\# 一样的访问方式。
 
 有一点需要注意的是，在 JavaScript 的类型系统中，继承是通过原型实现的，所以有一些名字已经被使用了，无法作为静态成员：`name`，`length` 和 `call`。
 

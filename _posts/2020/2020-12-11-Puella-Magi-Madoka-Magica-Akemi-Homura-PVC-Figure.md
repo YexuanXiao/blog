@@ -12,5 +12,4 @@ tags: [anime]
 
 <!-- more -->
 
-
-![20201211_131223](https://tva2.sinaimg.cn/large/005ZJ4a1ly1gljy7ww11jj32c0340qv6.jpg)
+![20201211\_131223](https://tva2.sinaimg.cn/large/005ZJ4a1ly1gljy7ww11jj32c0340qv6.jpg)

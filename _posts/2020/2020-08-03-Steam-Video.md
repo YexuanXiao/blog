@@ -46,9 +46,9 @@ ffmpeg -i input.file -start_number snumber -f hls -hls_list_size 0 -threads tnum
 
 ```
 
-+ snumber: 起始编号
-+ tnumber: 线程数
-+ seconds: 每一个 ts 包含的视频时间
-+ 0: 索引全部片段，请勿修改
+- snumber: 起始编号
+- tnumber: 线程数
+- seconds: 每一个 ts 包含的视频时间
+- 0: 索引全部片段，请勿修改
 
 使用 m3u8 优点:每段 ts 都是独立的视频，分段加载节省流量；保证 DTS 和 PTS 同步，防止拖动进度条时卡顿。

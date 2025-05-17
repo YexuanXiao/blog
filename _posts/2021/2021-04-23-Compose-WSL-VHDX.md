@@ -16,15 +16,15 @@ WSL 的 Linux 发行版都是储存在 vhdx 中的，而删除 vhdx 中的文件
 
 4. PowerShell 依次如下代码：
 
-    ```powershell
-
-    wsl --shutdown
-    diskpart
-    # open window Diskpart
-    select vdisk file="C:\ext4.vhdx"
-    attach vdisk readonly
-    compact vdisk
-    detach vdisk
-    exit
-
-    ```
+   ```powershell
+   
+   wsl --shutdown
+   diskpart
+   # open window Diskpart
+   select vdisk file="C:\ext4.vhdx"
+   attach vdisk readonly
+   compact vdisk
+   detach vdisk
+   exit
+   
+   ```

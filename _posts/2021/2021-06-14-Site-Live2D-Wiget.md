@@ -4,7 +4,6 @@ date: "2021-06-14 12:30:00"
 tags: [live2d, JavaScript, docs]
 category: blog
 ---
-
 以前就有给博客添加一个 live2d 看板娘的想法，但没有实施，直到发现了好看的模型和项目。
 
 <!-- more -->
@@ -20,90 +19,95 @@ category: blog
 在你的网站上使用 `live2d` 只需要简单几步：
 
 1. 选择合适模型并得到模型配置文件地址，大部分配置文件的文件名为 `model.json` `index.json`。
+
 2. 在你的网站添加 live2d.js，内容如下：
 
-    ```javascript
-
-    function loadStyles(url) {
-        var link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.type = 'text/css';
-        link.href = url;
-        document.querySelector('head').appendChild(link)
-    }
-    function loadScript(uri, callback) {
-        var fileref = document.createElement('script');
-        fileref.src = uri;
-        callback = callback || function () { };
-        fileref.onload = function () {
-            if (!this.readState || 'loaded' === this.readyState || 'complete' === this.readyState) {
-                callback();
-                this.onload = null;
-            }
-        }
-        document.body.appendChild(fileref);
-    }
-    function creatdom() {
-        const l2dcontainer = document.createElement('div');
-        l2dcontainer.className = 'pio-container ml-2';
-        document.body.appendChild(l2dcontainer);
-        const talk = document.createElement('div');
-        talk.classList.add('pio-action');
-        l2dcontainer.appendChild(talk);
-        const l2dcvs = document.createElement('canvas');
-        l2dcvs.id = 'pio';
-        l2dcvs.width = '240';
-        l2dcvs.height = '280';
-        l2dcontainer.appendChild(l2dcvs)
-    }
-    function initl2d() {
-        creatdom();
-        new Paul_Pio({
-            "mode": "fixed",
-            "content": {
-                "welcome": ["欢迎来到萧叶轩的网站", "我叫诺瓦露，是黑土边域（Lastation）的守护女神。", "这些女孩子们的服装，大多都很可爱呢。可、可不是说我想穿哦，才没有那个意思呢", "	真是优哉游哉的回来了呢，今天也还有许多事情要做，紧张起来", "哼哼哼~ ♪哼~哼♪ ······喂，你从什么时侯开始在那里的啊······", "做好心理准备了吧？"],
-                "touch": ["呀······！你在摸哪里啊！", "你、这······，不注意点分寸我真的要生气了哦", "等下，现在不是吐槽的时候！"],
-                "custom": [{ "selector": "#author", "text": "想了解我的主人吗" },
-                { "selector": "#comments", "text": "有任何意见都可以提出哦" },
-                { "selector": "#darkmode-btn", "text": "夜间点击这里可以保护眼睛呢" },
-                { "selector": "#musicbox", "text": "想听音乐吗？" },
-                { "selector": "#search-panel", "text": "在这里可以搜索文章！" },
-                { "selector": ".about", "text": "这是属于我们的故事！" },
-                { "selector": "#tagbox", "text": "想通过标签寻找文章吗" },
-                { "selector": "#postbox", "text": "想阅读更多文章吗" },
-                { "selector": "#friends", "text": "想和我们成为朋友吗" },
-                { "selector": ".post-text a", "type": "link" },
-                { "selector": ".post-link h3", "type": "link" },
-                { "selector": "article h1", "type": "link" }
-                ]
-            },
-            "button": {
-                "info": true
-            },
-            "night": "changeTheme()",
-            "model": ["//imuncle.github.io/live2d/model/HyperdimensionNeptunia/noireswim/index.json", "//imuncle.github.io/live2d/model/HyperdimensionNeptunia/noir/index.json", "//imuncle.github.io/live2d/model/HyperdimensionNeptunia/noir_classic/index.json", "//imuncle.github.io/live2d/model/HyperdimensionNeptunia/noir_santa/index.json"],
-            "tips": true
-        })
-    }
-    loadScript('//cdn.jsdelivr.net/gh/YexuanXiao/Pio@master/static/l2d.min.js', () => {
-        loadScript('//cdn.jsdelivr.net/gh/YexuanXiao/Pio@master/static/pio.js', () => {
-            initl2d()
-            loadStyles('//cdn.jsdelivr.net/gh/YexuanXiao/Pio@master/static/pio.css')
-        })
-    })
-
-    ````
+   ```javascript
+   
+   function loadStyles(url) {
+       var link = document.createElement('link');
+       link.rel = 'stylesheet';
+       link.type = 'text/css';
+       link.href = url;
+       document.querySelector('head').appendChild(link)
+   }
+   function loadScript(uri, callback) {
+       var fileref = document.createElement('script');
+       fileref.src = uri;
+       callback = callback || function () { };
+       fileref.onload = function () {
+           if (!this.readState || 'loaded' === this.readyState || 'complete' === this.readyState) {
+               callback();
+               this.onload = null;
+           }
+       }
+       document.body.appendChild(fileref);
+   }
+   function creatdom() {
+       const l2dcontainer = document.createElement('div');
+       l2dcontainer.className = 'pio-container ml-2';
+       document.body.appendChild(l2dcontainer);
+       const talk = document.createElement('div');
+       talk.classList.add('pio-action');
+       l2dcontainer.appendChild(talk);
+       const l2dcvs = document.createElement('canvas');
+       l2dcvs.id = 'pio';
+       l2dcvs.width = '240';
+       l2dcvs.height = '280';
+       l2dcontainer.appendChild(l2dcvs)
+   }
+   function initl2d() {
+       creatdom();
+       new Paul_Pio({
+           "mode": "fixed",
+           "content": {
+               "welcome": ["欢迎来到萧叶轩的网站", "我叫诺瓦露，是黑土边域（Lastation）的守护女神。", "这些女孩子们的服装，大多都很可爱呢。可、可不是说我想穿哦，才没有那个意思呢", "	真是优哉游哉的回来了呢，今天也还有许多事情要做，紧张起来", "哼哼哼~ ♪哼~哼♪ ······喂，你从什么时侯开始在那里的啊······", "做好心理准备了吧？"],
+               "touch": ["呀······！你在摸哪里啊！", "你、这······，不注意点分寸我真的要生气了哦", "等下，现在不是吐槽的时候！"],
+               "custom": [{ "selector": "#author", "text": "想了解我的主人吗" },
+               { "selector": "#comments", "text": "有任何意见都可以提出哦" },
+               { "selector": "#darkmode-btn", "text": "夜间点击这里可以保护眼睛呢" },
+               { "selector": "#musicbox", "text": "想听音乐吗？" },
+               { "selector": "#search-panel", "text": "在这里可以搜索文章！" },
+               { "selector": ".about", "text": "这是属于我们的故事！" },
+               { "selector": "#tagbox", "text": "想通过标签寻找文章吗" },
+               { "selector": "#postbox", "text": "想阅读更多文章吗" },
+               { "selector": "#friends", "text": "想和我们成为朋友吗" },
+               { "selector": ".post-text a", "type": "link" },
+               { "selector": ".post-link h3", "type": "link" },
+               { "selector": "article h1", "type": "link" }
+               ]
+           },
+           "button": {
+               "info": true
+           },
+           "night": "changeTheme()",
+           "model": ["//imuncle.github.io/live2d/model/HyperdimensionNeptunia/noireswim/index.json", "//imuncle.github.io/live2d/model/HyperdimensionNeptunia/noir/index.json", "//imuncle.github.io/live2d/model/HyperdimensionNeptunia/noir_classic/index.json", "//imuncle.github.io/live2d/model/HyperdimensionNeptunia/noir_santa/index.json"],
+           "tips": true
+       })
+   }
+   loadScript('//cdn.jsdelivr.net/gh/YexuanXiao/Pio@master/static/l2d.min.js', () => {
+       loadScript('//cdn.jsdelivr.net/gh/YexuanXiao/Pio@master/static/pio.js', () => {
+           initl2d()
+           loadStyles('//cdn.jsdelivr.net/gh/YexuanXiao/Pio@master/static/pio.css')
+       })
+   })
+   
+   ```
 
 3. 这些代码实际上做了几件事:
-    1. `load` ：动态顺序加载 js 和 css
-    2. `creatdom` ：建立 dom 节点作为容器
-    3. `initl2d` ：调用 `creatdom` 并创建 live2d 实例
-    4. 调用 `loadScript` 依次加载两个 js 文件并调用 initl2d
-    5. 调用 `loadStyles` 加载 style
+
+   1. `load` ：动态顺序加载 js 和 css
+   2. `creatdom` ：建立 dom 节点作为容器
+   3. `initl2d` ：调用 `creatdom` 并创建 live2d 实例
+   4. 调用 `loadScript` 依次加载两个 js 文件并调用 initl2d
+   5. 调用 `loadStyles` 加载 style
 
 4. 你只需要修改模型链接即可完成最基本的功能
+
 5. 你可以 修改 `initl2d` 创建的 `live2dnoireswim` 实例中的 json 配置文件自定义对话
+
 6. 在 `creatdom` 函数中你可以修改 `l2dcvs.width` 和 `l2dcvs.height` 的值来修改看板娘的默认大小
+
 7. `"changeTheme('darktheme')"` 是开启夜间模式用的函数，如果你不知道这是干什么的，或者不支持夜间模式，可以把引号中的内容删除
 
 由于该写的东西我已经写好了，所以你只需要插入这个 `script` 和配置 live2d 就行，Pio 提供了一些文档。

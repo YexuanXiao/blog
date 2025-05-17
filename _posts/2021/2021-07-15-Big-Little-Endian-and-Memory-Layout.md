@@ -71,13 +71,13 @@ void roundBytes(unsigned char *data, size_t length)
 
 ```
 
-思路也很简单，将数据强制转换为 unsigned char* 再前后颠倒就可以。
+思路也很简单，将数据强制转换为 unsigned char\* 再前后颠倒就可以。
 
 对于定长且占用空间较小的类型，可以用移位运算符进行转换。
 
 注意，C/C++ 对于 unsigned 类型和非 unsigned 类型使用移位操作的具体表现是不一样的：非 unsigned 并且符号位不为 0 的时候，编译器会选择算术移位，即符号位固定为 1，符号位和数据位向右移动，舍弃数据位的最后一位。
 
-C++20 为了解决字节序问题，设置了一组枚举用于判断当前平台的字节序：
+C++20 为了解决字节序问题，设置了一组枚举 [`std::endian`](https://zh.cppreference.com/w/cpp/types/endian) 用于判断当前平台的字节序：
 
 ```cpp
 
@@ -91,9 +91,7 @@ enum class endian
 
 ```
 
-使用的时候只需要判断 native 是否等于 big 或者 little 即可 [^1] ：
-
-[^1]: [std::endian](https://zh.cppreference.com/w/cpp/types/endian)
+使用的时候只需要判断 native 是否等于 big 或者 little 即可：
 
 ```cpp
 
@@ -110,9 +108,7 @@ int main() {
 
 ```
 
-C++23 添加了函数 byteswap 用于翻转字节序 [^2] ：
-
-[^2]: [std::byteswap](https://zh.cppreference.com/w/cpp/numeric/byteswap)
+C++23 添加了函数 [`std::byteswap`](https://zh.cppreference.com/w/cpp/numeric/byteswap) 用于翻转字节序 ：
 
 ```cpp
 

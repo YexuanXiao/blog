@@ -4,15 +4,14 @@ date: "2021-12-21 13:45:00"
 tags: [C++,STL]
 category: blog
 ---
-
 在 C++17 之前，C++ 的文件系统操作都是依靠吗一些第三方库包装 Windows 或者 POSIX 系统调用来实现的。C++14 时期的 Paper [N4100](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4100.pdf) 提出了文件系统标准库，C++17 中 std::filesystem 正式纳入标准。
 
 <!-- more -->
 
 std::filesystem 通过两个基础类实现需要的功能：
 
-+ std::filesystem::directory_entry：提供对真实存在的目录的访问
-+ std::filesystem::path：提供对路径的操作
+- std::filesystem::directory\_entry：提供对真实存在的目录的访问
+- std::filesystem::path：提供对路径的操作
 
 #### 硬链接
 
@@ -82,7 +81,7 @@ int main()
 
 ```
 
-注意，Windows 平台上如果一个软链接指向了错误的地点（例如指向文件或者其他神奇的东西），则通过此 path 无法构造 directory_entry，会抛出 filesystem_error 异常而当软链接指向的地点为空时不触发异常。
+注意，Windows 平台上如果一个软链接指向了错误的地点（例如指向文件或者其他神奇的东西），则通过此 path 无法构造 directory\_entry，会抛出 filesystem\_error 异常而当软链接指向的地点为空时不触发异常。
 
 不安全：
 
@@ -194,23 +193,23 @@ int main()
 
 ```
 
-由于 Windows 平台上，字符都使用 wchar_t 而不是 char，这将导致 std::filesystem::path 内部也使用 wchar_t，不过还好标准库考虑到了这一点，不管是何种方式实现的 path，都可以通过成员函数进行轻松的编码转换：
+由于 Windows 平台上，字符都使用 wchar\_t 而不是 char，这将导致 std::filesystem::path 内部也使用 wchar\_t，不过还好标准库考虑到了这一点，不管是何种方式实现的 path，都可以通过成员函数进行轻松的编码转换：
 
 返回转换到字符串的原生路径名格式：
 
-+ string
-+ wstring
-+ u8string
-+ u16string
-+ u32string
+- string
+- wstring
+- u8string
+- u16string
+- u32string
 
 返回转换到字符串的通用路径名格式：
 
-+ generic_string
-+ generic_wstring
-+ generic_u8string
-+ generic_u16string
-+ generic_u32string
+- generic\_string
+- generic\_wstring
+- generic\_u8string
+- generic\_u16string
+- generic\_u32string
 
 ```cpp
 

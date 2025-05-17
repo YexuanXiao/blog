@@ -12,7 +12,7 @@ tags: [anime,jottings]
 
 去年看时下大热的刀剑神域（Sword Art Online）改编的第三季动画的时候有一个细节看的我非常不爽，如图：
 
-![哔哩哔哩概念_2020-07-11-09-49-08](https://tva4.sinaimg.cn/large/005ZJ4a1ly1ggoacvessvj31z4140npe.jpg)
+![哔哩哔哩概念\_2020-07-11-09-49-08](https://tva4.sinaimg.cn/large/005ZJ4a1ly1ggoacvessvj31z4140npe.jpg)
 
 <p class="pic-comment">注意这个脸部轮廓</p>
 
@@ -24,7 +24,7 @@ tags: [anime,jottings]
 
 当然 这几天才播出的 我的青春恋爱物语绝对有问题 也是有类似的毛病，不过这个的原因就是赶工+没钱了，因为问题太明显了，如图：
 
-![哔哩哔哩概念_2020-07-11-09-43-51](https://tva4.sinaimg.cn/large/005ZJ4a1ly1ggoacu7iuhj31z41404qq.jpg)
+![哔哩哔哩概念\_2020-07-11-09-43-51](https://tva4.sinaimg.cn/large/005ZJ4a1ly1ggoacu7iuhj31z41404qq.jpg)
 
 <p class="pic-comment">和 SAO 一样的问题，外带五官错位</p>
 
@@ -32,7 +32,7 @@ tags: [anime,jottings]
 
 <p class="pic-comment">也是花两分钟补了一下，五官就先不管了</p>
 
-![2020-07-11_225422](https://tvax2.sinaimg.cn/large/005ZJ4a1ly1ggob1q153ej31hc0u0e81.jpg)
+![2020-07-11\_225422](https://tvax2.sinaimg.cn/large/005ZJ4a1ly1ggob1q153ej31hc0u0e81.jpg)
 
 <p class="pic-comment">佩可莉姆是我的 <span calss="heimu">M.A.O也真实劳模</span></p>
 

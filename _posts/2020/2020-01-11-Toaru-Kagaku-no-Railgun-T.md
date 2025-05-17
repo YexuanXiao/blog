@@ -4,7 +4,6 @@ title: 某科学的超电磁炮 T
 category: by-talk
 tags: [2020一月新番,anime,introduction]
 ---
-
 某科学的超电磁炮 T 第一话 在昨日播放了！！！
 
 2018年10月7日官宣后，这一天终于到来，除了它，今年还有什么动画更值得期待呢？
@@ -21,7 +20,7 @@ tags: [2020一月新番,anime,introduction]
 
 ![01](https://tva3.sinaimg.cn/large/005ZJ4a1ly1grdno2wp5bj31hc0u042n.jpg)
 
-　这熟悉的画风![泪目]
+　这熟悉的画风\!\[泪目\]
 
 ![02](https://tva2.sinaimg.cn/large/005ZJ4a1ly1grdno38r5hj31hc0u0mzz.jpg)
 
@@ -66,7 +65,6 @@ tags: [2020一月新番,anime,introduction]
 <br>
 <br>
 <br>
-
 
 　官方还做了个输入姓名测定能力的网站
 [とある科学の能力判定](https://toaru-project.com/railgun_t/special/systemscan.html)

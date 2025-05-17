@@ -5,7 +5,6 @@ category: by-talk
 tags: [society,nation]
 description:
 ---
-
 THEY CAME FIRST for the Communists,
 and I didn’t speak up because I wasn’ t a Communist.
 
@@ -20,7 +19,6 @@ and I didn’t speak up because I was a Protestant.
 
 THEN THEY CAME for me,
 and by that time no one was left to speak up.
-
 
 ――Pastor Martin Niemoeller
 
@@ -43,10 +41,9 @@ and by that time no one was left to speak up.
 最后他们奔我而来，
 那时已经没有人能为我说话了。
 
-
 ——马丁·尼莫拉
 
-## 人物生平 ##
+## 人物生平
 
 一战期间，尼莫拉是德国海军的一名潜艇指挥官，战争结束后，他开始研读神学。
 
@@ -77,9 +74,11 @@ and by that time no one was left to speak up.
 1984年3月6日在西德的威斯巴登去世，享年92岁。
 
 <!-- http://paper.people.com.cn/rmwz/html/2010-06/01/content_576370.htm -->
+
 <br><br>
+
 <!-- 惨象，已使我目不忍视了；bai流言，尤使我耳du不忍闻。我还有什么话可说呢？我懂得衰亡民族之所以默无声息的缘由了。 -->
 
-> 沉默呵，沉默呵！不在沉默中爆发，就在沉默中灭亡!
+> 沉默呵，沉默呵！不在沉默中爆发，就在沉默中灭亡\!
 
 <p class="small right">鲁迅《纪念刘和珍君》</p>

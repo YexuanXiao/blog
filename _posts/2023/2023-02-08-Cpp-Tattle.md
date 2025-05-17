@@ -76,11 +76,11 @@ C++ 标准保证情况 1，允许情况 3，4，5，同时情况 4，5 如果不
 
 stdio 里面的 `fseek` 的第二个参数是 `long`，而在 Windows 的 UCRT 和 MSVCRT 里 `long` 的长度是 32 位，因此 mingw-w64 为了正确使用以及类型安全，不能自己把 `long` 改成 64 位，不然链接之后传参传 64 位的，运行的时候会被 `fseek` 截断，就炸了。64 位 Linux 使用的 long 为 64 位是因为 glibc 或者 musl 选择了 64 位。
 
-因为这个原因，C 和 C++ 的 ABI 从来没有统一一说，因为有的平台上 `long` 是 64 位，有的平台上 `int` 是 64 位，怎么统一？符号名统一是个 *，有什么用呢？一切都是 LIBC 决定的，因此注定一个 LIBC 一个 ABI。这也就是 mingw-w64 分 MSVCRT 和 UCRT 的原因（因为 MSVCRT 和 UCRT 的符号以及结构体声明不一样），也是 x86_64-linux-gcc 区分 glibc 和 musl 的原因。目标 LIBC 不同的两个编译中间产物，是不能链接在一起的。
+因为这个原因，C 和 C++ 的 ABI 从来没有统一一说，因为有的平台上 `long` 是 64 位，有的平台上 `int` 是 64 位，怎么统一？符号名统一是个 \*，有什么用呢？一切都是 LIBC 决定的，因此注定一个 LIBC 一个 ABI。这也就是 mingw-w64 分 MSVCRT 和 UCRT 的原因（因为 MSVCRT 和 UCRT 的符号以及结构体声明不一样），也是 x86\_64-linux-gcc 区分 glibc 和 musl 的原因。目标 LIBC 不同的两个编译中间产物，是不能链接在一起的。
 
 Rust 要进行系统调用也得按照规矩来，不是你说 64 位就 64 位，你说 32 位就 32 位，LIBC 才起决定性作用。C/C++ 之所以跨平台就是因为编译器保证了基本数据类型和 LIBC 一致，因此只要符号名一致就可以保证安全，不会出现数据被截断，因此可以根据符号名直接链接到 LIBC 上，而不用中间做其他转换。
 
-另外 C 这个 * 玩意函数传参不检查类型，传的参数类型不一致也不报错。当年我给 `sqrt` 传了个 `int`，C 是不负责把 `int` 转成 `double` 的，而 gcc 即使知道这件事也没报错，于是我获得了一个 INF。C++ 里面就会帮你转换，这就是 C++ 隐式转换的来源。
+另外 C 这个 \* 玩意函数传参不检查类型，传的参数类型不一致也不报错。当年我给 `sqrt` 传了个 `int`，C 是不负责把 `int` 转成 `double` 的，而 gcc 即使知道这件事也没报错，于是我获得了一个 INF。C++ 里面就会帮你转换，这就是 C++ 隐式转换的来源。
 
 此外，Windows 的 UCRT 虽然是 “C” 库，但是实际上是 C++ 实现的（LIBC 用于实现系统调用接口，提供 C/C++ 运行环境），并且微软实际上通过 UCRT 这次重构解决了以往纯 C 实现的 MSVCRT 的 ABI 不稳定的问题，可以参考这个博文 [伟大的C运行时（CRT）重构](https://devblogs.microsoft.com/cppblog/the-great-c-runtime-crt-refactoring/)；同时，LLVM 也在使用 C++ 实现 [LIBC](https://github.com/llvm/llvm-project/blob/main/libc/src/__support/threads/thread.cpp)，所谓的 C++ ABI 不稳定实际上是个伪命题。
 

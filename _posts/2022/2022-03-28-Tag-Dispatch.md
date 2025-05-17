@@ -4,7 +4,6 @@ date: "2022-03-28 20:09:00"
 tags: [C++]
 category: blog
 ---
-
 标签派发是 C++20 引入 concept 之前模板编程的一个手段：由于 C++ 不支持函数模板的偏特化，所以为了实现“偏特化”而产生的一个技巧。
 
 <!-- more -->
@@ -15,12 +14,12 @@ category: blog
 
 ##### Reason 原因
 
-* A template defines a general interface.
-* 模板定义普遍接口。
-* Tag dispatch allows us to select implementations based on specific properties of an argument type.
-* 标签分发允许我们根据参数类型的特定属性选择实现方式。
-* Performance.
-* 性能
+- A template defines a general interface.
+- 模板定义普遍接口。
+- Tag dispatch allows us to select implementations based on specific properties of an argument type.
+- 标签分发允许我们根据参数类型的特定属性选择实现方式。
+- Performance.
+- 性能
 
 ##### Example 示例
 

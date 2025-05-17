@@ -8,8 +8,6 @@ category: blog
 
 <!-- more -->
 
-* toc
-{:toc}
 
 ## 删除 Windows 10 中的 OneDrive 上下文菜单
 
@@ -39,12 +37,11 @@ category: blog
 
 方案:[CHH](https://www.chiphell.com/thread-2254324-1-1.html)
 
- [恩山](https://www.right.com.cn/forum/thread-4053910-1-1.html)
-
+[恩山](https://www.right.com.cn/forum/thread-4053910-1-1.html)
 
 1. 登录路由器得到浏览器地址栏的 stok
 2. 替换并访问 `http://192.168.31.1/cgi-bin/luci/;stok=<STOK>/api/misystem/set_config_iotdev?bssid=Xiaomi&user_id=longdike&ssid=-h%3B%20nvram%20set%20ssh_en%3D1%3B%20nvram%20commit%3B%20sed%20-i%20's%2Fchannel%3D.*%2Fchannel%3D%5C%22debug%5C%22%2Fg'%20%2Fetc%2Finit.d%2Fdropbear%3B%20%2Fetc%2Finit.d%2Fdropbear%20start%3B%20echo%20-e%20'admin%5Cnadmin'%20%7C%20passwd%20root%3B`
 3. powershell `ssh root@192.168.31.1`
 4. powershell `speed=$(uci -q get xiaoqiang.common.WAN_SPEED)`
 5. powershell `[ -n "$speed" ] && /usr/sbin/phyhelper swan "$speed"`
-6. ip6tables -I forwarding_rule -p tcp --dport 12268 -j ACCEPT
+6. ip6tables -I forwarding\_rule -p tcp --dport 12268 -j ACCEPT

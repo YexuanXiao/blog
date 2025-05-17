@@ -22,19 +22,19 @@ WSL 2 最近支持在 Explorer 中简单管理文件，并且 WSL 2 还可以自
 
 2. PowerShell 执行如下命令，给 Windows 10 添加 WSL 功能
 
-    ```powershell
-
-    dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
-
-    ```
+   ```powershell
+   
+   dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+   
+   ```
 
 3. PowerShell 执行如下命令，给 Windows 10 添加 虚拟机平台 功能
 
-    ```powershell
-
-    dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
-
-    ```
+   ```powershell
+   
+   dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+   
+   ```
 
 4. 点击链接下载 WSL 2 更新并安装：[WSL2 Linux kernel update package for x64 machines](https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi)
 
@@ -46,13 +46,13 @@ WSL 2 最近支持在 Explorer 中简单管理文件，并且 WSL 2 还可以自
 
 2. 去 Microsoft Store 下载 Linux 发行版，有以下系统可供选择：
 
-    + Ubuntu
-    + openSUSE
-    + SUSE Linux Enterprise
-    + Kali Linux
-    + Debian
+   - Ubuntu
+   - openSUSE
+   - SUSE Linux Enterprise
+   - Kali Linux
+   - Debian
 
-    我推荐使用 Ubuntu 20.04
+   我推荐使用 Ubuntu 20.04
 
 3. PowerShell 执行 wsl 或者直接在开始菜单打开对应的 Linux 发行版
 
@@ -163,7 +163,7 @@ tasks.json
 
 把中间的内容处理为如下格式并储存为 .vscode 下的文件：
 
-c_cpp_properties.json
+c\_cpp\_properties.json
 
 ```json
 

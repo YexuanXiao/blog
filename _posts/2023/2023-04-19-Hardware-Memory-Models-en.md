@@ -10,20 +10,18 @@ category: blog
 
 <!-- more -->
 
-\(_[Memory Models](https://research.swtch.com/mm), Part 1_\)
+(_[Memory Models](https://research.swtch.com/mm), Part 1_)
 
 Posted on Tuesday, June 29, 2021.
 
-* toc
-{:toc}
 
 ## Introduction: A Fairy Tale, Ending {#introduction}
 
-A long time ago, when everyone wrote single-threaded programs, one of the most effective ways to make a program run faster was to sit back and do nothing. Optimizations in the next generation of hardware and the next generation of compilers would make the program run exactly as before, just faster. During this fairy-tale period, there was an easy test for whether an optimization was valid: if programmers couldn't tell the difference \(except for the speedup\) between the unoptimized and optimized execution of a valid program, then the optimization was valid. That is, _valid optimizations do not change the behavior of valid programs._
+A long time ago, when everyone wrote single-threaded programs, one of the most effective ways to make a program run faster was to sit back and do nothing. Optimizations in the next generation of hardware and the next generation of compilers would make the program run exactly as before, just faster. During this fairy-tale period, there was an easy test for whether an optimization was valid: if programmers couldn't tell the difference (except for the speedup) between the unoptimized and optimized execution of a valid program, then the optimization was valid. That is, _valid optimizations do not change the behavior of valid programs._
 
 One sad day, years ago, the hardware engineers' magic spells for making individual processors faster and faster stopped working. In response, they found a new magic spell that let them create computers with more and more processors, and operating systems exposed this hardware parallelism to programmers in the abstraction of threads. This new magic spell—multiple processors made available in the form of operating-system threads—worked much better for the hardware engineers, but it created significant problems for language designers, compiler writers and programmers.
 
-Many hardware and compiler optimizations that were invisible \(and therefore valid\) in single-threaded programs produce visible changes in multithreaded programs. If valid optimizations do not change the behavior of valid programs, then either these optimizations or the existing programs must be declared invalid. Which will it be, and how can we decide?
+Many hardware and compiler optimizations that were invisible (and therefore valid) in single-threaded programs produce visible changes in multithreaded programs. If valid optimizations do not change the behavior of valid programs, then either these optimizations or the existing programs must be declared invalid. Which will it be, and how can we decide?
 
 Here is a simple example program in a C-like language. In this program and in all programs we will consider, all variables are initially set to zero.
 
@@ -95,19 +93,19 @@ A good mental model for sequential consistency is to imagine all the processors 
 
 ![](//static.nykz.org/blog/images/mem-order/mem-sc.png "candark")
 
-\(The three memory model hardware diagrams in this post are adapted from Maranget _et_ _al_., “[A Tutorial Introduction to the ARM and POWER Relaxed Memory Models](https://www.cl.cam.ac.uk/~pes20/ppc-supplemental/test7.pdf).”\)
+(The three memory model hardware diagrams in this post are adapted from Maranget _et_ _al_., “[A Tutorial Introduction to the ARM and POWER Relaxed Memory Models](https://www.cl.cam.ac.uk/~pes20/ppc-supplemental/test7.pdf).”)
 
 This diagram is a _model_ for a sequentially consistent machine, not the only way to build one. Indeed, it is possible to build a sequentially consistent machine using multiple shared memory modules and caches to help predict the result of memory fetches, but being sequentially consistent means that machine must behave indistinguishably from this model. If we are simply trying to understand what sequentially consistent execution means, we can ignore all of those possible implementation complications and think about this one model.
 
 Unfortunately for us as programmers, giving up strict sequential consistency can let hardware execute programs faster, so all modern hardware deviates in various ways from sequential consistency. Defining exactly how specific hardware deviates turns out to be quite difficult. This post uses as two examples two memory models present in today's widely-used hardware: that of the x86, and that of the ARM and POWER processor families.
 
-## x86 Total Store Order \(x86-TSO\) {#x86}
+## x86 Total Store Order (x86-TSO) {#x86}
 
 The memory model for modern x86 systems corresponds to this hardware diagram:
 
 ![](//static.nykz.org/blog/images/mem-order/mem-tso.png "candark")
 
-All the processors are still connected to a single shared memory, but each processor queues writes to that memory in a local write queue. The processor continues executing new instructions while the writes make their way out to the shared memory. A memory read on one processor consults the local write queue before consulting main memory, but it cannot see the write queues on other processors. The effect is that a processor sees its own writes before others do. But—and this is very important—all processors do agree on the \(total\) order in which writes \(stores\) reach the shared memory, giving the model its name: _total store order_, or TSO. At the moment that a write reaches shared memory, any future read on any processor will see it and use that value \(until it is overwritten by a later write, or perhaps by a buffered write from another processor\).
+All the processors are still connected to a single shared memory, but each processor queues writes to that memory in a local write queue. The processor continues executing new instructions while the writes make their way out to the shared memory. A memory read on one processor consults the local write queue before consulting main memory, but it cannot see the write queues on other processors. The effect is that a processor sees its own writes before others do. But—and this is very important—all processors do agree on the (total) order in which writes (stores) reach the shared memory, giving the model its name: _total store order_, or TSO. At the moment that a write reaches shared memory, any future read on any processor will see it and use that value (until it is overwritten by a later write, or perhaps by a buffered write from another processor).
 
 The write queue is a standard first-in, first-out queue: the memory writes are applied to the shared memory in the same order that they were executed by the processor. Because the write order is preserved by the write queue, and because other processors see the writes to shared memory immediately, the message passing litmus test we considered earlier has the same outcome as before: `r1` `=` `1`, `r2` `=` `0` remains impossible.
 
@@ -125,13 +123,13 @@ y = 1                 r2 = x
 
 > On sequentially consistent hardware: no.
 >
-> On x86 \(or other TSO\): no.
+> On x86 (or other TSO): no.
 
-The write queue guarantees that thread 1 writes `x` to memory before `y`, and the system-wide agreement about the order of memory writes \(the total store order\) guarantees that thread 2 learns of `x`'s new value before it learns of `y`'s new value. Therefore it is impossible for `r1` `=` `y` to see the new `y` without `r2` `=` `x` also seeing the new `x`. The store order is crucial here: thread 1 writes `x` before `y`, so thread 2 must not see the write to `y` before the write to `x`.
+The write queue guarantees that thread 1 writes `x` to memory before `y`, and the system-wide agreement about the order of memory writes (the total store order) guarantees that thread 2 learns of `x`'s new value before it learns of `y`'s new value. Therefore it is impossible for `r1` `=` `y` to see the new `y` without `r2` `=` `x` also seeing the new `x`. The store order is crucial here: thread 1 writes `x` before `y`, so thread 2 must not see the write to `y` before the write to `x`.
 
 The sequential consistency and TSO models agree in this case, but they disagree about the results of other litmus tests. For example, this is the usual example distinguishing the two models:
 
-> _Litmus Test: Write Queue \(also called Store Buffer\)_
+> _Litmus Test: Write Queue (also called Store Buffer)_
 >
 > Can this program see `r1` `=` `0`, `r2` `=` `0`?
 
@@ -145,13 +143,13 @@ r1 = y                r2 = x
 
 > On sequentially consistent hardware: no.
 >
-> On x86 \(or other TSO\): _yes\!_
+> On x86 (or other TSO): _yes\!_
 
 In any sequentially consistent execution, either `x` `=` `1` or `y` `=` `1` must happen first, and then the read in the other thread must observe it, so `r1` `=` `0`, `r2` `=` `0` is impossible. But on a TSO system, it can happen that Thread 1 and Thread 2 both queue their writes and then read from memory before either write makes it to memory, so that both reads see zeros.
 
 This example may seem artificial, but using two synchronization variables does happen in well-known synchronization algorithms, such as [Dekker's algorithm](https://en.wikipedia.org/wiki/Dekker%27s_algorithm) or [Peterson's algorithm](https://en.wikipedia.org/wiki/Peterson%27s_algorithm), as well as ad hoc schemes. They break if one thread isn’t seeing all the writes from another.
 
-To fix algorithms that depend on stronger memory ordering, non-sequentially-consistent hardware supplies explicit instructions called memory barriers \(or fences\) that can be used to control the ordering. We can add a memory barrier to make sure that each thread flushes its previous write to memory before starting its read:
+To fix algorithms that depend on stronger memory ordering, non-sequentially-consistent hardware supplies explicit instructions called memory barriers (or fences) that can be used to control the ordering. We can add a memory barrier to make sure that each thread flushes its previous write to memory before starting its read:
 
 ```c
 
@@ -166,11 +164,11 @@ With the addition of the barriers, `r1` `=` `0`, `r2` `=` `0` is again impossibl
 
 One final example, to drive home why the model is called total store order. In the model, there are local write queues but no caches on the read path. Once a write reaches main memory, all processors not only agree that the value is there but also agree about when it arrived relative to writes from other processors. Consider this litmus test:
 
-> _Litmus Test: Independent Reads of Independent Writes \(IRIW\)_
+> _Litmus Test: Independent Reads of Independent Writes (IRIW)_
 >
 > Can this program see `r1` `=` `1`, `r2` `=` `0`, `r3` `=` `1`, `r4` `=` `0`?
 >
-> \(Can Threads 3 and 4 see `x` and `y` change in different orders?\)
+> (Can Threads 3 and 4 see `x` and `y` change in different orders?)
 
 ```c
 
@@ -182,15 +180,15 @@ x = 1          y = 1          r1 = x         r3 = y
 
 > On sequentially consistent hardware: no.
 >
-> On x86 \(or other TSO\): no.
+> On x86 (or other TSO): no.
 
-If Thread 3 sees `x` change before `y`, can Thread 4 see `y` change before `x`? For x86 and other TSO machines, the answer is no: there is a _total order_ over all stores \(writes\) to main memory, and all processors agree on that order, subject to the wrinkle that each processor knows about its own writes before they reach main memory.
+If Thread 3 sees `x` change before `y`, can Thread 4 see `y` change before `x`? For x86 and other TSO machines, the answer is no: there is a _total order_ over all stores (writes) to main memory, and all processors agree on that order, subject to the wrinkle that each processor knows about its own writes before they reach main memory.
 
-## The Path to x86-TSO {#path_to_x86-tso}
+## The Path to x86-TSO {#path\_to\_x86-tso}
 
 The x86-TSO model seems fairly clean, but the path there was full of roadblocks and wrong turns. In the 1990s, the manuals available for the first x86 multiprocessors said next to nothing about the memory model provided by the hardware.
 
-As one example of the problems, Plan 9 was one of the first true multiprocessor operating systems \(without a global kernel lock\) to run on the x86. During the port to the multiprocessor Pentium Pro, in 1997, the developers stumbled over unexpected behavior that boiled down to the write queue litmus test. A subtle piece of synchronization code assumed that `r1` `=` `0`, `r2` `=` `0` was impossible, and yet it was happening. Worse, the Intel manuals were vague about the memory model details.
+As one example of the problems, Plan 9 was one of the first true multiprocessor operating systems (without a global kernel lock) to run on the x86. During the port to the multiprocessor Pentium Pro, in 1997, the developers stumbled over unexpected behavior that boiled down to the write queue litmus test. A subtle piece of synchronization code assumed that `r1` `=` `0`, `r2` `=` `0` was impossible, and yet it was happening. Worse, the Intel manuals were vague about the memory model details.
 
 In response to a mailing list suggestion that “it's better to be conservative with locks than to trust hardware designers to do what we expect,” one of the Plan 9 developers [explained the problem well](https://web.archive.org/web/20091124045026/http://9fans.net/archive/1997/04/76):
 
@@ -210,9 +208,9 @@ The answer appears to be that Intel processors never actually answered “yes”
 
 The Plan 9 discussion was not an isolated event. The Linux kernel developers spent over a hundred messages on their mailing list [starting in late November 1999](https://lkml.org/lkml/1999/11/20/76) in similar confusion over the guarantees provided by Intel processors.
 
-In response to more and more people running into these difficulties over the decade that followed, a group of architects at Intel took on the task of writing down useful guarantees about processor behavior, for both current and future processors. The first result was the “[Intel 64 Architecture Memory Ordering White Paper](http://www.cs.cmu.edu/~410-f10/doc/Intel_Reordering_318147.pdf)”, published in August 2007, which aimed to “provide software writers with a clear understanding of the results that different sequences of memory access instructions may produce.” AMD published a similar description later that year in the [_AMD64 Architecture Programmer's Manual revision 3.14_](<https://courses.cs.washington.edu/courses/cse351/12wi/supp-docs/AMD Vol 1.pdf>). These descriptions were based on a model called “total lock order + causal consistency” \(TLO+CC\), intentionally weaker than TSO. In public talks, the Intel architects said that TLO+CC was “as strong as required but no stronger.” In particular, the model reserved the right for x86 processors to answer “yes” to the IRIW litmus test. Unfortunately, the definition of the memory barrier was [not strong enough](http://web.archive.org/web/20080512021617/http://blogs.sun.com/dave/entry/java_memory_model_concerns_on) to reestablish sequentially-consistent memory semantics, even with a barrier after every instruction. Even worse, researchers observed actual Intel x86 hardware violating the TLO+CC model. For example:
+In response to more and more people running into these difficulties over the decade that followed, a group of architects at Intel took on the task of writing down useful guarantees about processor behavior, for both current and future processors. The first result was the “[Intel 64 Architecture Memory Ordering White Paper](http://www.cs.cmu.edu/~410-f10/doc/Intel_Reordering_318147.pdf)”, published in August 2007, which aimed to “provide software writers with a clear understanding of the results that different sequences of memory access instructions may produce.” AMD published a similar description later that year in the [_AMD64 Architecture Programmer's Manual revision 3.14_](https://courses.cs.washington.edu/courses/cse351/12wi/supp-docs/AMD%20Vol%201.pdf). These descriptions were based on a model called “total lock order + causal consistency” (TLO+CC), intentionally weaker than TSO. In public talks, the Intel architects said that TLO+CC was “as strong as required but no stronger.” In particular, the model reserved the right for x86 processors to answer “yes” to the IRIW litmus test. Unfortunately, the definition of the memory barrier was [not strong enough](http://web.archive.org/web/20080512021617/http://blogs.sun.com/dave/entry/java_memory_model_concerns_on) to reestablish sequentially-consistent memory semantics, even with a barrier after every instruction. Even worse, researchers observed actual Intel x86 hardware violating the TLO+CC model. For example:
 
-> _Litmus Test: n6 \(Paul Loewenstein\)_
+> _Litmus Test: n6 (Paul Loewenstein)_
 >
 > Can this program end with `r1` `=` `1`, `r2` `=` `0`, `x` `=` `1`?
 
@@ -227,11 +225,11 @@ r2 = y
 
 > On sequentially consistent hardware: no.
 >
-> On x86 TLO+CC model \(2007\): no.
+> On x86 TLO+CC model (2007): no.
 >
 > On actual x86 hardware: _yes\!_
 >
-> On x86 TSO model: _yes\!_ \(Example from x86-TSO paper.\)
+> On x86 TSO model: _yes\!_ (Example from x86-TSO paper.)
 
 Revisions to the Intel and AMD specifications later in 2008 guaranteed a “no” to the IRIW case and strengthened the memory barriers but still permitted unexpected behaviors that seem like they could not arise on any reasonable hardware. For example:
 
@@ -249,11 +247,11 @@ r1 = x         r2 = x
 
 > On sequentially consistent hardware: no.
 >
-> On x86 specification \(2008\): _yes\!_
+> On x86 specification (2008): _yes\!_
 >
 > On actual x86 hardware: no.
 >
-> On x86 TSO model: no. \(Example from x86-TSO paper.\)
+> On x86 TSO model: no. (Example from x86-TSO paper.)
 
 To address these problems, Owens _et_ _al_. [proposed the x86-TSO model](https://www.cl.cam.ac.uk/~pes20/weakmemory/x86tso-paper.tphols.pdf), based on the earlier [SPARCv8 TSO model](https://research.swtch.com/sparcv8.pdf). At the time they claimed that “To the best of our knowledge, x86-TSO is sound, is strong enough to program above, and is broadly in line with the vendors’ intentions.” A few months later Intel and AMD released new manuals broadly adopting this model.
 
@@ -285,7 +283,7 @@ y = 1                 r2 = x
 
 > On sequentially consistent hardware: no.
 >
-> On x86 \(or other TSO\): no.
+> On x86 (or other TSO): no.
 >
 > On ARM/POWER: _yes\!_
 
@@ -307,7 +305,7 @@ r1 = y                r2 = x
 
 > On sequentially consistent hardware: no.
 >
-> On x86 \(or other TSO\): _yes\!_
+> On x86 (or other TSO): _yes\!_
 >
 > On ARM/POWER: _yes\!_
 
@@ -315,11 +313,11 @@ On ARM/POWER, the writes to `x` and `y` might be made to the local memories but 
 
 Here’s the litmus test that showed what it meant for x86 to have a total store order:
 
-> _Litmus Test: Independent Reads of Independent Writes \(IRIW\)_
+> _Litmus Test: Independent Reads of Independent Writes (IRIW)_
 >
 > Can this program see `r1` `=` `1`, `r2` `=` `0`, `r3` `=` `1`, `r4` `=` `0`?
 >
-> \(Can Threads 3 and 4 see `x` and `y` change in different orders?\)
+> (Can Threads 3 and 4 see `x` and `y` change in different orders?)
 
 ```c
 
@@ -331,19 +329,19 @@ x = 1          y = 1          r1 = x         r3 = y
 
 > On sequentially consistent hardware: no.
 >
-> On x86 \(or other TSO\): no.
+> On x86 (or other TSO): no.
 >
 > On ARM/POWER: _yes\!_
 
 On ARM/POWER, different threads may learn about different writes in different orders. They are not guaranteed to agree about a total order of writes reaching main memory, so Thread 3 can see `x` change before `y` while Thread 4 sees `y` change before `x`.
 
-As another example, ARM/POWER systems have visible buffering or reordering of memory reads \(loads\), as demonstrated by this litmus test:
+As another example, ARM/POWER systems have visible buffering or reordering of memory reads (loads), as demonstrated by this litmus test:
 
 > _Litmus Test: Load Buffering_
 >
 > Can this program see `r1` `=` `1`, `r2` `=` `1`?
 >
-> \(Can each thread's read happen _after_ the other thread's write?\)
+> (Can each thread's read happen _after_ the other thread's write?)
 
 ```c
 
@@ -355,13 +353,13 @@ y = 1          x = 1
 
 > On sequentially consistent hardware: no.
 >
-> On x86 \(or other TSO\): no.
+> On x86 (or other TSO): no.
 >
 > On ARM/POWER: _yes\!_
 
 Any sequentially consistent interleaving must start with either thread 1's `r1` `=` `x` or thread 2's `r2` `=` `y`. That read must see a zero, making the outcome `r1` `=` `1`, `r2` `=` `1` impossible. In the ARM/POWER memory model, however, processors are allowed to delay reads until after writes later in the instruction stream, so that `y` `=` `1` and `x` `=` `1` execute _before_ the two reads.
 
-Although both the ARM and POWER memory models allow this result, Maranget _et_ _al_. [reported \(in 2012\)](https://www.cl.cam.ac.uk/~pes20/ppc-supplemental/test7.pdf) being able to reproduce it empirically only on ARM systems, never on POWER. Here the divergence between model and reality comes into play just as it did when we examined Intel x86: hardware implementing a stronger model than technically guaranteed encourages dependence on the stronger behavior and means that future, weaker hardware will break programs, validly or not.
+Although both the ARM and POWER memory models allow this result, Maranget _et_ _al_. [reported (in 2012)](https://www.cl.cam.ac.uk/~pes20/ppc-supplemental/test7.pdf) being able to reproduce it empirically only on ARM systems, never on POWER. Here the divergence between model and reality comes into play just as it did when we examined Intel x86: hardware implementing a stronger model than technically guaranteed encourages dependence on the stronger behavior and means that future, weaker hardware will break programs, validly or not.
 
 Like on TSO systems, ARM and POWER have barriers that we can insert into the examples above to force sequentially consistent behaviors. But the obvious question is whether ARM/POWER without barriers excludes any behavior at all. Can the answer to any litmus test ever be “no, that can’t happen?” It can, when we focus on a single memory location.
 
@@ -371,7 +369,7 @@ Here’s a litmus test for something that can’t happen even on ARM and POWER:
 >
 > Can this program see `r1` `=` `1`, `r2` `=` `2`, `r3` `=` `2`, `r4` `=` `1`?
 >
-> \(Can Thread 3 see `x` `=` `1` before `x` `=` `2` while Thread 4 sees the reverse?\)
+> (Can Thread 3 see `x` `=` `1` before `x` `=` `2` while Thread 4 sees the reverse?)
 
 ```c
 
@@ -383,7 +381,7 @@ x = 1          x = 2          r1 = x         r3 = x
 
 > On sequentially consistent hardware: no.
 >
-> On x86 \(or other TSO\): no.
+> On x86 (or other TSO): no.
 >
 > On ARM/POWER: no.
 
@@ -393,11 +391,11 @@ The answer is no, even on ARM/POWER: threads in the system must agree about a to
 
 I'm purposely leaving out a lot of subtleties in the ARM and POWER weak memory models. For more detail, see any of [Peter Sewell's papers on the topic](https://www.cl.cam.ac.uk/~pes20/papers/topics.html#Power_and_ARM). Also, ARMv8 [strengthened the memory model](https://www.cl.cam.ac.uk/~pes20/armv8-mca/armv8-mca-draft.pdf) by making it “multicopy atomic,” but I won't take the space here to explain exactly what that means.
 
-There are two important points to take away. First, there is an incredible amount of subtlety here, the subject of well over a decade of academic research by very persistent, very smart people. I don't claim to understand anywhere near all of it myself. This is not something we should hope to explain to ordinary programmers, not something that we can hope to keep straight while debugging ordinary programs. Second, the gap between what is allowed and what is observed makes for unfortunate future surprises. If current hardware does not exhibit the full range of allowed behaviors—especially when it is difficult to reason about what is allowed in the first place\!—then inevitably programs will be written that accidentally depend on the more restricted behaviors of the actual hardware. If a new chip is less restricted in its behaviors, the fact that the new behavior breaking your program is technically allowed by the hardware memory model—that is, the bug is technically your fault—is of little consolation. This is no way to write programs.
+There are two important points to take away. First, there is an incredible amount of subtlety here, the subject of well over a decade of academic research by very persistent, very smart people. I don't claim to understand anywhere near all of it myself. This is not something we should hope to explain to ordinary programmers, not something that we can hope to keep straight while debugging ordinary programs. Second, the gap between what is allowed and what is observed makes for unfortunate future surprises. If current hardware does not exhibit the full range of allowed behaviors—especially when it is difficult to reason about what is allowed in the first place!—then inevitably programs will be written that accidentally depend on the more restricted behaviors of the actual hardware. If a new chip is less restricted in its behaviors, the fact that the new behavior breaking your program is technically allowed by the hardware memory model—that is, the bug is technically your fault—is of little consolation. This is no way to write programs.
 
 ## Weak Ordering and Data-Race-Free Sequential Consistency {#drf}
 
-By now I hope you're convinced that the hardware details are complex and subtle and not something you want to work through every time you write a program. Instead, it would help to identify shortcuts of the form “if you follow these easy rules, your program will only produce results as if by some sequentially consistent interleaving.” \(We're still talking about hardware, so we're still talking about interleaving individual assembly instructions.\)
+By now I hope you're convinced that the hardware details are complex and subtle and not something you want to work through every time you write a program. Instead, it would help to identify shortcuts of the form “if you follow these easy rules, your program will only produce results as if by some sequentially consistent interleaving.” (We're still talking about hardware, so we're still talking about interleaving individual assembly instructions.)
 
 Sarita Adve and Mark Hill proposed exactly this approach in their 1990 paper “[Weak Ordering – A New Definition](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.42.5567)”. They defined “weakly ordered” as follows.
 
@@ -405,13 +403,13 @@ Sarita Adve and Mark Hill proposed exactly this approach in their 1990 paper “
 >
 > Hardware is weakly ordered with respect to a synchronization model if and only if it appears sequentially consistent to all software that obey the synchronization model.
 
-Although their paper was about capturing the hardware designs of that time \(not x86, ARM, and POWER\), the idea of elevating the discussion above specific designs, keeps the paper relevant today.
+Although their paper was about capturing the hardware designs of that time (not x86, ARM, and POWER), the idea of elevating the discussion above specific designs, keeps the paper relevant today.
 
 I said before that “valid optimizations do not change the behavior of valid programs.” The rules define what valid means, and then any hardware optimizations have to keep those programs working as they might on a sequentially consistent machine. Of course, the interesting details are the rules themselves, the constraints that define what it means for a program to be valid.
 
-Adve and Hill propose one synchronization model, which they call _data-race-free \(DRF\)_. This model assumes that hardware has memory synchronization operations separate from ordinary memory reads and writes. Ordinary memory reads and writes may be reordered between synchronization operations, but they may not be moved across them. \(That is, the synchronization operations also serve as barriers to reordering.\) A program is said to be data-race-free if, for all idealized sequentially consistent executions, any two ordinary memory accesses to the same location from different threads are either both reads or else separated by synchronization operations forcing one to happen before the other.
+Adve and Hill propose one synchronization model, which they call _data-race-free (DRF)_. This model assumes that hardware has memory synchronization operations separate from ordinary memory reads and writes. Ordinary memory reads and writes may be reordered between synchronization operations, but they may not be moved across them. (That is, the synchronization operations also serve as barriers to reordering.) A program is said to be data-race-free if, for all idealized sequentially consistent executions, any two ordinary memory accesses to the same location from different threads are either both reads or else separated by synchronization operations forcing one to happen before the other.
 
-Let’s look at some examples, taken from Adve and Hill's paper \(redrawn for presentation\). Here is a single thread that executes a write of variable `x` followed by a read of the same variable.
+Let’s look at some examples, taken from Adve and Hill's paper (redrawn for presentation). Here is a single thread that executes a write of variable `x` followed by a read of the same variable.
 
 ![](//static.nykz.org/blog/images/mem-order/mem-adve-1.png "candark")
 
@@ -423,7 +421,7 @@ In contrast, there is a race in this two-thread program:
 
 Here, thread 2 writes to x without coordinating with thread 1. Thread 2's write _races_ with both the write and the read by thread 1. If thread 2 were reading x instead of writing it, the program would have only one race, between the write in thread 1 and the read in thread 2. Every race involves at least one write: two uncoordinated reads do not race with each other.
 
-To avoid races, we must add synchronization operations, which force an order between operations on different threads sharing a synchronization variable. If the synchronization S\(a\) \(synchronizing on variable a, marked by the dashed arrow\) forces thread 2's write to happen after thread 1 is done, the race is eliminated:
+To avoid races, we must add synchronization operations, which force an order between operations on different threads sharing a synchronization variable. If the synchronization S(a) (synchronizing on variable a, marked by the dashed arrow) forces thread 2's write to happen after thread 1 is done, the race is eliminated:
 
 ![](//static.nykz.org/blog/images/mem-order/mem-adve-3.png "candark")
 

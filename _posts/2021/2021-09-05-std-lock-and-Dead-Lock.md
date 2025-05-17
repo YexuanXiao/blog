@@ -47,9 +47,9 @@ void swap(X &lhs, X &rhs)
 
 而 std::lock 就具有原子性。
 
-由于 C++11 的 std::lock 只有锁定功能，没有解锁功能，所以需要将 std::mutex 的所有权移交给 std::lock_guard。
+由于 C++11 的 std::lock 只有锁定功能，没有解锁功能，所以需要将 std::mutex 的所有权移交给 std::lock\_guard。
 
-C++17 中添加了 RAII 风格的 std::lock：std::scoped_lock，简化了代码的书写：
+C++17 中添加了 RAII 风格的 std::lock：std::scoped\_lock，简化了代码的书写：
 
 ```cpp
 
@@ -63,4 +63,4 @@ void swap(X &lhs, X &rhs)
 
 ```
 
-std::scoped_lock 是 std::lock 和 std::lock_guard 的结合体，可以同时传入两个 std::mutex 并在离开作用域时自动析构，防止死锁。
+std::scoped\_lock 是 std::lock 和 std::lock\_guard 的结合体，可以同时传入两个 std::mutex 并在离开作用域时自动析构，防止死锁。

@@ -5,7 +5,6 @@ category: by-talk
 tags: [nation,society]
 description:
 ---
-
 转载纽约时报一篇文章《Why I’ve Stopped Telling People I’m Not Chinese》。
 
 作者韩裔美国作家 Euny Hong。
@@ -18,12 +17,11 @@ description:
 
 作为一个韩裔美国人，作者因为长了一张亚洲脸，跟中国人一起在美国经历了种族歧视。在韩国人的氛围下被教育到，遇到歧视时要告诉别人自己不是中国人，而是韩国人。但是它不管用，因为和她的幼儿园同学认为根本没有韩国这个国家。
 
->Our parents and Sunday school teachers told us that the correct response was, “I’m not Chinese; I’m Korean.” (This didn’t even work, it should be noted: When I informed a mean kindergartner that I was Korean, he responded, “There is no such place.”)
+> Our parents and Sunday school teachers told us that the correct response was, “I’m not Chinese; I’m Korean.” (This didn’t even work, it should be noted: When I informed a mean kindergartner that I was Korean, he responded, “There is no such place.”)
 
 “如果有人说你们中国人害死我们”，那一刻，我就是中国人。不论是不是开口强烈抗议这种论断，我直觉的反应应该是对种族歧视感到愤怒，而不是努力撇清自己。因为我从这次疫情及其影响中学到的重要一课是：跟种族歧视者争论他们歧视错了，就等同于让对方下次找个机会再准确的歧视我。“
 
->If someone says, “You Chinese are killing us,” I am in that moment Chinese. Whether I give the other person a piece of my mind or not — awkward, perhaps, from six feet away — my instinct should be indignation, not deflection. Because one of many lessons I’ve learned from the pandemic and its consequences is that focusing on being misidentified by a xenophobe is nothing better than trying to negotiate a more accurate insult.
-
+> If someone says, “You Chinese are killing us,” I am in that moment Chinese. Whether I give the other person a piece of my mind or not — awkward, perhaps, from six feet away — my instinct should be indignation, not deflection. Because one of many lessons I’ve learned from the pandemic and its consequences is that focusing on being misidentified by a xenophobe is nothing better than trying to negotiate a more accurate insult.
 
 原文在此：
 

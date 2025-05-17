@@ -4,10 +4,10 @@ date: "2024-10-07 01:10:00"
 tags: [C++]
 category: blog
 ---
-
 协程是 C++ 20 标准中新添加的一个重要语言特性，包含了一些新语法和协程支持库，然而，如何使用协程进行编程还是一片蓝海。
 
 <!-- more -->
+
 C++ 的无栈协程最早出现于 2012 年，当时被叫做 [Resumeable Functions](https://www.open-std.org/JTC1/SC22/WG21/docs/papers/2012/n3328.pdf)，由 Visual C++ 团队的 Niklas Gustafsson 提出，Visual C++ 团队在当时设计了代号为 Casablanca 的 [C++ Rest SDK](https://github.com/microsoft/cpprestsdk)。[Resumeable Functions rev.4](https://isocpp.org/files/papers/N4402.pdf)是最接近最终设计的带有教学性质的版本，而 2018 年发布的 [Working Draft, C++ Extensions for Coroutines](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0057r8.pdf) 第八版则几乎可以被认为是最终设计。
 
 笔者在接触协程后使用过一些库，例如 [C++/WinRT](https://github.com/microsoft/cppwinrt)、[Drogon](https://github.com/drogonframework/drogon)、[stdexec](https://github.com/NVIDIA/stdexec) 等，但都是基于别人已有成果的二次创作，如何从零开始编写一个可用的基于协程的异步设施仍然是笔者头上的一顶乌云以及待办列表中的重要一项。同时，网络上关于如何使用协程的教程也寥寥无几，主要有 [C++ Reference](https://zh.cppreference.com/w/cpp/language/coroutines)、[C++20 协程原理和应用](https://zhuanlan.zhihu.com/p/497224333)、以及 [Asymmetric Transfer](https://lewissbaker.github.io/) 等。许传奇等人的教程主要介绍了协程的基本接口，但过于简单，C++ Reference 则是较为准确的描述了这些接口如何被编译器使用，而 Lewis Baker 的教程比较全面但过于复杂，都缺乏理论与实践结合。

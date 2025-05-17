@@ -4,7 +4,6 @@ title: 随手拍-华风国际商城
 category: by-talk
 tags: [photograph]
 ---
-
 今天有空便随手拍了几张照片。
 
 <!-- more -->

@@ -4,15 +4,11 @@ date: "2020-05-21 00:00:00"
 tags: [Windows]
 category: blog
 ---
-
 因为 COVID-19，微软的 Build 2020 改成了线上，因而有幸参加这次大会。
 
 根据大会的服务协议，貌似不能以任何形式对会议内容进行记录，不过我发个微软提供的时间表(不完整)总是 OK 的。
 
 <!-- more -->
-
-* toc
-{:toc}
 
 ## Microsoft Build | May 19th - 21st | A global digital event
 
@@ -22,11 +18,11 @@ Tuesday, May 19 at 11:00 PM
 
 ### Welcome to Microsoft Build 2020
 
-Join Seth Juarez and Dona Sarkar as they kick off Microsoft Build 2020\. View this session on the MyBuild home page.
+Join Seth Juarez and Dona Sarkar as they kick off Microsoft Build 2020. View this session on the MyBuild home page.
 
 **Speakers:** Seth Juarez, Dona Sarkar
 
-* * *
+-----
 
 Tuesday, May 19 at 11:20 PM
 
@@ -36,7 +32,7 @@ In this time of uncertainty, developers will play a central role in reimagining 
 
 **Speakers:** Satya Nadella
 
-* * *
+-----
 
 Tuesday, May 19 at 11:40 PM
 
@@ -46,7 +42,7 @@ The 2020 Imagine Cup World Championship – from tens of thousands of competitor
 
 **Speakers:** Corey Sanders
 
-* * *
+-----
 
 Wednesday, May 20 at 12:00 AM
 
@@ -56,7 +52,7 @@ Scott Hanselman calls on a number of his friends to explore the modern developer
 
 **Speakers:** Scott Hanselman, Allison Buchholtz-Au, Kayla Cinnamon, Maddy Leger
 
-* * *
+-----
 
 Wednesday, May 20 at 1:15 AM
 
@@ -66,7 +62,7 @@ Microsoft is unique in the industry and provides the world’s most comprehensiv
 
 **Speakers:** Scott Guthrie, Julia White, Donovan Brown, Jeff Hollan, Rohan Kumar, Amanda Silver
 
-* * *
+-----
 
 Wednesday, May 20 at 2:00 AM
 
@@ -76,7 +72,7 @@ Join Rajesh Jha to learn how you can build on the world’s productivity cloud, 
 
 **Speakers:** Rajesh Jha, Yina Arenas, Kevin Gallo, Archana Saseetharan
 
-* * *
+-----
 
 Wednesday, May 20 at 2:45 AM
 
@@ -86,7 +82,7 @@ Join Dona Sarkar as she gets keynote reactions and incisive commentary from indu
 
 **Speakers:** Mary Jo Foley, Paul Thurrott
 
-* * *
+-----
 
 Wednesday, May 20 at 3:30 AM
 
@@ -96,7 +92,7 @@ See live demos of Azure Migrate, in different scenarios, as we demonstrate how t
 
 **Speakers:** Shikher Saluja
 
-* * *
+-----
 
 Wednesday, May 20 at 3:30 AM
 
@@ -106,7 +102,7 @@ The Microsoft identity platform offers the building blocks for authentication, s
 
 **Speakers:** Saeed Akhter
 
-* * *
+-----
 
 Wednesday, May 20 at 4:15 AM
 
@@ -116,7 +112,7 @@ Power Automate is Microsoft's low-code digital and ropbotic process automation s
 
 **Speakers:** Stephen Siciliano
 
-* * *
+-----
 
 Wednesday, May 20 at 4:15 AM
 
@@ -126,7 +122,7 @@ Get the latest updates in .NET Core and how you can be more productive building 
 
 **Speakers:** Scott Hanselman, Scott Hunter
 
-* * *
+-----
 
 Wednesday, May 20 at 5:45 AM
 
@@ -136,17 +132,17 @@ Learn how the Windows app platform is evolving and unifying Win32 and UWP so you
 
 **Speakers:** Jesse Bishop, Paul Gusmorino
 
-* * *
+-----
 
 Wednesday, May 20 at 6:30 AM
 
 ### Everything you need to know about WinUI
 
-WinUI is Microsoft’s UI framework of the future for every app on Windows, designed to work in both Universal (UWP) and Desktop (Win32) apps. Come learn how WinUI provides a path forward for every Windows Developer, whether you’re using WinForms, WPF, MFC, native or .NET, and more!
+WinUI is Microsoft’s UI framework of the future for every app on Windows, designed to work in both Universal (UWP) and Desktop (Win32) apps. Come learn how WinUI provides a path forward for every Windows Developer, whether you’re using WinForms, WPF, MFC, native or .NET, and more\!
 
 **Speakers:** Ryan Demopoulos, Miguel Ramos
 
-* * *
+-----
 
 Wednesday, May 20 at 7:30 AM
 
@@ -156,7 +152,7 @@ Hear the latest updates on Microsoft Edge & Chromium for developers including: w
 
 **Speakers:** Kyle Pflug
 
-* * *
+-----
 
 Wednesday, May 20 at 8:20 AM
 
@@ -166,7 +162,7 @@ In this time of uncertainty, developers will play a central role in reimagining 
 
 **Speakers:** Satya Nadella
 
-* * *
+-----
 
 Wednesday, May 20 at 8:40 AM
 
@@ -176,7 +172,7 @@ The 2020 Imagine Cup World Championship – from tens of thousands of competitor
 
 **Speakers:** Corey Sanders
 
-* * *
+-----
 
 Wednesday, May 20 at 9:00 AM
 
@@ -186,7 +182,7 @@ Scott Hanselman calls on a number of his friends to explore the modern developer
 
 **Speakers:** Scott Hanselman, Allison Buchholtz-Au, Kayla Cinnamon, Maddy Leger
 
-* * *
+-----
 
 Wednesday, May 20 at 11:15 AM
 
@@ -196,7 +192,7 @@ Join Sonia, Jess and Jesse to discuss why Identity is a crucial technology compo
 
 **Speakers:** Sonia Cuff, Jess Dodson, Jesse Suna
 
-* * *
+-----
 
 Wednesday, May 20 at 3:15 PM
 
@@ -206,7 +202,7 @@ Microsoft is unique in the industry and provides the world’s most comprehensiv
 
 **Speakers:** Scott Guthrie, Julia White, Donovan Brown, Jeff Hollan, Rohan Kumar, Amanda Silver
 
-* * *
+-----
 
 Wednesday, May 20 at 4:00 PM
 
@@ -216,7 +212,7 @@ Join Rajesh Jha to learn how you can build on the world’s productivity cloud, 
 
 **Speakers:** Rajesh Jha, Yina Arenas, Kevin Gallo, Archana Saseetharan
 
-* * *
+-----
 
 Thursday, May 21 at 12:45 AM
 
@@ -226,17 +222,17 @@ Kevin Scott and industry guests present the emergent trends that are on path to 
 
 **Speakers:** Kevin Scott, Peter Lee, lila tretikov, Luis Vargas
 
-* * *
+-----
 
 Thursday, May 21 at 1:30 AM
 
 ### Ask Scott Guthrie, with Scott Guthrie
 
-In a live Q&A, Scott Guthrie answers the most pressing questions submitted by the developer community.
+In a live Q\&A, Scott Guthrie answers the most pressing questions submitted by the developer community.
 
 **Speakers:** Scott Guthrie
 
-* * *
+-----
 
 Thursday, May 21 at 2:30 AM
 
@@ -246,7 +242,7 @@ Join James Phillips to see how the Power Platform complements existing developme
 
 **Speakers:** James Phillips, Charles Lamanna, Kim Manis, Julie Strauss
 
-* * *
+-----
 
 Thursday, May 21 at 9:30 AM
 
@@ -254,7 +250,7 @@ Thursday, May 21 at 9:30 AM
 
 Trivia, Film Festival, Performances and more! View this session on the MyBuild home page.
 
-* * *
+-----
 
 Thursday, May 21 at 10:30 AM
 
@@ -264,7 +260,7 @@ Kevin Scott and industry guests present the emergent trends that are on path to 
 
 **Speakers:** Kevin Scott, Peter Lee, lila tretikov, Luis Vargas
 
-* * *
+-----
 
 Thursday, May 21 at 11:15 AM
 
@@ -274,8 +270,7 @@ Join James Phillips to see how the Power Platform complements existing developme
 
 **Speakers:** James Phillips, Charles Lamanna, Kim Manis, Julie Strauss
 
-* * *
-
+-----
 
 ## Microsoft Build Registration Terms and Conditions
 

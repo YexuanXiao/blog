@@ -19,10 +19,7 @@ tags: [type-moon,anime]
 
 [【月姬自制动画】反转冲动](https://www.bilibili.com/video/av81899533 "【月姬自制动画】反转冲动")
 
-
 <iframe src="//player.bilibili.com/player.html?aid=81899533&amp;cid=140137703&amp;page=1&amp;high_quality=1&amp;danmaku=0" allowfullscreen="allowfullscreen" width="100%" height="450" scrolling="no" frameborder="0" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts" class="bilivideo"></iframe>
-
-
 
 整体是 UFOTABLE 的风格，外加一部分武内脸，还有比这更激动人心的粉丝自制动画吗？？？
 
@@ -35,7 +32,6 @@ tags: [type-moon,anime]
 另外视频创作团队还曾经自制了 FSN UBW 的视频，补全了 15 年动画缺少的伊莉雅的剧情。
 
 awsl，请问有谁能不喜欢伊莉雅呢？？？
-
 
 [【Fate自制动画第三期】](https://www.bilibili.com/video/av48372161 "【Fate自制动画第三期】")
 

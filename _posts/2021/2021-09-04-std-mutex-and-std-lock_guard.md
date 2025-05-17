@@ -10,7 +10,6 @@ category: blog
 
 <!-- more -->
 
-
 参考：C++ 并发编程实战 第二版 3.2。
 
 书中提供了线程安全的 stack 模板如下：
@@ -79,7 +78,7 @@ public:
 
 其中有几点需要注意：
 
-1. std::lock_guard 类模板是对 std::mutex 的 RAII 封装，用于防止忘记解锁以及出现异常时不能被解锁，保证一定程度的线程安全
-2. `mutable std::mutex m;` 的作用是在声明为 const 的函数里对 std::mutex 进行修改，通过 std::lock_guard，因为只想保护内部数据，而不是保护互斥器不被修改
-3. 这个类中大部分成员函数的第一句都是 `std::lock_guard<std::mutex> lock(m)`，即进入函数时构造 std::lock_guard（加锁），退出函数时自动调用析构函数（解锁），因此保证中间部分的执行不会和其他线程并行执行
+1. std::lock\_guard 类模板是对 std::mutex 的 RAII 封装，用于防止忘记解锁以及出现异常时不能被解锁，保证一定程度的线程安全
+2. `mutable std::mutex m;` 的作用是在声明为 const 的函数里对 std::mutex 进行修改，通过 std::lock\_guard，因为只想保护内部数据，而不是保护互斥器不被修改
+3. 这个类中大部分成员函数的第一句都是 `std::lock_guard<std::mutex> lock(m)`，即进入函数时构造 std::lock\_guard（加锁），退出函数时自动调用析构函数（解锁），因此保证中间部分的执行不会和其他线程并行执行
 4. 这个中间部分由于锁的存在保持了原子性，即这个操作在开始执行前，数据是预期状态，执行后，数据也是预期状态（不存在和其他线程的竞争数据）

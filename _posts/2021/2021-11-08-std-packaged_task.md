@@ -4,14 +4,11 @@ date: "2021-11-08 18:33:00"
 tags: [C++, docs]
 category: blog
 ---
-
-std::packaged_task 是 C++11 将任务进行包装的一种容器，类似于 std::async，但是 std::package_task 本身并不负责发起一个并行任务，仅仅将任务与期望包装为一个异步 Provider。
+std::packaged\_task 是 C++11 将任务进行包装的一种容器，类似于 std::async，但是 std::package\_task 本身并不负责发起一个并行任务，仅仅将任务与期望包装为一个异步 Provider。
 
 <!-- more -->
 
-参考 cppreference 的示例 [^1] ：
-
-[^1]: [std::packaged_task](https://zh.cppreference.com/w/cpp/thread/packaged_task)
+参考 cppreference 的 [std::packaged_task](https://zh.cppreference.com/w/cpp/thread/packaged_task) 示例 ：
 
 ```cpp
 
@@ -66,8 +63,8 @@ int main()
 
 ```
 
-正如示例代码展示的那样，std::packaged_task 会将任务包装为可调用对象，类似于 std::bind，并且任务的结果被装入 std::future，在适当的时候可以通过 std::future::get 来获得最终结果。
+正如示例代码展示的那样，std::packaged\_task 会将任务包装为可调用对象，类似于 std::bind，并且任务的结果被装入 std::future，在适当的时候可以通过 std::future::get 来获得最终结果。
 
-std::packaged_task 的模板参数是函数参数和返回值的类型，可以预料到的是，在构造 packaged_task 对象的时候，使用了 std::invoke 来转发参数，实际上标准库也大都是这样做的。
+std::packaged\_task 的模板参数是函数参数和返回值的类型，可以预料到的是，在构造 packaged\_task 对象的时候，使用了 std::invoke 来转发参数，实际上标准库也大都是这样做的。
 
 <div class="ref-label">注：</div>

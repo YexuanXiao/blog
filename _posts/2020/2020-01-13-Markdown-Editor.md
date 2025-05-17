@@ -5,7 +5,6 @@ title: Markdown 内嵌 HTML
 category: blog
 tags: [markdown,Windows,docs]
 ---
-
 <!-- more -->
 
 ### 使用过程需要注意的问题
@@ -25,7 +24,7 @@ tags: [markdown,Windows,docs]
 | 统一代码缩进方式 | 排版混乱 |
 | 段与段之间需要2个换行 | 行与行粘连 |
 | 特殊字符和 HTML 标签使用转义符 | 当作元素 |
-| 首行缩进使用 &amp;emsp; | 不显示缩进 |
+| 首行缩进使用 \&emsp; | 不显示缩进 |
 
 <br>
 
@@ -52,13 +51,17 @@ tags: [markdown,Windows,docs]
 </pre>
 
 分隔线
+
 <hr>
 
 <i>斜体</i>
 
-	有序列表 (<ol>) 无序列表 (<ul>)
+
+有序列表 (<ol>) 无序列表 (<ul>)
+
 
 页面导航链接
+
 <nav>
 <a href="/html/">HTML</a> |
 <a href="/css/">CSS</a> |
@@ -71,8 +74,7 @@ tags: [markdown,Windows,docs]
 H<sub>2</sub>O
 x<sup>n</sup>
 
-
-```html
+``` html
 
 <del> 删除线</del>
 
@@ -117,8 +119,3 @@ x<sup>n</sup>
 ### Markdown 语法范例
 
 参见 [Page Test](/blog/2019/03/28/markdown-test/)
-
-
-
-
-

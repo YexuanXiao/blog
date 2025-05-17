@@ -4,8 +4,7 @@ title: 魔法少女小圆外传动画 魔法记录
 category: by-talk
 tags: [2020一月新番,anime]
 ---
-
-早早就知道魔法少女小圆的衍生游戏魔法记录预定改编为TV动画了，终于在今天看到了第一话。
+早早就知道魔法少女小圆的衍生游戏魔法记录预定改编为 TV 动画了，终于在今天看到了第一话。
 
 <!-- more -->
 
@@ -15,7 +14,7 @@ tags: [2020一月新番,anime]
 
 ![02](https://tva2.sinaimg.cn/large/005ZJ4a1ly1grdnkez22nj31hc0u0di3.jpg)
 
-虽然在游戏中丘比是玩家，不过即使是玩家，也是万恶之源2333
+虽然在游戏中丘比是玩家，不过即使是玩家，也是万恶之源 2333
 
 ![03](https://tvax3.sinaimg.cn/large/005ZJ4a1ly1grdnkf61slj31hc0u0mz0.jpg)
 
@@ -37,22 +36,21 @@ tags: [2020一月新番,anime]
 
 原文：
 
->Speech too is great, but not the greatest.
->As the Swiss Inscription says:
->Sprechen ist silbern, Schweigen ist golden;
->or as I might rather express it:
->Speech is of Time, Silence is of Eternity.
-<br>
+> Speech too is great, but not the greatest.
+> As the Swiss Inscription says:
+> Sprechen ist silbern, Schweigen ist golden;
+> or as I might rather express it:
+> Speech is of Time, Silence is of Eternity.
+
 <p class="small right">第三卷第三章《象征》</p>
 
 ![07](https://tvax3.sinaimg.cn/large/005ZJ4a1ly1grdnkft6tlj31hc0u0q59.jpg)
 
-> The only Good Witch is a Dead Witch!
+> The only Good Witch is a Dead Witch\!
 
 　这句话原文是
 
 > The only good Indians I ever saw were dead.
-<br>
 
 　1869年1月，谢里丹将军在所谓的印第安领土（俄克拉荷马州的后方）与50名印第安酋长举行了一次会议。当时，谢里丹在内战中获得了联邦军官的承认，他负责密苏里州的部分。他的职责之一是监督印第安领土，确保印第安人保留其保留地，不骚扰白人定居者。当科曼奇酋长在会议上被介绍给谢里丹时，这位印第安人说，"Me Toch-a-way, me good Indian."。谢里丹笑着说："The only good Indians I ever saw were dead."
 

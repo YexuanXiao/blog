@@ -8,18 +8,15 @@ category: blog
 
 <!-- more -->
 
-* toc
-{:toc}
-
 ## 照片 HDR
 
 HDR 这个词最开始就是摄影用词，由于人眼看到的图像会经过大脑的处理，所以“看到”的景象并不是真实的（定性而不是定量），譬如下面两个图
 
-![2020-07-12_185135](https://tva2.sinaimg.cn/large/005ZJ4a1ly1ggoeokjbxcj30qh0fl75s.jpg)
+![2020-07-12\_185135](https://tva2.sinaimg.cn/large/005ZJ4a1ly1ggoeokjbxcj30qh0fl75s.jpg)
 
 <p class="pic-comment">永远“不直”的线</p>
 
-![2020-07-12_185246](https://tva3.sinaimg.cn/large/005ZJ4a1ly1ggoeqdp9w5j30ke0f7gon.jpg)
+![2020-07-12\_185246](https://tva3.sinaimg.cn/large/005ZJ4a1ly1ggoeqdp9w5j30ke0f7gon.jpg)
 
 <p class="pic-comment">永远“数不完”的点</p>
 

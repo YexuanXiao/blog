@@ -78,15 +78,19 @@ void insert(const Comparable &x, Container &v){
 
 基于以上原因，C++ 提出了比较性和有序性的一些概念：
 
-+ 等价（equivalent）：若 `f(a)` 和 `f(b)` 存在相同副作用，则对于 `f`，`a` 等价于 `b`。
-+ 相等（equal）：`a` 全等于 `b`，相等是等价的特殊情况。
+- 等价（equivalent）：若 `f(a)` 和 `f(b)` 存在相同副作用，则对于 `f`，`a` 等价于 `b`。
 
-+ 强有序（strong ordering）：对于整数类型来说天生就是强有序，强有序要求定义大于，小于和等价。
-+ 弱有序（weak ordering）：根据值的一部分来确定顺序，要求定义大于，小于和等价。
-+ 部分有序（partial ordering）：部分值有序，例如浮点数有坏值（NaN），坏值不可比较。要求定义大于，小于，等价和不可比。
+- 相等（equal）：`a` 全等于 `b`，相等是等价的特殊情况。
 
-+ 强等（strong equality）：只有相等和非相等，例如和空指针进行比较。
-+ 弱等（weak equality）：只有等价和不等价，例如 `unordered_map` 中的元素之间都是不等价关系。
+- 强有序（strong ordering）：对于整数类型来说天生就是强有序，强有序要求定义大于，小于和等价。
+
+- 弱有序（weak ordering）：根据值的一部分来确定顺序，要求定义大于，小于和等价。
+
+- 部分有序（partial ordering）：部分值有序，例如浮点数有坏值（NaN），坏值不可比较。要求定义大于，小于，等价和不可比。
+
+- 强等（strong equality）：只有相等和非相等，例如和空指针进行比较。
+
+- 弱等（weak equality）：只有等价和不等价，例如 `unordered_map` 中的元素之间都是不等价关系。
 
 其中约束性强的概念可以转化为约束性较弱的概念。
 
@@ -94,11 +98,11 @@ void insert(const Comparable &x, Container &v){
 
 | Category         | -1   | 0          | +1            | Non-numeric values |
 | -                | -    | -          | -             | -                  |
-| strong_ordering  | less | equal      | greater       |                    |
-| weak_ordering    | less | equivalent | greater       |                    |
-| partial_ordering | less | equivalent | greater       | unordered          |
-| strong_equality  |      | equal      | nonequal      |                    |
-| weak_equality    |      | equivalent | nonequivalent |                    |
+| strong\_ordering  | less | equal      | greater       |                    |
+| weak\_ordering    | less | equivalent | greater       |                    |
+| partial\_ordering | less | equivalent | greater       | unordered          |
+| strong\_equality  |      | equal      | nonequal      |                    |
+| weak\_equality    |      | equivalent | nonequivalent |                    |
 
 强有序必须比较所有成员/元素。大部分 STL 有序容器要求为弱有序。`std::string` 的备选有序类型为弱有序。
 
@@ -112,9 +116,9 @@ void insert(const Comparable &x, Container &v){
 
 C++20 根据有序概念设计了 3 种对象：
 
-+ `std::strong_ordering`
-+ `std::weak_ordering`
-+ `std::partial_ordering`
+- `std::strong_ordering`
+- `std::weak_ordering`
+- `std::partial_ordering`
 
 其中 `std::strong_ordering` 和 `std::weak_ordering` 提供了用户定义类型转换运算符的重载，所以可以向下转换。
 
@@ -122,13 +126,13 @@ C++20 根据有序概念设计了 3 种对象：
 
 三路比较满足如下规律：
 
-+ `(a <=> b == 0) == bool(a == b)` is true
-+ `(a <=> b != 0) == bool(a != b)` is true
-+ `((a <=> b) <=> 0)` and `(0 <=> (b <=> a))` are equal
-+ `(a <=> b < 0) == bool(a < b)` is true
-+ `(a <=> b > 0) == bool(a > b)` is true
-+ `(a <=> b <= 0) == bool(a <= b)` is true
-+ `(a <=> b >= 0) == bool(a >= b)` is true
+- `(a <=> b == 0) == bool(a == b)` is true
+- `(a <=> b != 0) == bool(a != b)` is true
+- `((a <=> b) <=> 0)` and `(0 <=> (b <=> a))` are equal
+- `(a <=> b < 0) == bool(a < b)` is true
+- `(a <=> b > 0) == bool(a > b)` is true
+- `(a <=> b <= 0) == bool(a <= b)` is true
+- `(a <=> b >= 0) == bool(a >= b)` is true
 
 一个正确实现的三路比较必须满足以上规律，标准库提供了 `three_way_comparable` 这个概念用于验证此规律，该 concept 在 \<compare\> 中定义。
 
