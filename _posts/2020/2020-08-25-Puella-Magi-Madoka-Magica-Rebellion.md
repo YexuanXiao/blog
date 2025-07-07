@@ -22,5 +22,3 @@ tags: [anime,jottings]
 [魔法少女小圆剧场版 叛逆的物语](https://mysteriouspreserve.com/by-talk/2020/07/20/Puella-Magi-Madoka-Magica-Rebellion/)
 
 目前 Bilibili 购买了国内的网络播放权，可以去 Bilibili 观看整部电影。
-
-<script src="{{ site.baseurl }}/assets/js/adjust.js">

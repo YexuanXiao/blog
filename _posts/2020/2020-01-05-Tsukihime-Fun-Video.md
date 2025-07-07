@@ -39,5 +39,3 @@ awsl，请问有谁能不喜欢伊莉雅呢？？？
 <br>
 <br>
 <p class="little" align="right">版权归原作者所有</p>
-
-<script src="{{ site.baseurl }}/assets/js/adjust.js">

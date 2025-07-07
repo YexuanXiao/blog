@@ -29,5 +29,3 @@ tags: [manga,anime]
 <iframe src="//player.bilibili.com/player.html?aid=2348817&amp;cid=3668304&amp;page=1&amp;high_quality=1&amp;danmaku=0" allowfullscreen="allowfullscreen" width="100%" height="450" scrolling="no" frameborder="0" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts" class="bilivideo"></iframe>
 
 这上色过程，给跪了\[跪倒\]
-
-<script src="{{ site.baseurl }}/assets/js/adjust.js">
