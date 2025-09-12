@@ -13,7 +13,7 @@ title : RSS Feed
 		<atom:link href="{{ site.url  }}/rss.xml" rel="self" type="application/rss+xml" />
 		<ttl>3600</ttl>
 		<webMaster>{{ site.author.email }} ({{ site.author.name }})</webMaster>
-		<link>{{ site.url }}</link>
+		<link>//{{ site.url }}</link>
 		<lastBuildDate>{{ site.time | date_to_rfc822 }}</lastBuildDate>
 		<pubDate>{{ site.time | date_to_rfc822 }}</pubDate>
 		{% for post in site.posts %}
