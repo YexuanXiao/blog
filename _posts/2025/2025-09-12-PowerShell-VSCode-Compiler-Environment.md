@@ -76,7 +76,7 @@ PowerShell -NoExit -Command "& VS-Env amd64"
 
 三者皆可。
 
-VSCode 的 CMakeTools 提供一个功能叫做用户本地工具包，通过编辑该 JSON 可以通过在状态栏快速切换编译器。
+VSCode 的 CMakeTools 提供一个功能叫做用户本地工具包，使用该 JSON 配置不同编译器后，VSCode 的状态栏就可以快速切换编译器。
 
 ```json
 
@@ -144,4 +144,4 @@ VSCode 的 CMakeTools 提供一个功能叫做用户本地工具包，通过编�
 
 ```
 
-使用 `cmake --preset default` 就可以指定使用某个编译器配置和构建项目。
+使用 `cmake --preset default` 或者 CMakeTools 在 VSCode 状态栏提供的按钮就可以指定使用某个编译器配置和构建项目。
