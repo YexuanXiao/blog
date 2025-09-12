@@ -10,7 +10,7 @@ title : RSS Feed
 		<description>{{ site.title | xml_escape }} - {{ site.author.name | xml_escape }}</description>
 		<copyright>© {{ site.time | date: '%Y' }} {{ site.copyright }} All rights reserved.</copyright>
 		<language>zh-cn</language>
-		<atom:link href="{{ site.url  }}/rss.xml" rel="self" type="application/rss+xml" />
+		<atom:link href="//{{ site.url  }}/rss.xml" rel="self" type="application/rss+xml" />
 		<ttl>3600</ttl>
 		<webMaster>{{ site.author.email }} ({{ site.author.name }})</webMaster>
 		<link>//{{ site.url }}</link>
