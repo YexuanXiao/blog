@@ -11,7 +11,7 @@ category: blog
 
 大部分教程声称锁屏壁纸存储在以下路径：
 
-`C:\Users\Administrator\AppData\Local\Packages\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\LocalState\Assets`
+`C:\Users\Administrator\AppData\Local\Packages\​Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy​\LocalState\Assets`
 
 但问题在于，很多用户（包括我自己）并不使用 Administrator 账户，甚至根本不存在 `C:\Users\Administrator\` 用户文件夹。大部分人的第一反应应该和我一样，把 Administrator 改成自己的用户文件夹，但很遗憾这个文件夹应该是空的，至少我本地是空的。这个方法可能仅适用于使用 Administrator 账户的人。
 
