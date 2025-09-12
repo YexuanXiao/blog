@@ -21,7 +21,7 @@ title : RSS Feed
 				<title>{{ post.title | xml_escape }}</title>
 				<category>{{ post.categories | first }}</category>
 				<description>{{ post.excerpt | strip_html | escape | strip_newlines }}</description>
-				<link>{{ site.url }}{{ post.url }}</link>
+				<link>//{{ site.url }}{{ post.url }}</link>
 				<guid>{{ post.url }}</guid>
 				<pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
 		</item>
