@@ -22,4 +22,6 @@ Windows 10 1809 起，自带可选的 OpenSSH 服务器功能，经过简单配�
 
 6. PowerShell 执行 `New-NetFirewallRule -Name 'OpenSSH-Server-In-TCP-Custom-Port' -DisplayName 'OpenSSH Server (sshd) Custom Port' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 234` 开放 Windows 防火墙，注意端口号自行修改为第四步设置的
 
-7. 可选，PowerShell 执行 `New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Program Files\PowerShell\7\pwsh.exe" -PropertyType String -Force` 可以修改默认 Shell，注意路径必须是绝对路径
+7. PowerShell 执行 `Set-Service -Name "sshd" -StartupType Automatic` 设置 sshd 服务开机自启动
+
+8. 可选，PowerShell 执行 `New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Program Files\PowerShell\7\pwsh.exe" -PropertyType String -Force` 可以修改默认 Shell，注意路径必须是绝对路径
