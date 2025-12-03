@@ -1,7 +1,7 @@
 ---
 title: Hardware Memory Models
 date: "2023-04-19 19:45:00"
-tags: [C++,C]
+tags: [C++, C, docs]
 category: blog
 ---
 这是 Go 语言现任领队 Russ Cox 在 2021 年写的文章 [Hardware Memory Models](https://research.swtch.com/hwmm) 的英文原版的备份。

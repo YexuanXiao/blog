@@ -1,7 +1,7 @@
 ---
 title: 为什么不能分发 C++ 二进制模块接口（BMI）
 date: "2025-11-16 18:48:00"
-tags: [Windows, docs]
+tags: [C++, docs]
 category: blog
 ---
 

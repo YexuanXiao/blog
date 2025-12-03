@@ -1,7 +1,7 @@
 ---
 title: 配置 Windows 的局域网 SSH 访问
 date: "2025-12-01 00:05:00"
-tags: [C++, docs]
+tags: [Windows, docs]
 category: blog
 ---
 Windows 10 1809 起，自带可选的 OpenSSH 服务器功能，经过简单配置即可作为 SSH 服务器使用。
