@@ -8,8 +8,7 @@
 body {
 	max-width: 100%;
 	user-select: none;
-	overflow-x: hidden;
-	overscroll-behavior-y: none
+	overflow-x: hidden
 }
 
 a {
