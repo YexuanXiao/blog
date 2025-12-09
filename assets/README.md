@@ -32,20 +32,6 @@ Hebrew OpenType Layout logic copyright © 2003 & 2007, Ralph Hancock & John Huds
 
 seguoweb.woff
 
-### Workbox
-
-#### License
-
-According to https://github.com/GoogleChrome/workbox/blob/v6/LICENSE, Workbox uses the following license:
-
-MIT License
-
-Copyright 2018 Google LLC
-
-#### Include files
-
-All js files in the workbox folder.
-
 ### Logo Image (svgs)
 
 All logo images downloaded from Wikipedia.

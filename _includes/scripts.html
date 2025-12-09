@@ -59,15 +59,6 @@
 	})
 	observer.observe(element, { childList: true, subtree: true })
 </script>
-<script>
-	// service worker
-	if (navigator.serviceWorker.controller) {
-		navigator.serviceWorker.addEventListener('controllerchange', () => {
-			showNotification()
-		})
-	}
-	navigator.serviceWorker.register('{{ site.alternateurl }}/sw.js')
-</script>
 {% if site.live2d.enable == true %}
 <script type="module" src="{{ site.alternateurl }}/assets/js/live2d.js">
 </script>
@@ -77,6 +68,6 @@
 	data-repo-id="{{ site.giscus.data_repo_id }}" data-category="{{ site.giscus.data_category }}"
 	data-category-id="{{ site.giscus.data_category_id }}" data-mapping="title" data-loading="lazy"
 	data-reactions-enabled="0" data-emit-metadata="0" data-input-position="top" data-lang="zh-CN"
-	data-theme="//static.nykz.org/blog/style.css"	crossorigin="anonymous" async>
+	data-theme="//static.nykz.org/blog/style.css" crossorigin="anonymous" async>
 </script>
 {% endif %}
