@@ -12,22 +12,24 @@ layout: default
 		<h1 class="has-text-weight-medium is-size-4">
 			{{ page.title | escape }}
 		</h1>
-		<span class="is-size-7">
-			<span class="sw sw-calender mr-1"></span>
-			<time class="date" datetime="{{ page.date | date_to_xmlschema }}">
-				{{ page.date | date: "%B %-d, %Y. A %A" }}
-			</time>
-		</span>
 		<div class="is-size-7 is-justify-content-space-between is-flex">
+		    <span>
+		    	<span class="sw sw-calender mr-1"></span>
+		    	<time class="date" datetime="{{ page.date | date_to_xmlschema }}">
+		    		{{ page.date | date: "%B %-d, %Y" }}
+		    	</time>
+		    </span>
 			<span>
-				{% if site.i18n.number_of_words %}{{ site.i18n.number_of_words }}{% else %}Number of words: {% endif %}{{ content | number_of_words: "auto" | divided_by: 1.2 | floor }}
+				{% if site.i18n.number_of_words %}{{ site.i18n.number_of_words }}{% else %}Number of words: {% endif %}{{ content | number_of_words: "cjk" }}
 			</span>
-			{% unless page.categories == empty %}
-			<a class="px-2" href="{{ site.alternateurl }}/categories#{{ page.categories | first | uri_escape }}">
+		</div>
+		{% unless page.categories == empty %}
+		<div class="right is-size-7">
+			<a href="{{ site.alternateurl }}/categories#{{ page.categories | first | uri_escape }}">
 				{{ page.categories | first }}
 			</a>
-			{% endunless %}
 		</div>
+		{% endunless %}
 		<hr>
 		{{ content | replace: "	", "    " }}
 	</article>
