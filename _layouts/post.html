@@ -23,13 +23,6 @@ layout: default
 				{% if site.i18n.number_of_words %}{{ site.i18n.number_of_words }}{% else %}Number of words: {% endif %}{{ content | number_of_words: "cjk" }}
 			</span>
 		</div>
-		{% unless page.categories == empty %}
-		<div class="right is-size-7">
-			<a href="{{ site.alternateurl }}/categories#{{ page.categories | first | uri_escape }}">
-				{{ page.categories | first }}
-			</a>
-		</div>
-		{% endunless %}
 		<hr>
 		{{ content | replace: "	", "    " }}
 	</article>
@@ -58,10 +51,20 @@ layout: default
 			申请许可后转载。
 		</p>
 		{% endif %}
+		{% unless page.categories == empty %}
+		<div class="mb-2">
+			{% for category in page.categories %}
+			<a href="{{ site.alternateurl }}/tags#{{ tag | uri_escape }}" class="tag is-medium is-success is-light">
+				<span class="sw sw-category mr-1"></span>
+				{{ category }}
+			</a>
+			{% endfor %}
+		</div>
+		{% endunless %}
 		{% unless page.tags == empty %}
 		<div>
 			{% for tag in page.tags %}
-			<a href="{{ site.alternateurl }}/tags#{{ tag | uri_escape }}" class="tag is-medium is-success is-light mb-2">
+			<a href="{{ site.alternateurl }}/tags#{{ tag | uri_escape }}" class="tag is-medium is-info is-light">
 				<span class="sw sw-tag mr-1"></span>
 				{{ tag }}
 			</a>

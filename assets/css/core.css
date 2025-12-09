@@ -165,7 +165,6 @@ article code {
 @font-face {
 	font-family: "segoeweb";
 	src: url("/assets/fonts/segoeweb.woff2") format("woff2");
-	unicode-range: U+0009, U+0020, U+003E-002D, U+E000-E00B, U+1F5CE, U+1F313, U+21A9, U+00A9;
 	font-style: normal;
 	font-weight: normal
 }
@@ -239,4 +238,8 @@ article code {
 
 .sw-calender:before {
 	content: "\e00e"
+}
+
+.sw-category:before {
+	content: "\e00f"
 }
