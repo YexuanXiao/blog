@@ -54,7 +54,7 @@ layout: default
 		{% unless page.categories == empty %}
 		<div class="mb-2">
 			{% for category in page.categories %}
-			<a href="{{ site.alternateurl }}/tags#{{ tag | uri_escape }}" class="tag is-medium is-success is-light">
+			<a href="{{ site.alternateurl }}/categories#{{ category | uri_escape }}" class="tag is-medium is-success is-light">
 				<span class="sw sw-category mr-1"></span>
 				{{ category }}
 			</a>
