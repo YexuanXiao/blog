@@ -63,6 +63,9 @@
 <script type="module" src="{{ site.alternateurl }}/assets/js/live2d.js">
 </script>
 {% endif %}
+<script>
+	navigator.serviceWorker.register('{{ site.alternateurl }}/sw.js')
+</script>
 {% if site.giscus.enable == true and page.layout == 'post' %}
 <script src="//giscus.app/client.js" data-repo="{{ site.giscus.data_repo }}" data-strict="1"
 	data-repo-id="{{ site.giscus.data_repo_id }}" data-category="{{ site.giscus.data_category }}"
