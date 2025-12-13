@@ -7,7 +7,6 @@
 .post-text pre {
 	padding: 0 1.5em;
 	font-size: .85em;
-	user-select: text;
 	overflow-y: hidden;
 	border-radius: 4px
 }
