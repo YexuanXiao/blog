@@ -117,7 +117,19 @@ When working with event handlers, the thread that raises the event is the thread
 
 Some tasks run on their own threads and raise events spontaneously, such as `MediaPlayer` and its associated objects. Typically, their member functions are thread-safe, but the callbacks for events they raise can execute on any thread. In these cases, you must synchronize back to the UI thread or a specified thread to complete your logic.
 
-<div class="ref-label">Reference:</div>
+### COM Initialization  
+
+Apart from the main thread in UWP, all threads are not initialized with COM, meaning there is no STA or MTA context available for use.
+
+C++/WinRT provides `winrt::init_apartment` and `winrt::uninit_apartment` for initializing and uninitializing COM. However, note that these are not wrapped as RAII-style classes, so ensure that when `winrt::uninit_apartment` is called, no COM objects remain unreleased.  
+
+A thread can be initialized multiple times with the same context type, and there must be a corresponding number of uninitializations. Re-initializing with a different context type is an error. After the last uninitialization is performed, COM returns to an uninitialized state. Generally, threads in the Win32 thread pool need to consistently use MTA.
+
+<div class="ref-label">Acknowledgements</div>
+
+Thanks to [GeeLaw](https://github.com/GeeLaw) for the detailed explanation on COM initialization, and to [cnbluefire](https://github.com/cnbluefire) for sharing the experience and tests.
+
+<div class="ref-label">References</div>
 <div class="ref-list">
 <a href="https://github.com/microsoft/cppwinrt">
 C++/WinRT

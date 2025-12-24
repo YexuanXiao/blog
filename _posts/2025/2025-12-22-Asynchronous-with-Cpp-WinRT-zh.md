@@ -116,6 +116,18 @@ for (unsigned x = 0u; !canceled(); ++x) {
 
 有些任务在自己的线程执行并且自发的产生事件，例如 `MediaPlayer` 和其关联的对象。通常来说，它们的成员函数是线程安全的，但它们产生的事件的回调可以在任何线程被执行，此时必须同步到 UI 线程或者指定线程来完成后续逻辑。
 
+### COM 初始化
+
+除了 UWP 的主线程外，所有线程都没有初始化 COM，因此没有 STA 和 MTA 上下文可以使用。
+
+C++/WinRT 提供了 `winrt::init_apartment` 和 `winrt::uninit_apartment` 用于初始化和反初始化 COM，但需要注意，它没有包装成 RAII 风格的类，因此请确保 `winrt::uninit_apartment` 调用时，没有 COM 对象还未完成释放。
+
+线程可以重复使用相同上下文类型初始化，并且要有对应数量的反初始化。使用不同上下文类型重复初始化是错误的。在最后一给反初始化执行后，COM 回到未初始化状态。一般来说，Win32 线程池里的线程需要一致的使用 MTA。
+
+<div class="ref-label">致谢</div>
+
+感谢 [GeeLaw](https://geelaw.blog/) 提供的有关 COM 初始化的细致的解释，以及[蓝火火](https://github.com/cnbluefire)分享的经验以及测试。
+
 <div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://github.com/microsoft/cppwinrt">
@@ -127,4 +139,9 @@ Inside C++/WinRT: Apartment switching: The basic idea
 <a href="https://learn.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/concurrency-2">
 Advanced concurrency and asynchrony with C++/WinRT
 </a>
+<a href="https://learn.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/agile-objects">
+Agile objects in C++/WinRT
+</a>
 </div>
+
+
