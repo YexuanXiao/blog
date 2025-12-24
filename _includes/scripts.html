@@ -27,23 +27,25 @@
 </script>
 <script type="module">
 	// search
-	import SimpleJekyllSearch from '//static.nykz.org/Single/Search.js'
-	{
-		const panel = document.getElementById('search-panel')
-		window.Search = new SimpleJekyllSearch({
-			searchInput: panel.querySelector('input'),
+	const panel = document.getElementById('search-panel')
+	panel.classList.remove('is-hidden')
+	panel.querySelector('input').addEventListener('input', () => {
+		checkInput()
+	})
+	const input = panel.querySelector('input')
+	const callback = async () => {
+		const SimpleJekyllSearch = await import('//static.nykz.org/Single/SEngine.js');
+		const search = new SimpleJekyllSearch.default({
+			searchInput: input,
 			resultsContainer: panel.querySelector('ul'),
 			searchResultTemplate: '<li><a href="{url}">{title}</a></li>',
 			limit: 15,
 		    {% if site.i18n.search.empty %} noResultsText: '{{ site.i18n.search.empty }}', {% endif %}
 			debounceTime: 750,
-			json: '{{ site.alternateurl }}/assets/search.json'
+			json: '{{ site.alternateurl }}/assets/search.json.dyn' // avoid cache
 		})
-		panel.querySelector('input').addEventListener('input', () => {
-			checkInput()
-		})
-		panel.classList.remove('is-hidden')
 	}
+	input.addEventListener('focus', callback , { once: true })
 </script>
 <script type="module">
 	// music box

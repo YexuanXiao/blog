@@ -1,11 +1,11 @@
-const CACHE_VERSION = 'v1.2'
+const CACHE_VERSION = 'v1.3'
 const CACHE_NAME = `sw-cache-${CACHE_VERSION}`
 
 function checkExt(path) {
-    const EXT_WHITE_LIST = [
+    const ext_white_list = [
         '.js', '.css', '.json', '.txt', '.png', '.jpg', '.jpeg', '.svg', '.avif', '.woff2', '.gif', '.moc', '.mtn', '.webmanifest'
     ]
-    for (const ext of EXT_WHITE_LIST) {
+    for (const ext of ext_white_list) {
         if (path.endsWith(ext))
             return true
     }
@@ -14,15 +14,15 @@ function checkExt(path) {
 }
 
 function shouldCache(request) {
-    const SITE_WHITE_LIST = [
+    const site_white_list = [
         'static.nykz.org'
     ]
     const url = new URL(request.url)
     if (url.hostname === self.location.hostname)
         return checkExt(url.pathname)
 
-    for (const domain of SITE_WHITE_LIST) {
-        if (url.hostname === domain)
+    for (const hostname of site_white_list) {
+        if (url.hostname === hostname)
             return checkExt(url.pathname)
     }
 
@@ -30,11 +30,7 @@ function shouldCache(request) {
 }
 
 self.addEventListener('install', event => {
-    event.waitUntil(
-        (async () => {
-            await self.skipWaiting()
-        })()
-    )
+    event.waitUntil(self.skipWaiting())
 })
 
 self.addEventListener('activate', event => {
