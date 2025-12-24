@@ -175,7 +175,7 @@ module :private;
 
 需要使用 C 库或者老的 C++ 库头文件时，也在全局模块片段中使用 `#include` 导入。
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <span>
 ISO/IEC 14882:2020 Programming languages — C++

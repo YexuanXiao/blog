@@ -137,7 +137,7 @@ void invoke_default_contract_violation_handler(const contract_violation &);
 
 如果编译器实现了契约，那么编译器会预定义功能特性测试宏 `__cpp_contracts` 为 `202502L`。
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://isocpp.org/files/papers/P2900R14.pdf">
 Contracts for C++

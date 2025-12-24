@@ -226,7 +226,7 @@ public:
 
 通过观察能发现，这个类的 push 函数在执行过程中对条件变量执行了 notify\_one 函数，而此时如果有一个 wait\_and\_pop 函数正在等待，那么这次 push 就会唤醒 wait\_and\_pop。
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://www.bookstack.cn/read/CPP-Concurrency-In-Action-2ed-2019/content-chapter4-4.1-chinese.md">
 4.1 等待一个事件或其他条件

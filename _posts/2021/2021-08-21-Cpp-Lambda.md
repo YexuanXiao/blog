@@ -195,7 +195,7 @@ C++20 之前使用默认按值捕获的同时会捕获 this 指针，C++20 要�
 
 lambda 设计最初就支持默认捕获，但是并不推荐。
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://en.cppreference.com/w/cpp/language/lambda">
 Lambda expressions

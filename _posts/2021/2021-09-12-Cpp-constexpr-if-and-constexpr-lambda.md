@@ -87,7 +87,7 @@ int main()
 
 ```
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://docs.microsoft.com/en-us/cpp/cpp/lambda-expressions-constexpr?view=msvc-160">
 constexpr lambda expressions in C++

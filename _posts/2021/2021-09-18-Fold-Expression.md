@@ -199,7 +199,7 @@ int result = removeFrom(1000, 5, 10, 15); //'result' is 1000 - 5 - 10 - 15 = 970
 
 ```
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4295.html">
 Folding expressions

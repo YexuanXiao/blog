@@ -159,7 +159,7 @@ int main()
 
 此时，别名模板也具有一定优势：可以指定自己的分配器，而**不影响原本的 Stack 模板**。
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://www.cnblogs.com/zhangyachen/p/14083672.html">
 C++11-17 模板核心知识（十二）—— 模板的模板参数 Template Template Parameters

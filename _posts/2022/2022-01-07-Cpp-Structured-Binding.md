@@ -166,7 +166,7 @@ const auto& [a1, b1, c1] = std::move(tpl); // 因此可以使用常量引用
 
 结构化绑定要求标识符列表中标识符数量于目标元组中元素数量一致，换句话说不能遗漏，这是为了防止如果以后目标元组元素数量改变，会造成潜在的错误绑定。
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://zh.cppreference.com/w/cpp/language/structured_binding">
 结构化绑定

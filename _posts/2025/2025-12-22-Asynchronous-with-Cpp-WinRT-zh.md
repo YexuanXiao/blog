@@ -116,7 +116,7 @@ for (unsigned x = 0u; !canceled(); ++x) {
 
 有些任务在自己的线程执行并且自发的产生事件，例如 `MediaPlayer` 和其关联的对象。通常来说，它们的成员函数是线程安全的，但它们产生的事件的回调可以在任何线程被执行，此时必须同步到 UI 线程或者指定线程来完成后续逻辑。
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://github.com/microsoft/cppwinrt">
 C++/WinRT

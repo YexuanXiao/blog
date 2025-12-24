@@ -94,7 +94,7 @@ std::invoke(pg, y, 3, 4); // OK
 
 有显式对象形参的成员函数不能是静态成员函数或虚函数，也不能带有 cv 或引用限定符。
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://zh.cppreference.com/w/cpp/language/member_functions#.E8.99.9A.E5.87.BD.E6.95.B0.E5.92.8C.E7.BA.AF.E8.99.9A.E5.87.BD.E6.95.B0">
 显式对象形参

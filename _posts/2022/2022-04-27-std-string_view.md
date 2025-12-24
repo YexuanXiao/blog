@@ -61,7 +61,7 @@ std::basic_string_view& operator=( const basic_string_view& view ) noexcept = de
 3. 用于字符串查找的结果
 4. 用作容器的成员
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://zh.cppreference.com/w/cpp/string/basic_string_view">
 std::basic_string_view

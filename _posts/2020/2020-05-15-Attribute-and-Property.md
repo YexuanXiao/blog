@@ -26,7 +26,7 @@ attribute 是 HTML 标签上的属性。
 8. getAttribute 在有些浏览器可能会获取到 property 。
 9. property 不限定值的类型，attribute 赋值类型只能是字符串。
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLElement/style">
 样式

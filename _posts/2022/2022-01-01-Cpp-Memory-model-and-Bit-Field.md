@@ -226,7 +226,7 @@ int main()
 
 如果数值不能储存到指定比特内，则由实现定义结果，例如 msvc 中，b1 = 128 == -128，129 == -127 等，编译器会保证溢出不会影响其他共享内存地址的位域成员。
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <span >
 ISO/IEC 14882:2020 Programming languages — C++

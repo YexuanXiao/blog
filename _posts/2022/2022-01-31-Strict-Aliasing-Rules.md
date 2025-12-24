@@ -240,7 +240,7 @@ P0593R6 进行了一种修正：将某些内存操作认定为隐式创造对象
 
 此修正使得 C++ 中可以合法的直接使用 `malloc`，而不需要 placement new 来创造一个对象。
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://eel.is/c++draft/ptr.launder">
 Pointer optimization barrier

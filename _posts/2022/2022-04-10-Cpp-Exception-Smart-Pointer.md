@@ -257,7 +257,7 @@ void foo() {
 
 这样就可以避免任何显式的 `new`，保证异常安全。
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3588.htm">
 N3588 std::make_unique

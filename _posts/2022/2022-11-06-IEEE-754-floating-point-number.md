@@ -50,7 +50,7 @@ IEEE 754 还规定了浮点数的计算方式：
 3. 对有效数进行加减运算
 4. 规格化，若溢出则将有效数清零
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://standards.ieee.org/content/ieee-standards/en/standard/754-2008.html">
 IEEE 754

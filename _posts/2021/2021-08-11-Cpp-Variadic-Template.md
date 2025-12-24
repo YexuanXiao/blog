@@ -114,7 +114,7 @@ class tuple<>
 
 这个模板将会被递归展开，通过私有继承来储存任意数据。
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://zhuanlan.zhihu.com/p/104450480">
 C++的可变参数模板 - Gemfield

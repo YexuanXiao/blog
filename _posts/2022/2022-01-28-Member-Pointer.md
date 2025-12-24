@@ -225,7 +225,7 @@ int main()
 
 C++ 标准未对此做出过多描述，不过编译器普遍支持上述情况。由于 C++ 继承存在更复杂情况，此时成员函数指针实现可能更为复杂，但并未得到广泛支持。
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://zh.cppreference.com/w/cpp/language/pointer">
 指针声明

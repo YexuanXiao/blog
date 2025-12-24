@@ -170,7 +170,7 @@ int main()
 
 注意，引用折叠只发生在模板的参数类型推导，`auto` 和 `decltype`，所以函数 `F` 不存在引用折叠，而 `G` 是函数模板，所以存在引用折叠，也可以做到万能引用。
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://zh.cppreference.com/w/cpp/utility/forward">
 std::forward

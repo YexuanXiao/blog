@@ -254,7 +254,7 @@ int main() {
 
 ```
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://zh.cppreference.com/w/cpp/header/compare">
 &lt;compare&gt;

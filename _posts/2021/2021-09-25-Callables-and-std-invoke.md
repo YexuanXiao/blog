@@ -135,7 +135,7 @@ int main() {
 
 通过 std::invoke 和 完美转发，能够轻松设计出接收任意可调用对象的函数。
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://zh.cppreference.com/w/cpp/utility/functional/invoke">
 std::invoke, std::invoke_r

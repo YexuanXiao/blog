@@ -369,7 +369,7 @@ public:
 
 改进版的代码中添加了一个 wait 语句来让 while 循环等待，在解锁时发送停止等待的通知。
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <span >
 ISO/IEC 14882:2020 Programming languages — C++

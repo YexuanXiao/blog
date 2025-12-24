@@ -62,7 +62,7 @@ mem 是一个指针，这个指针可以是堆上的也可以是栈上的。
 
 此外重载全局的 new 和 delete 实际上不会被调用，请使用成员函数。
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://zh.cppreference.com/w/cpp/language/new">
 new 表达式

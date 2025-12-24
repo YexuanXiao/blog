@@ -66,7 +66,7 @@ C++11 开始，线程正式加入标准库，并且一同加入了 \<atomic\> �
 - `operator+=` 原子加法
 - `operator-=` 原子减法
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://en.cppreference.com/w/cpp/atomic/atomic">
 std:atomic

@@ -143,7 +143,7 @@ int main()
 
 ```
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://en.cppreference.com/w/cpp/atomic/memory_order">
 std::memory_order

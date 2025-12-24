@@ -68,7 +68,7 @@ C++11 以后，表达式按值类别分，必然属于以下三者之一：左�
 
 正确的使用方法是在外部调用 std::move：`auto a = std::move(f(x));`。
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://docs.microsoft.com/zh-cn/cpp/cpp/lvalues-and-rvalues-visual-cpp?view=msvc-160">
 Lvalues 和 Rvalues (C++)

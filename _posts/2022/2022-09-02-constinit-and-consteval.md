@@ -30,7 +30,7 @@ C++ Reference 上对函数何时能声明为 `constexpr` 有详细的描述：[c
 
 `constexpr` 强制对象必须拥有静态初始化和常量析构，并使对象有 `const` 限定，然而 `constinit` 不强制常量析构和 `const` 限定。结果是拥有 `constexpr` 构造函数且无 `constexpr` 析构函数的类型（例如 `std::shared_ptr<T>` ）的对象可能可以用 `constinit` ，但不能用 `constexpr` 声明。
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://zh.cppreference.com/w/cpp/language/constinit">
 constinit

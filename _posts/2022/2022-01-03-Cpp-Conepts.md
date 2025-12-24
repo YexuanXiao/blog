@@ -233,7 +233,7 @@ auto copy(auto begin, auto end, auto dest)
 
 ```
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://devblogs.microsoft.com/cppblog/abbreviated-function-templates-and-constrained-auto/">
 Abbreviated Function Templates and Constrained Auto

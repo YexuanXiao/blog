@@ -48,7 +48,7 @@ category: blog
 
 除了使用原子操作外，标准还额外提供了 `std::atomic_thread_fence` 和 `std::atomic_signal_fence` 来规定 memory\_order，区别是前者可能存在潜在的 CPU 指令，后者只影响编译器优化。
 
-<div class="ref-label">参考：</div>
+<div class="ref-label">参考</div>
 <div class="ref-list">
 <a href="https://en.cppreference.com/w/cpp/atomic/memory_order">
 std::memory_order
