@@ -73,9 +73,7 @@
 								<div class="card">
 									<header class="card-header">
 										<p class="card-header-title is-size-5 has-text-weight-normal">
-											<a href="//github.com/{{ site.author.github }}">
-												{% if site.i18n.sidebox.author %}{{ site.i18n.sidebox.author }}{% else %}Author{% endif %}
-											</a>
+											{% if site.i18n.sidebox.author %}{{ site.i18n.sidebox.author }}{% else %}Author{% endif %}
 										</p>
 									</header>
 									<div class="card-content">
@@ -87,10 +85,18 @@
 												{{ site.author.name | slugize }}
 											</p>
 											<div class="is-size-7">
-												<span class="sw sw-email"></span>
-												<a href="mailto:{{ site.author.email }}">
-													{{ site.author.email }}
-												</a>
+												<div>
+													<span class="sw sw-email"></span>
+													<a href="mailto:{{ site.author.email }}">
+														{{ site.author.email }}
+													</a>
+												</div>
+												<div>
+													<span class="sw sw-github"></span>
+													<a href="//github.com/{{ site.author.github }}">
+														{{ site.author.github }}
+													</a>
+												</div>
 												<hr class="my-3">
 												<p>
 													{{ site.author.title }}
@@ -109,9 +115,7 @@
 								<div class="card">
 									<header class="card-header">
 										<p class="card-header-title is-size-5 has-text-weight-normal">
-											<a href="{{ site.alternateurl }}/archive">
-												{% if site.i18n.sidebox.recent %}{{ site.i18n.sidebox.recent }}{% else %}Recent Posts{% endif %}
-											</a>
+											{% if site.i18n.sidebox.recent %}{{ site.i18n.sidebox.recent }}{% else %}Recent Posts{% endif %}
 										</p>
 									</header>
 									<div class="card-content p-4">
@@ -134,9 +138,7 @@
 								<div class="card">
 									<header class="card-header">
 										<p class="card-header-title is-size-5 has-text-weight-normal">
-											<a href="{{ site.alternateurl }}/tags">
-												{% if site.i18n.nav.tags %}{{ site.i18n.nav.tags }}{% else %}Tags{% endif %}
-											</a>
+											{% if site.i18n.nav.tags %}{{ site.i18n.nav.tags }}{% else %}Tags{% endif %}
 										</p>
 									</header>
 									<div class="card-content p-4">

@@ -53,7 +53,7 @@ In C++/WinRT, common scenarios that **do** cause a thread switch include:
 
 1.  Awaiting a duration, e.g., `co_await 1s;`
 2.  Switching execution to a background thread, e.g., `co_await winrt::resume_background();`
-3.  Specifying a task queue (DispatcherQueue), e.g., `co_await wil::resume_foreground(DispatcherQueue())`
+3.  Specifying a task queue (DispatcherQueue), e.g., `co_await wil::resume_foreground(DispatcherQueue());`
 4.  Specifying a context for execution, e.g., `co_await context;` where `context` is a `winrt::apartment_context`
 5.  Resuming after a C++/WinRT coroutine returns (explained in detail later)
 
@@ -91,7 +91,7 @@ When `co_await context;` resumes, if `context` is an STA context, the coroutine 
 
 When you need to synchronize back to the UI thread, **prioritize using the Dispatcher**, as it does **not** block the caller (addressing cases 2 and 3 in the table).
 
-A C++/WinRT coroutine captures the current context when called and attempts to resume on it when returning. So, if you call a C++/WinRT coroutine from a UI thread, you are guaranteed to still be on the UI thread when it returns.
+A C++/WinRT coroutine captures the current context when called and attempts to resume on it when returning. So, if you await a C++/WinRT coroutine from a UI thread, you are guaranteed to still be on the UI thread when it returns.
 
 ### Handling Thread Affinity Correctly
 
@@ -107,7 +107,7 @@ for (unsigned x = 0u; !canceled(); ++x) {
 	text.Text(to_hstring(x));
     using namespace std::literals;
 	co_await 1s;
-    // 切换回UI线程
+    // switch back to UI thread
 	co_await wil::resume_foreground(text.DispatcherQueue());
 }
 

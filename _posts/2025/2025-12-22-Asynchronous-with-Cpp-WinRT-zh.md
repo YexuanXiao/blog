@@ -52,7 +52,7 @@ C++/WinRT 中会导致切换线程的情况包括：
 
 1. 等待一段时间，例如 `co_await 1s;`
 2. 将任务转移到背景线程执行，例如 `co_await winrt::resume_background();`
-3. 指定任务队列执行，例如 `co_await wil::resume_foreground(DispatcherQueue())`
+3. 指定任务队列执行，例如 `co_await wil::resume_foreground(DispatcherQueue());`
 4. 指定上下文执行，例如 `co_await context;`，其中 `context` 是 `winrt::apartment_context`
 5. C++/WinRT 协程返回（下文会详细解释）
 
@@ -90,7 +90,7 @@ Dispatcher 代表关联到该 STA 线程的一个消息队列。
 
 需要同步到 UI 线程时，应该优先使用 Dispatcher，因为它不会阻塞调用者（对应情况 2 和情况 3）。
 
-C++/WinRT 协程会在调用的时候捕获当前上下文，然后在返回时尝试恢复它。因此，在 UI 线程中执行 C++/WinRT 协程，可以保证返回时一定还在 UI 线程。
+C++/WinRT 协程会在调用的时候捕获当前上下文，然后在返回时尝试恢复它。因此，在 UI 线程中等待一个 C++/WinRT 协程，可以保证返回时一定还在 UI 线程。
 
 ### 正确处理线程亲和性
 
