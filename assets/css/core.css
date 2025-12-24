@@ -244,3 +244,10 @@ article code {
 .sw-category:before {
 	content: "\e00f"
 }
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block
+}
