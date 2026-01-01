@@ -122,7 +122,7 @@ for (unsigned x = 0u; !canceled(); ++x) {
 
 C++/WinRT 提供了 `winrt::init_apartment` 和 `winrt::uninit_apartment` 用于初始化和反初始化 COM，但需要注意，它没有包装成 RAII 风格的类，因此请确保 `winrt::uninit_apartment` 调用时，没有 COM 对象还未完成释放。
 
-线程可以重复使用相同上下文类型初始化，并且要有对应数量的反初始化。使用不同上下文类型重复初始化是错误的。在最后一给反初始化执行后，COM 回到未初始化状态。一般来说，Win32 线程池里的线程需要一致的使用 MTA。
+线程可以重复使用相同上下文类型初始化，并且要有对应数量的反初始化。使用不同上下文类型重复初始化是错误的。在最后一个反初始化执行后，COM 回到未初始化状态。一般来说，Win32 线程池里的线程需要一致的使用 MTA。
 
 <div class="ref-label">致谢</div>
 
