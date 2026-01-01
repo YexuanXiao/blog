@@ -1,5 +1,5 @@
 ---
-title: 已经看过的动画列表
+title: 看过的动画列表
 date: "2021-11-19 22:59:00"
 permalink: /anime/
 tags: [memories, anime, life]
@@ -10,17 +10,30 @@ category: by-talk
 <!-- more -->
 
 <script>
+function countWords(text) {
+  const cjkRegex = /[\u4e00-\u9fff]/g
+  const cjkCount = (text.match(cjkRegex) || []).length
+  const englishRegex = /[a-zA-Z]+/g
+  const englishCount = (text.match(englishRegex) || []).length
+  const numberRegex = /\d+/g
+  const numberCount = (text.match(numberRegex) || []).length
+  return cjkCount + englishCount + numberCount
+}
+
 (async () => {
+    const container = document.body.querySelector('.post-text p').parentNode
+    const words = container.querySelector(':scope>.is-justify-content-space-between').children[1]
     const getData = async () => {
         try {
-            const response = await fetch('https://static.nykz.org/animelist.txt')
+            words.textContent = '字数统计：加载中...'
+            const response = await fetch('https://static.nykz.org/animelist.txt.dyn')
             const text = await response.text()
             return text
         } catch (e) {
             const p = document.createElement('p')
-            p.textContent = '获得列表失败，请检查网络连接。'
-            const container = document.body.querySelector('.post-text p').parentNode
+            p.textContent = '获取数据失败，请检查网络连接。'
             container.appendChild(p)
+            words.textContent = '字数统计：加载失败'
             throw e
         }
     }
@@ -34,13 +47,12 @@ category: by-talk
         li.textContent = i
         ul.appendChild(li)
     }
-    const container = document.body.querySelector('.post-text p').parentNode
     container.append(ul)
     const count = document.createElement('p')
     count.classList = 'right'
     count.textContent = `共计 ${items.length} 部动画。`
     container.appendChild(count)
-    container.querySelector(".is-justify-content-space-between>span").textContent = `字数统计：${text.length}`
+    words.textContent = `字数统计：${countWords(text)}`
 })()
 document.currentScript.remove()
 </script>
