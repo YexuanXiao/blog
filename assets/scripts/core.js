@@ -2,7 +2,7 @@
 	layout: null
 ---
 'use strict';
-/* 2020-2025 YexuanXiao under the MIT License */
+/* 2020-2026 YexuanXiao under the MIT License */
 
 // for the random quote in the title
 (async () => {
@@ -199,5 +199,5 @@ for (let element of document.body.querySelectorAll('div.highlight')) {
 }
 
 // output logo to console
-console.info('\n▄██╗   ███╗   ▄██████╗   ▄███████╗\n████╗ ████║   ██╔══██║   ██╔═══██║\n██╔████╔██║   ██████╔╝   ██║   ██║\n██║╚██╔╝██║   ██╔═══╝    ██║   ██║\n██║ ╚═╝ ██║██╗██║     ██╗███████╔╝██╗\n╚═╝     ╚═╝╚═╝╚═╝     ╚═╝ ╚═════╝ ╚═╝\n       © 2016 - 2025 M.P.O.')
+console.info(`\n▄██╗   ███╗   ▄██████╗   ▄███████╗\n████╗ ████║   ██╔══██║   ██╔═══██║\n██╔████╔██║   ██████╔╝   ██║   ██║\n██║╚██╔╝██║   ██╔═══╝    ██║   ██║\n██║ ╚═╝ ██║██╗██║     ██╗███████╔╝██╗\n╚═╝     ╚═╝╚═╝╚═╝     ╚═╝ ╚═════╝ ╚═╝\n       © 2016 - ${new Date().getFullYear()} M.P.O.`)
 console.info('%c M.P.O. %c https://mysteriouspreserve.com ', 'color: #fff; margin: 1em 0; padding: 5px 0; background: #3298dc;', 'margin: 1em 0; padding: 5px 0; background: #efefef;')
