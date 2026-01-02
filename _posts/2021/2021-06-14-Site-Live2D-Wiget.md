@@ -29,7 +29,7 @@ category: blog
        link.rel = 'stylesheet';
        link.type = 'text/css';
        link.href = url;
-       document.querySelector('head').appendChild(link)
+       document.head.appendChild(link)
    }
    function loadScript(uri, callback) {
        var fileref = document.createElement('script');

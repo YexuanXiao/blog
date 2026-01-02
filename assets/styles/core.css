@@ -88,7 +88,7 @@ article code {
 }
 
 @media screen and (max-width:1023px) {
-	#menu-toggle:checked~#navbar-menu {
+	#navbar-menu.is-active {
 		display: block;
 	}
 
@@ -246,8 +246,32 @@ article code {
 }
 
 .ellipsis {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: block
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: block
+}
+
+.navbar-burger.is-active span:first-child {
+	transform: translateY(5px) rotate(45deg)
+}
+
+.navbar-burger span:first-child {
+	top: calc(50% - 6px)
+}
+
+.navbar-burger.is-active span:nth-child(2) {
+	opacity: 0
+}
+
+.navbar-burger span:nth-child(2) {
+	top: calc(50% - 1px)
+}
+
+.navbar-burger.is-active span:nth-child(3) {
+	transform: translateY(-5px) rotate(-45deg)
+}
+
+.navbar-burger span:nth-child(3) {
+	top: calc(50% + 4px)
 }

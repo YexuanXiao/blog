@@ -1,12 +1,11 @@
 <script>
 	function loadStyles(url) {
-		const head = document.querySelector('head')
 		const link = document.createElement('link')
 		link.type = 'text/css'
 		link.rel = 'stylesheet preload'
 		link.as = 'style'
 		link.href = url
-		head.appendChild(link)
+		document.head.appendChild(link)
 	}
 	function loadScript(url) {
 		const script = document.createElement('script')
@@ -23,7 +22,7 @@
 		navbarBurger.classList.remove('is-hidden')
 	}
 </script>
-<script src="/assets/js/core.js">
+<script src="/assets/scripts/core.js">
 </script>
 <script type="module">
 	// search
@@ -62,7 +61,7 @@
 	observer.observe(element, { childList: true, subtree: true })
 </script>
 {% if site.live2d.enable == true %}
-<script type="module" src="{{ site.alternateurl }}/assets/js/live2d.js">
+<script type="module" src="{{ site.alternateurl }}/assets/scripts/live2d.js">
 </script>
 {% endif %}
 <script>

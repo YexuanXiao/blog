@@ -1,5 +1,5 @@
 ---
-    layout: null
+	layout: null
 ---
 'use strict';
 /* 2020-2025 YexuanXiao under the MIT License */
@@ -10,42 +10,44 @@
 	const text = await response.text()
 	const lines = text.split('\n')
 	const randLine = lines[Math.floor((Math.random() * lines.length) + 1)]
-	if (randLine) {
-		document.getElementById('quote').textContent = randLine
-		setTimeout(() => { render(randLine) }, 100000)
-	}
+	document.getElementById('quote').textContent = randLine
+	setTimeout(() => { render(randLine) }, 100000)
 })()
 
 // function for control search manu and navbar menu display or not
 // 0 for hide search-menu
 // 1 for show search-menu
 // 2 for close navbar-menu
-function closeMenu(x) {
+
+const closeMenu = (() => {
 	const searchMenu = document.body.querySelector('#search-panel>div')
-	const navbarBurger = document.body.querySelector('#navbar>div>.navbar-burger')
-	const navbarToggle = document.body.querySelector('#navbar-menu')
-	if (x === 0) {
-		searchMenu.classList.add('is-hidden')
-	} else if (x === 1) {
-		searchMenu.classList.remove('is-hidden')
-	} else {
-		navbarBurger.classList.remove('is-active')
-		navbarToggle.classList.remove('is-active')
+	const navbarBurger = document.getElementById('menu-burger')
+	const navbarMenu = document.getElementById('navbar-menu')
+	return (x) => {
+		if (x === 0) {
+			searchMenu.classList.add('is-hidden')
+		} else if (x === 1) {
+			searchMenu.classList.remove('is-hidden')
+		} else {
+			navbarBurger.classList.remove('is-active')
+			navbarMenu.classList.remove('is-active')
+		}
 	}
-}
+})()
 
 // add dynamic menu button on vertical device
 {
-	const burger = document.getElementById('search-panel').nextElementSibling
-	const menu = document.getElementById('menu-toggle')
+	const burger = document.getElementById('menu-burger')
+	const menu = document.getElementById('navbar-menu')
 	burger.addEventListener('click', () => {
-		menu.checked = !burger.classList.toggle('is-active')
+		burger.classList.toggle('is-active')
+		menu.classList.toggle('is-active')
 		closeMenu(0)
 	})
 }
 
 // footnote dynamic popup tooltips
-for (const sup of document.querySelectorAll('sup.footnote-ref')) {
+for (const sup of document.body.querySelectorAll('sup.footnote-ref')) {
 	const anchor = sup.firstElementChild;
 	const id = anchor.innerText
 	const message = document.createElement('div')
@@ -58,12 +60,12 @@ for (const sup of document.querySelectorAll('sup.footnote-ref')) {
 	messageBody.innerText = text.slice(0, text.indexOf('↩')).trim()
 	message.appendChild(messageBody)
 	sup.parentNode.appendChild(message)
-	const article = document.querySelector('.post-text')
+	const article = document.body.querySelector('.post-text')
 	sup.addEventListener('mouseover', () => {
 		message.style.display = ''
-		message.style.marginTop= ''
+		message.style.marginTop = ''
 		message.style.width = `${article.clientWidth}px`
-		message.style.marginTop = `${-(message.offsetTop - sup.offsetTop  + message.clientHeight)}px`
+		message.style.marginTop = `${-(message.offsetTop - sup.offsetTop + message.clientHeight)}px`
 	})
 	sup.addEventListener('mouseout', () => {
 		message.style.display = 'none'
@@ -71,24 +73,27 @@ for (const sup of document.querySelectorAll('sup.footnote-ref')) {
 }
 
 // check search bar value to display search-menu
-function checkInput() {
-	closeMenu(2)
-	const inputValue = document.body.querySelector('#search-panel>input').value
-	render(`{% if site.i18n.l2dmessage.search %}{{ site.i18n.l2dmessage.search }}{% else %}Searching{% endif %} ${inputValue} ...`)
-	if (!inputValue)
-		closeMenu(0)
-	else
-		closeMenu(1)
-}
+const checkInput = (() => {
+	const input = document.body.querySelector('#search-panel>input')
+	return () => {
+		closeMenu(2)
+		const inputValue = input.value
+		render(`{% if site.i18n.l2dmessage.search %}{{ site.i18n.l2dmessage.search }}{% else %}Searching{% endif %} ${inputValue} ...`)
+		if (!inputValue)
+			closeMenu(0)
+		else
+			closeMenu(1)
+	}
+})()
 
 // tap blank area to close search menu and navbar
 document.body.addEventListener('click', (event) => {
-	const cDom = document.querySelector('#navbar')
-	const tDom = event.target
-	if (!(cDom === tDom || cDom.contains(tDom))) {
-		closeMenu(0)
-		closeMenu(2)
-	}
+	closeMenu(0)
+	closeMenu(2)
+})
+
+document.getElementById('navbar').addEventListener('click', (event) => {
+	event.stopPropagation()
 })
 
 // make navbar flow on the top and progress bar
@@ -106,8 +111,6 @@ document.body.addEventListener('click', (event) => {
 	const articleTop = article.offsetTop
 	const scrollTopExp = container.offsetTop
 	document.addEventListener('scroll', () => {
-		closeMenu(2)
-
 		const thirdWindow = visualViewport.height / 3
 		const articleHeight = article.clientHeight
 		const scrollTopReal = document.documentElement.scrollTop
