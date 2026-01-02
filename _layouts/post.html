@@ -16,7 +16,7 @@ layout: default
 		    <span>
 		    	<span class="sw sw-calender mr-1"></span>
 		    	<time class="date" datetime="{{ page.date | date_to_xmlschema }}">
-		    		{{ page.date | date: "%B %-d, %Y" }}
+		    		{{ page.date | chinese_date }}
 		    	</time>
 		    </span>
 			<span>

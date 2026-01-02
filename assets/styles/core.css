@@ -87,9 +87,16 @@ article code {
 	width: 22em
 }
 
+/*
+	Using the checkbox hack for no-JS menu expansion.
+	The menu-toggle must be an HTMLInputElement with type="checkbox".
+	The navbar-menu must be placed after and be a sibling of the menu-toggle.
+	The navbar-burger must be an HTMLLabelElement with for="menu-toggle".
+*/
 @media screen and (max-width:1023px) {
-	#navbar-menu.is-active {
-		display: block;
+	#navbar-menu.is-active,
+	#menu-toggle:checked~#navbar-menu {
+		display: block
 	}
 
 	#navbar-menu>span {

@@ -51,15 +51,15 @@ Any `co_await` expression has the *potential* to switch threads (this isn't uniq
 
 In C++/WinRT, common scenarios that **do** cause a thread switch include:
 
-1.  Awaiting a duration, e.g., `co_await 1s;`
-2.  Switching execution to a background thread, e.g., `co_await winrt::resume_background();`
-3.  Specifying a task queue (DispatcherQueue), e.g., `co_await wil::resume_foreground(DispatcherQueue());`
-4.  Specifying a context for execution, e.g., `co_await context;` where `context` is a `winrt::apartment_context`
+1.  Awaiting a duration, e.g., `co_await 1s`
+2.  Switching execution to a background thread, e.g., `co_await winrt::resume_background()`
+3.  Specifying a task queue (DispatcherQueue), e.g., `co_await wil::resume_foreground(DispatcherQueue())`
+4.  Specifying a context for execution, e.g., `co_await context` where `context` is a `winrt::apartment_context`
 5.  Resuming after a C++/WinRT coroutine returns (explained in detail later)
 
 ...and others.
 
-After executing any of the above statements, the coroutine continues on a different thread.
+After executing any of the above expressions, the coroutine continues on a different thread.
 
 In WinRT, classes that inherit from `DependencyObject` (such as `UIElement`) provide the ability to run tasks on a specific thread. Traditional WinRT (UWP) uses member function `Dispatcher` to obtain a Dispatcher object for scheduling. When using APIs from the Windows App SDK, you should use the member function `DispatcherQueue` to obtain it.
 

@@ -50,15 +50,15 @@ if (canceled) {
 
 C++/WinRT 中会导致切换线程的情况包括：
 
-1. 等待一段时间，例如 `co_await 1s;`
-2. 将任务转移到背景线程执行，例如 `co_await winrt::resume_background();`
-3. 指定任务队列执行，例如 `co_await wil::resume_foreground(DispatcherQueue());`
-4. 指定上下文执行，例如 `co_await context;`，其中 `context` 是 `winrt::apartment_context`
+1. 等待一段时间，例如 `co_await 1s`
+2. 将任务转移到背景线程执行，例如 `co_await winrt::resume_background()`
+3. 指定任务队列执行，例如 `co_await wil::resume_foreground(DispatcherQueue())`
+4. 指定上下文执行，例如 `co_await context`，其中 `context` 是 `winrt::apartment_context`
 5. C++/WinRT 协程返回（下文会详细解释）
 
 等。
 
-在执行以上语句后，该协程会切换到另一个线程上执行。
+在执行以上表达式后，该协程会切换到另一个线程上执行。
 
 在 WinRT 中，继承 `DependencyObject`（例如 `UIElement`）的类提供了让任务在指定线程运行的能力。传统 WinRT（UWP）使用成员函数 `Dispatcher` 获得用于调度的 Dispatcher 对象，使用 WindowsAppSDK 的 API 时，应使用成员函数 `DispatcherQueue` 获得它。
 

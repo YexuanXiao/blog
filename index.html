@@ -17,7 +17,7 @@ title: Home Page
 					<span>
 						<span class="sw sw-calender mr-1"></span>
 						<time class="date" datetime="{{ post.date | date_to_xmlschema }}">
-							{{ post.date | date: "%B %-d, %Y" }}
+							{{ post.date | chinese_date }}
 						</time>
 					</span>
 					<span>

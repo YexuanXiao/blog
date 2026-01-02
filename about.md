@@ -1,6 +1,6 @@
 ---
 layout: page
-title: About
+title: 关于
 permalink: /about
 ---
 
@@ -186,9 +186,9 @@ The stories of M.P.O. was written by YexuanXiao.
 
 二、本规约各当事国及接受同样义务之任何其他国家，承认机构之管辖为当然而具有强制性，不须另订特别协定：
 
-(子) 条约之解释。　
+(子) 条约之解释。
 
-(丑) 机构之任何问题。　
+(丑) 机构之任何问题。
 
 (寅) 任何事实之存在，如经确定即属违反规约者。
 
@@ -232,15 +232,15 @@ The stories of M.P.O. was written by YexuanXiao.
 
 机构认为必要时得以书面向秘书长提出于本规约之修正案，由联合国加以讨论。
 
-## Announcement
+## 声明
 
-+ 本站 By-Talk，Blog 分类内的文章，除特殊声明外均在[CC BY-SA 3.0 许可协议](//creativecommons.org/licenses/by-sa/3.0/deed.zh)下提供。
++ 本站 By-Talk，Blog 分类内的文章，除特殊声明外均在[CC BY-SA 3.0 许可协议](//creativecommons.org/licenses/by-sa/4.0/deed.zh)下提供。
 
 + 本站带 Anime 标签的文章中的图片，版权归属动画制作公司及版权方。
 
 + 本站不欢迎非搜索引擎类，非个人学习类爬虫；严禁将文章直接爬取至其他站点。
 
-+ 本站其他一些说明，参考[本站介绍]({{ site.alternateurl }}/introduction/)，[本人看过的动画列表]({{ site.alternateurl }}/anime/)，[项目界面](//github.com/YexuanXiao/yexuanxiao.github.io)。
++ 本站其他一些说明，参考[本站介绍]({{ site.alternateurl }}/introduction/)，[本人看过的动画列表]({{ site.alternateurl }}/anime/)，[项目界面](//github.com/YexuanXiao/blog)。
 
 
 <div class="has-text-centered icon-font mt-6">
