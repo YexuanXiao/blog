@@ -8,7 +8,7 @@ C++17中对可变参数模板的参数包进行了一项改进，即使用折叠
 
 <!-- more -->
 
-在之前的文章 [C++可变参数模板](/blog/2021/08/11/Cpp-Variadic-Template/) 和 [C++17 constexpr if和constexpr lambda](/blog/2021/09/12/Cpp-17-constexpr-if-and-constexpr-lambda/) 中都有提到过参数包（parameter pack），其中利用参数包实现了一个接收任意数量的参数的variadicPrint打印函数，实际上还可以通过折叠表达式进一步简化。
+在之前的文章[C++可变参数模板](/blog/2021/08/11/Cpp-Variadic-Template/)和[C++17 constexpr if和constexpr lambda](/blog/2021/09/12/Cpp-17-constexpr-if-and-constexpr-lambda/)中都有提到过参数包（parameter pack），其中利用参数包实现了一个接收任意数量的参数的variadicPrint打印函数，实际上还可以通过折叠表达式进一步简化。
 
 使用折叠表达式的前提是使用受支持的32个操作符：`+` `-` `*` `/` `%` `^` `&` `|` `=` `<` `>` `<<` `>>` `+=` `-=` `*=` `/=` `%=` `^=` `&=` `|=` `<<=` `>>=` `==` `!=` `<=` `>=` `&&` `||` `,` `.*` `->*`。
 

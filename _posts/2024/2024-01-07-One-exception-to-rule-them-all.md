@@ -50,7 +50,7 @@ category: blog
 
 ### 标准错误码和错误对象
 
-Niall Douglas的C++标准提案 [status\_code and standard error object](wg21.link/P1028) [^1] 给出了一种统一的表示方法，旨在解决上述问题：如何表达错误
+Niall Douglas的C++标准提案[status\_code and standard error object](wg21.link/P1028) [^1] 给出了一种统一的表示方法，旨在解决上述问题：如何表达错误
 
 [^1]: 之所以叫status\_code是因为C++ 11已经使用了error\_code
 
@@ -71,7 +71,7 @@ template\<typename DomainType\> status\_code\<DomainType\> 是持有错误码的
 
 ### Herbceptions
 
-Herb Sutter在2018年的时候提出了一种解决异常性能问题的新异常方案 [Herbceptions](wg21.link/p0709)，该方案保持现有异常的基本结构：throw以及try，catch块，同时简化异常对象的传递以及消除对RTTI的依赖。
+Herb Sutter在2018年的时候提出了一种解决异常性能问题的新异常方案[Herbceptions](wg21.link/p0709)，该方案保持现有异常的基本结构：throw以及try，catch块，同时简化异常对象的传递以及消除对RTTI的依赖。
 
 Herbceptions的核心方案是以值的形式抛出一个小对象，该对象足够小，小到可以被储存在函数栈中向下传递，使抛出异常后不再依赖复杂的异常对象管理函数管理异常对象。同时，提供一种不需要RTTI的手段来区分来自不同库，不同功能的异常，也就是std::status\_code的最终目的。
 

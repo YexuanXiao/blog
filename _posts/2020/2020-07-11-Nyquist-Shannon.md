@@ -10,7 +10,7 @@ category: blog
 
 注意本文的一些术语具有多重含义，请依据其定义进行区分。
 
-关于波特和比特率请看 [波特率和比特率](https://mysteriouspreserve.com/blog/2020/07/11/Baud-and-Bit-Rate/)。
+关于波特和比特率请看[波特率和比特率](https://mysteriouspreserve.com/blog/2020/07/11/Baud-and-Bit-Rate/)。
 
 ## 带宽和容量
 
@@ -36,7 +36,7 @@ category: blog
 
 C<sub>max</sub> = 2 × B × log <sub>2</sub> L
 
-这里C<sub>max</sub> 指的是信道的最大容量，B是信道的带宽，L是 [波特率和比特率](https://mysteriouspreserve.com/blog/2020/07/11/Baud-and-Bit-Rate/) 文中每个有效信号负载的信息量。
+这里C<sub>max</sub> 指的是信道的最大容量，B是信道的带宽，L是[波特率和比特率](https://mysteriouspreserve.com/blog/2020/07/11/Baud-and-Bit-Rate/)文中每个有效信号负载的信息量。
 
 奈奎斯特定理用于理想信道（如对类似正弦函数的模拟信号进行采样（通过滤波），以采样的电平数量作为每个有效信号负载的信息量），结果是波特。
 

@@ -10,7 +10,7 @@ C++用constexpr关键词设计了一系列辅助编译器优化的特性，此�
 
 要使用constexpr函数首先要理解聚合类这个概念。
 
-简单来说，聚合类是一个类似C语言的结构体的类，详细分析参考 [聚合初始化](https://zh.cppreference.com/w/cpp/language/aggregate_initialization)，主要表现为成员都是public，没有构造函数，没有基类等。
+简单来说，聚合类是一个类似C语言的结构体的类，详细分析参考[聚合初始化](https://zh.cppreference.com/w/cpp/language/aggregate_initialization)，主要表现为成员都是public，没有构造函数，没有基类等。
 
 如果一个类是聚合类，那么就可以使用聚合初始化：
 

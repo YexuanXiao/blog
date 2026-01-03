@@ -6,7 +6,7 @@ category: blog
 ---
 
 该文章是对微软的C++/WinRT文档的补充，微软的文档比较全面的介绍了C++/WinRT中异步的基本概念和用法，但它在一些问题上仍然模糊不清。
-在看这篇文章之前，应该先看 [Concurrency and asynchronous operations with C++/WinRT](https://learn.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/concurrency) 以及 [Advanced concurrency and asynchrony with C++/WinRT](https://learn.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/concurrency-2)，最好还可以看看我的C++协程教程。
+在看这篇文章之前，应该先看[Concurrency and asynchronous operations with C++/WinRT](https://learn.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/concurrency)以及[Advanced concurrency and asynchrony with C++/WinRT](https://learn.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/concurrency-2)，最好还可以看看我的C++协程教程。
 
 <!-- more -->
 
@@ -126,7 +126,7 @@ C++/WinRT提供了 `winrt::init_apartment` 和 `winrt::uninit_apartment` 用于�
 
 <div class="ref-label">致谢</div>
 
-感谢 [GeeLaw](https://geelaw.blog/) 提供的有关COM初始化的细致的解释，以及[蓝火火](https://github.com/cnbluefire)分享的经验以及测试。
+感谢[GeeLaw](https://geelaw.blog/)提供的有关COM初始化的细致的解释，以及[蓝火火](https://github.com/cnbluefire)分享的经验以及测试。
 
 <div class="ref-label">参考</div>
 <div class="ref-list">

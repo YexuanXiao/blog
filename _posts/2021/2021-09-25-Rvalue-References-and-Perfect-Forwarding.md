@@ -10,7 +10,7 @@ C++11开始增加了移动语义和右值引用，这使得函数的重载变得
 
 ### std::forward
 
-上一篇文章 [C++ std::move](/blog/2021/09/23/std-move/) 中提到过 `std::remove_reference` 和 `static_cast` 用于实现 `std::move`，而 `std::forward` 也是用这两个组件实现的：
+上一篇文章[C++ std::move](/blog/2021/09/23/std-move/)中提到过 `std::remove_reference` 和 `static_cast` 用于实现 `std::move`，而 `std::forward` 也是用这两个组件实现的：
 
 ```cpp
 

@@ -4,7 +4,7 @@ date: "2022-10-14 23:33:00"
 tags: [TypeScript,Web]
 category: blog
 ---
-TypeScript手册指北 第二部分，第一部分在 [TypeScript手册指北Part1](/blog/2022/10/12/TypeScript-Handbook-Tutorial/)，记录了本人阅读TypeScript官方手册的一些想法，包含Type Manipulation的内容。
+TypeScript手册指北 第二部分，第一部分在[TypeScript手册指北Part1](/blog/2022/10/12/TypeScript-Handbook-Tutorial/)，记录了本人阅读TypeScript官方手册的一些想法，包含Type Manipulation的内容。
 
 <!-- more -->
 

@@ -82,7 +82,7 @@ Rust要进行系统调用也得按照规矩来，不是你说64位就64位，你
 
 另外C这个 \* 玩意函数传参不检查类型，传的参数类型不一致也不报错。当年我给 `sqrt` 传了个 `int`，C是不负责把 `int` 转成 `double` 的，而gcc即使知道这件事也没报错，于是我获得了一个INF。C++里面就会帮你转换，这就是C++隐式转换的来源。
 
-此外，Windows的UCRT虽然是 “C” 库，但是实际上是C++实现的（LIBC用于实现系统调用接口，提供C/C++运行环境），并且微软实际上通过UCRT这次重构解决了以往纯C实现的MSVCRT的ABI不稳定的问题，可以参考这个博文 [伟大的C运行时（CRT）重构](https://devblogs.microsoft.com/cppblog/the-great-c-runtime-crt-refactoring/)；同时，LLVM也在使用C++实现 [LIBC](https://github.com/llvm/llvm-project/blob/main/libc/src/__support/threads/thread.cpp)，所谓的C++ ABI不稳定实际上是个伪命题。
+此外，Windows的UCRT虽然是 “C” 库，但是实际上是C++实现的（LIBC用于实现系统调用接口，提供C/C++运行环境），并且微软实际上通过UCRT这次重构解决了以往纯C实现的MSVCRT的ABI不稳定的问题，可以参考这个博文[伟大的C运行时（CRT）重构](https://devblogs.microsoft.com/cppblog/the-great-c-runtime-crt-refactoring/)；同时，LLVM也在使用C++实现[LIBC](https://github.com/llvm/llvm-project/blob/main/libc/src/__support/threads/thread.cpp)，所谓的C++ ABI不稳定实际上是个伪命题。
 
 ### 对象移动后可以继续使用
 

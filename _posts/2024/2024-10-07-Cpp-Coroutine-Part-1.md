@@ -8,9 +8,9 @@ category: blog
 
 <!-- more -->
 
-C++的无栈协程最早出现于2012年，当时被叫做 [Resumeable Functions](https://www.open-std.org/JTC1/SC22/WG21/docs/papers/2012/n3328.pdf)，由Visual C++团队的Niklas Gustafsson提出，Visual C++团队在当时设计了代号为Casablanca的 [C++ Rest SDK](https://github.com/microsoft/cpprestsdk)。[Resumeable Functions rev.4](https://isocpp.org/files/papers/N4402.pdf)是最接近最终设计的带有教学性质的版本，而2018年发布的 [Working Draft, C++ Extensions for Coroutines](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0057r8.pdf) 第八版则几乎可以被认为是最终设计。
+C++的无栈协程最早出现于2012年，当时被叫做[Resumeable Functions](https://www.open-std.org/JTC1/SC22/WG21/docs/papers/2012/n3328.pdf)，由Visual C++团队的Niklas Gustafsson提出，Visual C++团队在当时设计了代号为Casablanca的[C++ Rest SDK](https://github.com/microsoft/cpprestsdk)。[Resumeable Functions rev.4](https://isocpp.org/files/papers/N4402.pdf)是最接近最终设计的带有教学性质的版本，而2018年发布的[Working Draft, C++ Extensions for Coroutines](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0057r8.pdf)第八版则几乎可以被认为是最终设计。
 
-笔者在接触协程后使用过一些库，例如 [C++/WinRT](https://github.com/microsoft/cppwinrt)、[Drogon](https://github.com/drogonframework/drogon)、[stdexec](https://github.com/NVIDIA/stdexec) 等，但都是基于别人已有成果的二次创作，如何从零开始编写一个可用的基于协程的异步设施仍然是笔者头上的一顶乌云以及待办列表中的重要一项。同时，网络上关于如何使用协程的教程也寥寥无几，主要有 [C++ Reference](https://zh.cppreference.com/w/cpp/language/coroutines)、[C++20协程原理和应用](https://zhuanlan.zhihu.com/p/497224333)、以及 [Asymmetric Transfer](https://lewissbaker.github.io/) 等。许传奇等人的教程主要介绍了协程的基本接口，但过于简单，C++ Reference则是较为准确的描述了这些接口如何被编译器使用，而Lewis Baker的教程比较全面但过于复杂，都缺乏理论与实践结合。
+笔者在接触协程后使用过一些库，例如[C++/WinRT](https://github.com/microsoft/cppwinrt)、[Drogon](https://github.com/drogonframework/drogon)、[stdexec](https://github.com/NVIDIA/stdexec)等，但都是基于别人已有成果的二次创作，如何从零开始编写一个可用的基于协程的异步设施仍然是笔者头上的一顶乌云以及待办列表中的重要一项。同时，网络上关于如何使用协程的教程也寥寥无几，主要有[C++ Reference](https://zh.cppreference.com/w/cpp/language/coroutines)、[C++20协程原理和应用](https://zhuanlan.zhihu.com/p/497224333)、以及[Asymmetric Transfer](https://lewissbaker.github.io/)等。许传奇等人的教程主要介绍了协程的基本接口，但过于简单，C++ Reference则是较为准确的描述了这些接口如何被编译器使用，而Lewis Baker的教程比较全面但过于复杂，都缺乏理论与实践结合。
 
 因此本系列教程从0开始，从理论到实践去实现一个协程接口的线程池，并且模仿C++/WinRT风格实现了通过协程去使用线程池，可以说不仅仅是一个协程教程，也是一个异步教程。由于本文和代码皆由本人一人编写，如有疏漏和错误，还请指正和包涵。同时，本教程为了简化起见，尽量利用标准库已有功能，因此存在一定优化空间，实际应用时可自行优化。
 
@@ -92,4 +92,4 @@ class task_with_progress<void, U>;
 
 这些API来自C++/WinRT，读者可以在[使用C++/WinRT执行并发和异步操作](https://learn.microsoft.com/zh-cn/windows/uwp/cpp-and-winrt-apis/concurrency)和[通过C++/WinRT实现高级并发和异步](https://learn.microsoft.com/zh-cn/windows/uwp/cpp-and-winrt-apis/concurrency-2)找到，但注意我对它们进行了一些修改。
 
-最后，感谢 [@aleck099](https://github.com/aleck099) 在前期给予的帮助，[@frederick-vs-ja](https://github.com/frederick-vs-ja) 提供的技术支持以及 [@zwuiz](https://github.com/) 审查了第五章的内容指出了等待器变换中存在的问题。
+最后，感谢[@aleck099](https://github.com/aleck099)在前期给予的帮助，[@frederick-vs-ja](https://github.com/frederick-vs-ja)提供的技术支持以及[@zwuiz](https://github.com/)审查了第五章的内容指出了等待器变换中存在的问题。

@@ -12,7 +12,7 @@ tags: [2020一月新番,anime]
 
 ![](https://imgsrc.baidu.com/baike/pic/item/a50f4bfbfbedab64bd565008f936afc378311ed5.jpg)
 
-动画官网做的蛮有心意，效果不错 [TVアニメ『ぼくのとなりに暗黒破壊神がいます。』公式サイト](https://bokuhaka-anime.com/)。
+动画官网做的蛮有心意，效果不错[TVアニメ『ぼくのとなりに暗黒破壊神がいます。』公式サイト](https://bokuhaka-anime.com/)。
 
 <!-- more -->
 

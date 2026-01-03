@@ -77,7 +77,7 @@ void roundBytes(unsigned char *data, size_t length)
 
 注意，C/C++对于unsigned类型和非unsigned类型使用移位操作的具体表现是不一样的：非unsigned并且符号位不为0的时候，编译器会选择算术移位，即符号位固定为1，符号位和数据位向右移动，舍弃数据位的最后一位。
 
-C++20为了解决字节序问题，设置了一组枚举 [`std::endian`](https://zh.cppreference.com/w/cpp/types/endian) 用于判断当前平台的字节序：
+C++20为了解决字节序问题，设置了一组枚举[`std::endian`](https://zh.cppreference.com/w/cpp/types/endian)用于判断当前平台的字节序：
 
 ```cpp
 
@@ -108,7 +108,7 @@ int main() {
 
 ```
 
-C++23添加了函数 [`std::byteswap`](https://zh.cppreference.com/w/cpp/numeric/byteswap) 用于翻转字节序 ：
+C++23添加了函数[`std::byteswap`](https://zh.cppreference.com/w/cpp/numeric/byteswap)用于翻转字节序 ：
 
 ```cpp
 

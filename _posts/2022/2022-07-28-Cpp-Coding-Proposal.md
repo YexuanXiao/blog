@@ -112,14 +112,14 @@ permalink: /proposal/
 
    这种现象叫做内存别名使用：编译器无法判断指针是否重叠。一个好的方案是引入一个中间变量，这种方式首先能避免别名使用，还能提高可读性：字符数少的代码有可能性能差又难读
 
-10. 使用引用限定修饰赋值意义的运算符重载函数，限制 `*this` 的值类别（参考 [C++非静态成员函数的引用限定修饰](//mysteriouspreserve.com/blog/2022/06/20/Cpp-Reference-Quality-Member-Function/)）
+10. 使用引用限定修饰赋值意义的运算符重载函数，限制 `*this` 的值类别（参考[C++非静态成员函数的引用限定修饰](//mysteriouspreserve.com/blog/2022/06/20/Cpp-Reference-Quality-Member-Function/)）
 
     理由：
 
     1. 对一个右值进行赋值通常是无意义的
     2. 允许对一个右值进行赋值可能会使形如 `if(foo() = 8)` 的语句合法
 
-11. 避免抛出含有状态的异常，使用无状态异常（参考 [C++异常问题的简单分析](//mysteriouspreserve.com/blog/2022/07/18/Cpp-Exception/)）
+11. 避免抛出含有状态的异常，使用无状态异常（参考[C++异常问题的简单分析](//mysteriouspreserve.com/blog/2022/07/18/Cpp-Exception/)）
 
     理由：
 
@@ -175,7 +175,7 @@ permalink: /proposal/
 
     理由：
 
-    1. 保证动态内存分配的异常安全（参考 [C++异常安全 - 智能指针](//mysteriouspreserve.com/blog/2022/04/08/Cpp-Exception-Smart-Pointer/)）
+    1. 保证动态内存分配的异常安全（参考[C++异常安全 - 智能指针](//mysteriouspreserve.com/blog/2022/04/08/Cpp-Exception-Smart-Pointer/)）
 
 19. 使用 `const_cast`，`static_cast` 和 `reinterpret_cast` 代替C风格的转换
 
@@ -216,15 +216,15 @@ permalink: /proposal/
 
     理由：
 
-    1. 默认构造应该只进行0初始化，不进行资源分配（参考 [C++异常 - 资源管理](//mysteriouspreserve.com/blog/2022/06/18/Cpp-Exception-Resource-Management/)），不会产生异常
+    1. 默认构造应该只进行0初始化，不进行资源分配（参考[C++异常 - 资源管理](//mysteriouspreserve.com/blog/2022/06/18/Cpp-Exception-Resource-Management/)），不会产生异常
     2. 移动构造和移动赋值应该使用copy-and-swap idiom，天生异常安全
-    3. 析构函数的异常无法正确处理（参考 [C++异常 - 类和异常](//mysteriouspreserve.com/blog/2022/04/07/Cpp-Exception-Class-and-RAII/)）
+    3. 析构函数的异常无法正确处理（参考[C++异常 - 类和异常](//mysteriouspreserve.com/blog/2022/04/07/Cpp-Exception-Class-and-RAII/)）
 
 25. 避免使用 `using` 指令
 
     理由：
 
-    1. `using` 指令只影响查找规则，不引入名字到当前作用域，所以可能会发生遮蔽，造成错误的函数调用（参考 [C++命名空间和using](//mysteriouspreserve.com/blog/2022/04/13/Cpp-namespace-and-using/)）
+    1. `using` 指令只影响查找规则，不引入名字到当前作用域，所以可能会发生遮蔽，造成错误的函数调用（参考[C++命名空间和using](//mysteriouspreserve.com/blog/2022/04/13/Cpp-namespace-and-using/)）
 
 26. 避免使用无限定调用，例如避免依赖ADL或者ADL两步法，改为使用限定调用
 
@@ -272,7 +272,7 @@ permalink: /proposal/
     理由：
 
     1. `noexcept` 修饰使得编译器不用为此函数插入处理异常的代码，因此能减小二进制体积
-    2. 由于标准目前未强制使得用户定义的移动构造不抛出异常，这使得在某些情况下必须有 `noexcept` 修饰才能使用移动构造（参考 [std::move\_if\_noexcept](https://zh.cppreference.com/w/cpp/utility/move_if_noexcept)）
+    2. 由于标准目前未强制使得用户定义的移动构造不抛出异常，这使得在某些情况下必须有 `noexcept` 修饰才能使用移动构造（参考[std::move\_if\_noexcept](https://zh.cppreference.com/w/cpp/utility/move_if_noexcept)）
 
 32. 优先考虑通过显式 `this` 调用函数而不是隐含 `this`
 

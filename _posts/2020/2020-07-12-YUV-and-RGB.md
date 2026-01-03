@@ -6,7 +6,7 @@ category: blog
 ---
 \*\*\*注意！\*\*\*本文所涉及的内容皆为RGB和YUV总述，并没有涉及10bit的内容。
 
-关于10bit的内容参见Microsoft的文档 [10-bit and 16-bit YUV Video Formats](https://docs.microsoft.com/zh-cn/windows/win32/medfound/10-bit-and-16-bit-yuv-video-formats)
+关于10bit的内容参见Microsoft的文档[10-bit and 16-bit YUV Video Formats](https://docs.microsoft.com/zh-cn/windows/win32/medfound/10-bit-and-16-bit-yuv-video-formats)
 
 本文转载自CSDN，遵循CC 4.0 BY-SA协议。
 

@@ -4,7 +4,7 @@ date: "2021-12-15 00:48:00"
 tags: [C++,philosophy]
 category: blog
 ---
-本文转载自 [刘未鹏(pongba)](http://mindhacks.cn/) 14年前所写文章 [学习C++：实践者的方法（Beta1）](https://blog.csdn.net/pongba/article/details/1930150)。作者借用自己的经验来给广大C++学习者指明了一条正确的学习方向，本人也和作者同心合意，有过相似的困惑和经历，因此将文章重新排版转载于此，并加入了一些批注和微小的修改。
+本文转载自[刘未鹏(pongba)](http://mindhacks.cn/) 14年前所写文章[学习C++：实践者的方法（Beta1）](https://blog.csdn.net/pongba/article/details/1930150)。作者借用自己的经验来给广大C++学习者指明了一条正确的学习方向，本人也和作者同心合意，有过相似的困惑和经历，因此将文章重新排版转载于此，并加入了一些批注和微小的修改。
 
 <!-- more -->
 
@@ -14,7 +14,7 @@ category: blog
 
 我的blog以前很长一段时间关注的都是C++中的技术 & 细节，乃至于读者和应者都寥寥。然而5月份的时候写的一篇 “你应当如何学习C++” [^1] ，阅读量却达到了3万多，在blog上所有文章中却是最高的（且远远超过了第二位）；评论数目也有一百多。为什么独独这篇能够激起这么多的回应，想必是国内的C++社群被C++压抑太久，或者，严格来说，是被C++的教育方式压抑太久。实际不管是在各大国内论坛上，还是在comp.lang.c++.moderated这样的国际论坛上，甚至于在豆瓣上的小组内，有心者都会发现，对C++语言的细节的关注一直都没有停止过；同样，对C++语言的细节的抱怨也从来都没有停止过。一个例子就是comp.lang.c++.moderated上的一个技术牛人James Kanze说的，他说接触C++十年了，到现在还需要不时去翻C++标准。这就难怪Eric Raymond老大在《The Art of Unix Programming》中说 “C++是反紧凑” 的了。C++中的细节太多，就算都看过了，也不可能都记住。更关键的是，就算都记住了，也不能让你成为一个真正的好程序员。
 
-[^1]: 萧叶轩注：由于本文成文与2007年，本篇具有一定前瞻性的思考都被C++新标准解决了，例如foreach, variadic templates, concepts甚至decltype。虽然foreach和decltype是C++11才加入，vt是17加入，concepts是20加入，但是必须承认这些问题已经被解决了，所以不在正文里放入 [链接](https://blog.csdn.net/pongba/article/details/1611593)
+[^1]: 萧叶轩注：由于本文成文与2007年，本篇具有一定前瞻性的思考都被C++新标准解决了，例如foreach, variadic templates, concepts甚至decltype。虽然foreach和decltype是C++11才加入，vt是17加入，concepts是20加入，但是必须承认这些问题已经被解决了，所以不在正文里放入[链接](https://blog.csdn.net/pongba/article/details/1611593)
 
 绝大多数人都把细节太多（或者用贬义词来说就是 “阴暗角落太多”）归结为C++的本质问题，认为一切邪恶由此而生。也正因此，大约9月份的时候，Linus在邮件列表上说 “C++是一门有思想包袱的语言；仅仅是为了让程序员远离C++，我也要用C”。这句短短的话在国内引起了很大的反应，最初是刘江转了Linus的话 [^2] ，然后云风和孟岩都发表了自己的看法；我也写了一篇 “Why C++”（后来发给Bjarne，Bjarne对这篇文章做了一个友情评注）。
 

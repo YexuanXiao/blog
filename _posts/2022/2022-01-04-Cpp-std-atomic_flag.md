@@ -297,8 +297,8 @@ namespace std
 
 #### 注释
 
-1. 根据cppreference的文章 [成员函数](https://en.cppreference.com/w/cpp/language/member_functions#const-_and_volatile-qualified_member_functions)，volatile修饰成员函数的目的是对this\* 进行限定，类似于const修饰的成员函数只能调用该类的const修饰的成员函数。
-2. 根据cppreference的文章 [destructor](https://zh.cppreference.com/w/cpp/language/destructor)，平凡析构代表着，析构函数非虚且不是用户提供的，平凡析构函数是不进行任何动作的析构函数。有平凡析构函数的对象不要求delete表达式，并可以通过简单地解分配其存储进行释放。
+1. 根据cppreference的文章[成员函数](https://en.cppreference.com/w/cpp/language/member_functions#const-_and_volatile-qualified_member_functions)，volatile修饰成员函数的目的是对this\* 进行限定，类似于const修饰的成员函数只能调用该类的const修饰的成员函数。
+2. 根据cppreference的文章[destructor](https://zh.cppreference.com/w/cpp/language/destructor)，平凡析构代表着，析构函数非虚且不是用户提供的，平凡析构函数是不进行任何动作的析构函数。有平凡析构函数的对象不要求delete表达式，并可以通过简单地解分配其存储进行释放。
 3. 关于std::memory\_order的内容将在后半部分讲述。
 
 ### 总结

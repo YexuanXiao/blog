@@ -49,7 +49,7 @@ namespace std {
 
 推导指引还可以用于帮助使用某些概念 [^3] ：
 
-[^3]: 参考 [Stack overflow](https://stackoverflow.com/questions/40951697/what-are-template-deduction-guides-and-when-should-we-use-them)
+[^3]: 参考[Stack overflow](https://stackoverflow.com/questions/40951697/what-are-template-deduction-guides-and-when-should-we-use-them)
 
 ```cpp
 

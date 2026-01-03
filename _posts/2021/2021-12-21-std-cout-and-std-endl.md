@@ -14,7 +14,7 @@ std::cout最广泛的被诟病的就是性能低下，但是殊不知std::cout�
 
 #### 多线程下线程安全 {#thread-safe}
 
-打开cppreference的 [std::cout, std::wcout](https://zh.cppreference.com/w/cpp/io/cout) 页面，其中第一句描述性话语的前半句是：
+打开cppreference的[std::cout, std::wcout](https://zh.cppreference.com/w/cpp/io/cout)页面，其中第一句描述性话语的前半句是：
 
 > 全局对象std::cout和std::wcout控制输出。
 
@@ -82,13 +82,13 @@ int main(){
 
 ```
 
-注意，这也将导致每个线程独占一个缓冲区，造成多线程变为不加锁出现 [多线程下线程安全](#thread-safe) 的问题，导致多线程下需要手动加锁。
+注意，这也将导致每个线程独占一个缓冲区，造成多线程变为不加锁出现[多线程下线程安全](#thread-safe)的问题，导致多线程下需要手动加锁。
 
 #### locale支持
 
 C和C++在发展过程中分别加入了多语言支持（但是多语言支持做的很烂，不如不做）。
 
-打开cppreference的 [std::locale](https://zh.cppreference.com/w/cpp/locale/locale) 页面，第一句就是：
+打开cppreference的[std::locale](https://zh.cppreference.com/w/cpp/locale/locale)页面，第一句就是：
 
 > std::locale类型对象是不可变平面的不可变索引集。C++输入/输出库的每个流对象与一个std::locale对象关联，并用其平面分析及格式化所有数据。
 
@@ -115,7 +115,7 @@ std::endl最广为人知的是它可能导致潜在的副作用，尤其是非�
 
 但是，对于其他不是行缓冲的输出流来说，std::endl会产生无用的刷新缓冲区，导致缓冲区频繁被刷新，而这些流可能被设计为缓冲区满或者手动刷新时才刷新，造成额外的开销。
 
-Bjarne Stroustrup在C++核心指南中写有一小节 [SL.io.50: Avoid endl](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Rio-endl) 中提到了这个问题。
+Bjarne Stroustrup在C++核心指南中写有一小节[SL.io.50: Avoid endl](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Rio-endl)中提到了这个问题。
 
 虽然这一节起名叫Avoid endl，但是最后面的Note指出，在不存在性能问题的时候，选择哪种方式完全出于美学。
 

@@ -8,7 +8,7 @@ C++的访问权限控制除了用在成员上，也可以用在继承上，但�
 
 <!-- more -->
 
-之前的文章 [C++异常 - 容器和 `std::vector`](/blog/2022/04/07/Cpp-Exception-Container-and-std-vector/) 提到过 `vector` 的设计：`vector` 为了保证异常安全，内存分配过程是交给 `vector_base` 这个基类来负责的，`vector_base` 持有 `vector` 的全部成员，`vector` 本身只负责元素的分配。其中，`vector_base` 有一个成员 `allocator`，该成员默认为 `std::allocator`，`std::allocator` 是个无状态的分配器。
+之前的文章[C++异常 - 容器和 `std::vector`](/blog/2022/04/07/Cpp-Exception-Container-and-std-vector/)提到过 `vector` 的设计：`vector` 为了保证异常安全，内存分配过程是交给 `vector_base` 这个基类来负责的，`vector_base` 持有 `vector` 的全部成员，`vector` 本身只负责元素的分配。其中，`vector_base` 有一个成员 `allocator`，该成员默认为 `std::allocator`，`std::allocator` 是个无状态的分配器。
 
 而C++规定一个对象必须有一个唯一的地址，换句话说虽然 `std::allocator` 虽然没有任何数据成员，但是仍然要占用至少一个字节的内存，虽然一个字节的开销看似不大，但是如果考虑内存对齐，则将导致需要占用4字节或者8字节。标准库中类似的容器数不胜数，在一个大型程序中可能存在成百上千个没任何意义的占用，此时开销将十分可观。
 

@@ -4,7 +4,7 @@ date: "2023-04-19 19:45:00"
 tags: [C++, C, docs]
 category: blog
 ---
-这是Go语言现任领队Russ Cox在2021年写的文章 [Hardware Memory Models](https://research.swtch.com/hwmm) 的英文原版的备份。
+这是Go语言现任领队Russ Cox在2021年写的文章[Hardware Memory Models](https://research.swtch.com/hwmm)的英文原版的备份。
 
 本文是第一篇，重点阐述了几个流行的ISA（指令集架构）中如何实现缓存同步；第二篇则是总结了常见的支持多线程的语言中同步设施（内存模型）的设计；第三篇则讲述了Go的内存模型，Go的内存模型已经于去年正式发布。
 

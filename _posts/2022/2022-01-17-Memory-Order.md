@@ -10,7 +10,7 @@ category: blog
 
 ### 多线程下程序执行三问题
 
-之前的文章 [C++和双重检查锁定模式（DCLP）的风险](/blog/2021/09/20/Cpp-and-the-Perils-of-Double-Checked-Locking/) 介绍过由于编译器优化导致的“乱序执行”。
+之前的文章[C++和双重检查锁定模式（DCLP）的风险](/blog/2021/09/20/Cpp-and-the-Perils-of-Double-Checked-Locking/)介绍过由于编译器优化导致的“乱序执行”。
 
 - 一个浅显简单的例子就是，同时声明的2个变量a和b，编译器并不对a和b的声明顺序做任何保证。更可能的情况是，编译器把变量a和b的声明移动到a和b分别使用之前。
 

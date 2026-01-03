@@ -4,7 +4,7 @@ date: "2023-04-19 19:45:00"
 tags: [C++, C, docs]
 category: blog
 ---
-这是Go语言现任领队Russ Cox在2021年写的文章 [Programming Language Memory Models](https://research.swtch.com/plmm) 的英文原版的备份。
+这是Go语言现任领队Russ Cox在2021年写的文章[Programming Language Memory Models](https://research.swtch.com/plmm)的英文原版的备份。
 
 本文是第二篇，重点阐述了C++和Java对内存模型设计的历史，以及ECMAScript 2017的初步尝试。
 

@@ -8,7 +8,7 @@ category: blog
 
 <!-- more -->
 
-今年进入标准的缺陷解决方案 [P3349 Converting contiguous iterators to pointers](//wg21.link/p3349) 正式确定了 `std::to_address` 是从连续迭代器获得指针的便捷方法，在新版标准库中，它在C++20模式也有效。
+今年进入标准的缺陷解决方案[P3349 Converting contiguous iterators to pointers](//wg21.link/p3349)正式确定了 `std::to_address` 是从连续迭代器获得指针的便捷方法，在新版标准库中，它在C++20模式也有效。
 
 连续迭代器允许转换为指针，带来了两点好处：
 

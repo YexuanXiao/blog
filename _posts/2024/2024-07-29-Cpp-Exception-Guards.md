@@ -485,7 +485,7 @@ void emplace_(U&& u)
 
 此时，在 \#2抛出异常后，`allocate_guard` 就会保护 `p_`，不发生泄漏，并且不使用 `catch(...)` 和 `throw;`。
 
-实际上之前文章中介绍过的 `std::uninitialized_copy` 函数也可以使用相同的手法代替，这里留给读者做思考题。在我实现的 [basic\_json](https://github.com/yexuanXiao/basic_json/) 中，就同时用到了这两种手法。
+实际上之前文章中介绍过的 `std::uninitialized_copy` 函数也可以使用相同的手法代替，这里留给读者做思考题。在我实现的[basic\_json](https://github.com/yexuanXiao/basic_json/)中，就同时用到了这两种手法。
 
 认真思考的读者可能已经发现：标准库的 `std::unique_ptr` 有相同的函数，实际上就是 `allocate_guard`！
 

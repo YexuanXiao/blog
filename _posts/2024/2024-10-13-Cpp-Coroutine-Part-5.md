@@ -916,4 +916,4 @@ int main()
 
 ```
 
-完整代码（第一章所述）见 [coroutine.cpp](https://gist.github.com/YexuanXiao/abad460805c66eb66db883693d8b2f4d)。
+完整代码（第一章所述）见[coroutine.cpp](https://gist.github.com/YexuanXiao/abad460805c66eb66db883693d8b2f4d)。

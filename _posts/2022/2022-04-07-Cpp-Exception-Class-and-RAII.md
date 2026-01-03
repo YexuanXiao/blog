@@ -45,10 +45,10 @@ C++构造函数具有以下概念，性质和意义[^4]：
 [^1]: 《C++语言的设计和演化》中提到过C with Class和C++早期的编译器Cfront是将C++翻译为C，再将对C进行编译。
 [^2]: 不变性是对类的成员的一种约束，有别于不需要约束或者约束无意义的结构，例如pair。
 [^3]: [C++ Core Guidelines C.2](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c2-use-class-if-the-class-has-an-invariant-use-struct-if-the-data-members-can-vary-independently)
-[^4]: 之前的文章 [构造函数和C++的哲学](/blog/2022/03/27/About-Constructor/) 中提到过一部分。
+[^4]: 之前的文章[构造函数和C++的哲学](/blog/2022/03/27/About-Constructor/)中提到过一部分。
 [^5]: C的const关键词是从C++中取得的（参考《C++语言的设计和演化》），函数内的static变量应该也如此（我忘记了），对于const变量和函数/类内的静态变量来说，初始化和赋值是完全不同的东西。
 [^6]: C++主张变量应该在被使用时才声明（而K\&R C及ANSI C要求一定要先声明），所以C++变量可以在任何合理位置声明并初始化。
-[^7]: 之前的文章 [严格别名规则和指针的安全性](/blog/2022/01/30/Strict-Aliasing-Rules/) 中提到了一些小小的例外。
+[^7]: 之前的文章[严格别名规则和指针的安全性](/blog/2022/01/30/Strict-Aliasing-Rules/)中提到了一些小小的例外。
 [^8]: 参数错误通常是程序bug，属于特殊情况，当前不讨论，除了通过解析参数string进行构造的。
 [^9]: 参考《C++程序设计语言》，实际上是因为析构函数的异常无法被确定性捕获，并且析构函数的异常会阻止其他对象的析构。
 

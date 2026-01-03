@@ -4,7 +4,7 @@ date: "2022-10-18 15:33:00"
 tags: [TypeScript,Web]
 category: blog
 ---
-TypeScript手册指北 第三部分，第二部分在 [TypeScript手册指北Part2](/blog/2022/10/14/TypeScript-Handbook-Tutorial-2/)，记录了本人阅读TypeScript官方手册的一些想法，包含Classes的内容。
+TypeScript手册指北 第三部分，第二部分在[TypeScript手册指北Part2](/blog/2022/10/14/TypeScript-Handbook-Tutorial-2/)，记录了本人阅读TypeScript官方手册的一些想法，包含Classes的内容。
 
 <!-- more -->
 
@@ -97,7 +97,7 @@ getter和setter可以伪装成一个只读/只写的属性，内部操纵真正�
 
 TypeScript 4.3开始setter和普通函数一样参数支持联合类型（实际上本来就可以支持，因为如果不标注默认为 `any`）。
 
-由于 [Type-only Field Declarations](https://www.typescriptlang.org/docs/handbook/2/classes.html#type-only-field-declarations) 的原因，不建议用getter和setter，属于垃圾特性。
+由于[Type-only Field Declarations](https://www.typescriptlang.org/docs/handbook/2/classes.html#type-only-field-declarations)的原因，不建议用getter和setter，属于垃圾特性。
 
 #### 索引签名
 
@@ -184,7 +184,7 @@ class Derived extends Base {
 
 TypeScript的成员初始化方式和C++类似，先使用基类初始化器，再使用构造函数，再使用派生类初始化器和派生类构造函数。
 
-TypeScript的函数也是属性的一种，函数也是对象，由于 [Type-only Field Declarations](https://www.typescriptlang.org/docs/handbook/2/classes.html#type-only-field-declarations) 的原因，需要避免基类和派生类中的属性名字撞车，除非覆盖掉基类的函数，否则不要使用一个名字。
+TypeScript的函数也是属性的一种，函数也是对象，由于[Type-only Field Declarations](https://www.typescriptlang.org/docs/handbook/2/classes.html#type-only-field-declarations)的原因，需要避免基类和派生类中的属性名字撞车，除非覆盖掉基类的函数，否则不要使用一个名字。
 
 实际上现行版本中，在派生类中重复定义的基类属性，会覆盖掉基类的属性，并且可以改变 `protected` 可见性。
 

@@ -20,7 +20,7 @@ category: blog
 8. `namespace命名空间名 :: 内部命名空间名 { 声明序列 }` (C++17起)
 9. `namespace命名空间名::inline内部命名空间名 { 声明序列 }` (C++20起)
 
-解释（详细解释参考 [cppreference: 命名空间](https://zh.cppreference.com/w/cpp/language/namespace)）：
+解释（详细解释参考[cppreference: 命名空间](https://zh.cppreference.com/w/cpp/language/namespace)）：
 
 1. 具名命名空间声明
 2. `using` 指令：`using` 指令只影响查找规则，不引入新的名字，会使得操纵的命名空间内的名字如同在当前命名空间和操纵的命名空间的公共父命名空间内一样 [^1]。
@@ -32,5 +32,5 @@ category: blog
 8. 嵌套（内部）命名空间定义，`namespace A::B {/* */}` 表示 `B` 命名空间在 `A` 中，等价于 `namespace A { namespace B {/* */} }`
 9. 嵌套内联命名空间定义，在8的基础上指示内部命名空间是内联的
 
-[^1]: 由于 `using` 指令不在当前命名空间引入新名字，所以 `using` 指令操纵的命名空间中的相同的名字不会和当前作用域内的名字进行重载，而是会被当前命名空间中的名字覆盖（对于非函数模板），所以具有一定危险性，具体规则见 [cppreference: 命名空间](https://zh.cppreference.com/w/cpp/language/namespace#using_.E6.8C.87.E4.BB.A4)。
+[^1]: 由于 `using` 指令不在当前命名空间引入新名字，所以 `using` 指令操纵的命名空间中的相同的名字不会和当前作用域内的名字进行重载，而是会被当前命名空间中的名字覆盖（对于非函数模板），所以具有一定危险性，具体规则见[cppreference: 命名空间](https://zh.cppreference.com/w/cpp/language/namespace#using_.E6.8C.87.E4.BB.A4)。
 

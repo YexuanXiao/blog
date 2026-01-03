@@ -4,7 +4,7 @@ date: "2022-01-30 21:04:00"
 tags: [C++,STL]
 category: blog
 ---
-之前读到了陈硕在2010年写的文章 [带符号整数的除法与余数](https://blog.csdn.net/solstice/article/details/5139302)，其中提到了一种用一个对称的digits数组自动解决符号的问题的itoa实现，我也在前年写过一篇文章 [C++取模运算](https://mysteriouspreserve.com/blog/2020/09/20/Cpp-Modulus-Operation/) 中提到过类似问题。正好陈硕写完文章的10年后，C++加入了Concept，弥补了当年C++ 0x没有Concept的遗憾，于是本篇文章就是用Concept和陈硕文章内的itoa实现一同设计出一个泛型itoa。
+之前读到了陈硕在2010年写的文章[带符号整数的除法与余数](https://blog.csdn.net/solstice/article/details/5139302)，其中提到了一种用一个对称的digits数组自动解决符号的问题的itoa实现，我也在前年写过一篇文章[C++取模运算](https://mysteriouspreserve.com/blog/2020/09/20/Cpp-Modulus-Operation/)中提到过类似问题。正好陈硕写完文章的10年后，C++加入了Concept，弥补了当年C++ 0x没有Concept的遗憾，于是本篇文章就是用Concept和陈硕文章内的itoa实现一同设计出一个泛型itoa。
 
 <!-- more -->
 

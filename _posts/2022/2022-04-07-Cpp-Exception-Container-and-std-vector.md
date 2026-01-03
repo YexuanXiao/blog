@@ -177,7 +177,7 @@ vector<T, A>::vector(size_type n, const T& val, const A& a)
 
 `std::uninitialized_fill` 是标准库提供的一个函数模板，实现如下 [^3]：
 
-[^3]: 参考 [cppreference: std::uninitialized\_fill](https://zh.cppreference.com/w/cpp/memory/uninitialized_fill)。
+[^3]: 参考[cppreference: std::uninitialized\_fill](https://zh.cppreference.com/w/cpp/memory/uninitialized_fill)。
 
 ```cpp
 

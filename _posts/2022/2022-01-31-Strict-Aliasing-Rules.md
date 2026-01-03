@@ -118,9 +118,9 @@ C标准委员会的解决方案是使用严格别名规则和 `restrict` 关键�
 
 #### 缺陷报告P0593R6
 
-已经纳入标准 [^2] 的缺陷报告 [P0593R6 Implicit creation of objects for low-level object manipulation](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0593r6.html) 指出，如下代码**存在未定义行为**：
+已经纳入标准 [^2] 的缺陷报告[P0593R6 Implicit creation of objects for low-level object manipulation](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0593r6.html)指出，如下代码**存在未定义行为**：
 
-[^2]: [P2131R0](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p2131r0.html) 确认了P0593R6已经纳入标准。
+[^2]: [P2131R0](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p2131r0.html)确认了P0593R6已经纳入标准。
 
 ```cpp
 
@@ -138,7 +138,7 @@ X* make_x() {
 
 改写的方法是使用布置new [^1]：
 
-[^1]: 布置new的使用参见之前的文章 [C++ new和delete](/blog/2021/08/23/new-and-delete/)。
+[^1]: 布置new的使用参见之前的文章[C++ new和delete](/blog/2021/08/23/new-and-delete/)。
 
 ```cpp
 

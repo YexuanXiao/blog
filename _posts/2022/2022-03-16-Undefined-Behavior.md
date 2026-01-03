@@ -6,7 +6,7 @@ category: blog
 ---
 如果评比C++中最隐秘的一个角落，那不会是name mangling，不会是模板匹配规则，而是未定义行为。大部分人对于未定义行为都讳莫如深，但未定义也是C++设计理念的一部分。作为一个半学术性质的语言，C++选择相信程序员，程序员应该充分了解C++的语法规则。未定义行为的存在，使得编译器可以近乎任意的优化程序，而不用关心代码到底被编译成了何种硬件指令。基于此，C++可以写出最适合硬件的代码，进而被优化为最简单的指令。
 
-本文是对知乎用户 [Lancern](https://www.zhihu.com/people/lancern) 的文章 [浅谈C++ Undefined Behavior](https://zhuanlan.zhihu.com/p/391088391) 的转载。了解未定义行为不是目的，了解编译器行为才是。
+本文是对知乎用户[Lancern](https://www.zhihu.com/people/lancern)的文章[浅谈C++ Undefined Behavior](https://zhuanlan.zhihu.com/p/391088391)的转载。了解未定义行为不是目的，了解编译器行为才是。
 
 <!-- more -->
 

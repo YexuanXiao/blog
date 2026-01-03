@@ -9,7 +9,7 @@ category: blog
 
 <!-- more -->
 
-基本思路来自2015年的文章 [How to turn on Windows 10 Dark Theme using Registry Tweak](https://www.thewindowsclub.com/enable-windows-10-dark-theme)，本质是通过修改注册表的方式切换主题。经过我的测试，发现Windows监听了文中的注册表项，修改注册表后会立即切换。
+基本思路来自2015年的文章[How to turn on Windows 10 Dark Theme using Registry Tweak](https://www.thewindowsclub.com/enable-windows-10-dark-theme)，本质是通过修改注册表的方式切换主题。经过我的测试，发现Windows监听了文中的注册表项，修改注册表后会立即切换。
 
 根据文章可以知道，这个项目保存到了 `HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize` 的 `SystemUsesLightTheme` 和 `AppsUseLightTheme` 中。
 

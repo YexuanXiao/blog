@@ -4,7 +4,7 @@ date: "2021-12-21 13:45:00"
 tags: [C++,STL]
 category: blog
 ---
-在C++17之前，C++的文件系统操作都是依靠吗一些第三方库包装Windows或者POSIX系统调用来实现的。C++14时期的Paper [N4100](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4100.pdf) 提出了文件系统标准库，C++17中std::filesystem正式纳入标准。
+在C++17之前，C++的文件系统操作都是依靠吗一些第三方库包装Windows或者POSIX系统调用来实现的。C++14时期的Paper [N4100](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4100.pdf)提出了文件系统标准库，C++17中std::filesystem正式纳入标准。
 
 <!-- more -->
 

@@ -17,7 +17,7 @@ category: blog
 
 存在该问题也“情有可原”“情有可原”，因为系统壁纸本身属于多用户共享的内容。
 
-翻了十几个网页后我最终找到了正确的教程 [How to Find and Save Custom Lock Screen Background Images in Windows 10](https://www.tenforums.com/tutorials/130598-find-save-custom-lock-screen-background-images-windows-10-a.html)，锁屏壁纸缓存的实际位置在：
+翻了十几个网页后我最终找到了正确的教程[How to Find and Save Custom Lock Screen Background Images in Windows 10](https://www.tenforums.com/tutorials/130598-find-save-custom-lock-screen-background-images-windows-10-a.html)，锁屏壁纸缓存的实际位置在：
 `C:\ProgramData\Microsoft\Windows\SystemData\<UserSID>\ReadOnly\LockScreen_<Letter>`
 
 注意，访问该路径需要使用安全选项卡授予当前用户权限，可以按经验或者按教程解决该问题。每个 `LockScreen_<Letter>` 文件夹下会储存同一张壁纸的不同尺寸，删除需要SYSTEM权限，可以使用Dism++ 的春哥附体解决。

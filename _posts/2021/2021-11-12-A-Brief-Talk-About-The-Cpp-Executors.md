@@ -4,11 +4,11 @@ date: "2021-11-12 02:43:00"
 tags: [C++, docs]
 category: blog
 ---
-就在2021年7月6号，Executors提案又有了亿点点的更新。新的Paper [P2300R1](http://open-std.org/JTC1/SC22/WG21/docs/papers/2021/p2300r1.html)，正式命名为 `std::execution`，相较于The Unified Executor for C++，[P0443R14](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0443r14)，更系统地阐述了Executors的设计思路；给出了在实现上更多的说明；删除了Executor Concept，保留并确立了Sender/Receiver/Scheduler模型；给出了库里应有的初始算法集合，并对之前的算法设计有不小的改动；还有更多明确的语义如任务的多发射（multi-shot）和单发射（single-shot），任务的惰性（lazy）与及时（eager）提交，等等。笔者业余时间实践的Excutors库也正好实践完成了 [P1879R3](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p1897r3.html) 的内容，在  `std::execution` 发布的里程碑，借鄙文与大家简单聊聊Executors。
+就在2021年7月6号，Executors提案又有了亿点点的更新。新的Paper [P2300R1](http://open-std.org/JTC1/SC22/WG21/docs/papers/2021/p2300r1.html)，正式命名为 `std::execution`，相较于The Unified Executor for C++，[P0443R14](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0443r14)，更系统地阐述了Executors的设计思路；给出了在实现上更多的说明；删除了Executor Concept，保留并确立了Sender/Receiver/Scheduler模型；给出了库里应有的初始算法集合，并对之前的算法设计有不小的改动；还有更多明确的语义如任务的多发射（multi-shot）和单发射（single-shot），任务的惰性（lazy）与及时（eager）提交，等等。笔者业余时间实践的Excutors库也正好实践完成了[P1879R3](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p1897r3.html)的内容，在  `std::execution` 发布的里程碑，借鄙文与大家简单聊聊Executors。
 
 <!-- more -->
 
-**本文转载自知乎用户 [@Madokakaroto](https://www.zhihu.com/people/Madokakaroto) 所写文章 [浅谈The C++ Executors](https://zhuanlan.zhihu.com/p/395250667)。著作权归原作者所有。**
+**本文转载自知乎用户[@Madokakaroto](https://www.zhihu.com/people/Madokakaroto)所写文章[浅谈The C++ Executors](https://zhuanlan.zhihu.com/p/395250667)。著作权归原作者所有。**
 
 ## 1\. Why Executors?
 
@@ -32,13 +32,13 @@ std::async([]{ g(); });
 - 临时变量Temp在开始执行第二行之前发生析构；
 - `std::future<void>` 的析构函数，会同步地等操作的返回，并阻塞当前线程。
 
-[^1]: 编者注：该问题在之前的文章 [C++ std::async](/blog/2021/11/05/std-async/) 中提到过，准确来讲就是：std::async返回的std::future是一个纯右值，那么此时如果不选择去使用左值去移动性的接收返回值，则此纯右值会在下一条语句执行前被析构，这将导致调用std::async的线程被该析构过程阻塞，造成事实上的同步执行，而不是异步，因此会造成严重的设计缺陷。
+[^1]: 编者注：该问题在之前的文章[C++ std::async](/blog/2021/11/05/std-async/)中提到过，准确来讲就是：std::async返回的std::future是一个纯右值，那么此时如果不选择去使用左值去移动性的接收返回值，则此纯右值会在下一条语句执行前被析构，这将导致调用std::async的线程被该析构过程阻塞，造成事实上的同步执行，而不是异步，因此会造成严重的设计缺陷。
 
 `std::async` 在初期还会为每一个发起的任务，创建一个新的执行线程。因此， `std::async` 臭名昭著。这里既然提到了 `std::future`，它同样也有不少的问题。
 
 ### 1.2 Future/Promise模型的演进
 
-[Future/Promise](https://en.wikipedia.org/wiki/Futures_and_promises) 模型是一个经典的并发编程模型，它提供给程序员完整的机制来控制程序的同步和异步。C++11中也引入了Future/Promise机制。Future本质上是我们发起的一个并发操作，而Promise本质上则是并发操作的回调。我们可以通过Future对象等待该操作和获取操作的结果，而Promise对象则负责写入返回值并通知我们。C++中典型的Future/Promise的实现如下图所示：
+[Future/Promise](https://en.wikipedia.org/wiki/Futures_and_promises)模型是一个经典的并发编程模型，它提供给程序员完整的机制来控制程序的同步和异步。C++11中也引入了Future/Promise机制。Future本质上是我们发起的一个并发操作，而Promise本质上则是并发操作的回调。我们可以通过Future对象等待该操作和获取操作的结果，而Promise对象则负责写入返回值并通知我们。C++中典型的Future/Promise的实现如下图所示：
 
 ![Future/Promise](//static.nykz.org/blog/images/2021-11-12/Future_Promise.avif "candark")
 
@@ -54,7 +54,7 @@ std::async([]{ g(); });
 
 ### 1.3 Future/Promise模型的缺点
 
-虽然Executors提案从12年就开始起草，但早期的Executor提案还并没有提出Sender/Recevier模型，并依然基于Future/Promsie模型来表达任务图的关系。例如，来自Google专注于并发的提案 [N3378](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3378.pdf) 和来自NVIDIA专注于并行的提案 [N4406](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4406.pdf)，依旧使用Future/Promise，他们主要把关注点放在了任务调度的抽象上。
+虽然Executors提案从12年就开始起草，但早期的Executor提案还并没有提出Sender/Recevier模型，并依然基于Future/Promsie模型来表达任务图的关系。例如，来自Google专注于并发的提案[N3378](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3378.pdf)和来自NVIDIA专注于并行的提案[N4406](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4406.pdf)，依旧使用Future/Promise，他们主要把关注点放在了任务调度的抽象上。
 
 大家在逐步推进提案的进程，一统并发与并行的抽象时，发现Future/Promise模型并不能胜任表达任务图的工作。主要有以下几个原因：
 
@@ -77,7 +77,7 @@ std::future<int> f = /* ..... */;
 
 ### 1.4亟需更为泛型的抽象
 
-市面上已有的一些基于TaskNode抽象的库，例如Unity的JobSystem和UE4的TaskGraph，还有 [C++ TaskFlow](https://github.com/taskflow/taskflow)，他们都是类型擦除的实现，除了它们支持了惰性提交之外，其他的问题也无法解决。
+市面上已有的一些基于TaskNode抽象的库，例如Unity的JobSystem和UE4的TaskGraph，还有[C++ TaskFlow](https://github.com/taskflow/taskflow)，他们都是类型擦除的实现，除了它们支持了惰性提交之外，其他的问题也无法解决。
 
 问题的答案已经很明朗了，那就是更多的泛型抽象。我们需要一个更为泛型的Executors抽象，来表达我们的任务图，调度策略，并带上执行器的类型信息；使得编译器能够有足够的机会进行激进的优化，使得调度器能够聪明地选择最优的算法，使得执行器能调度到除CPU之外的硬件中执行。这就是下一节将要介绍的The Unified C++ Executors。
 

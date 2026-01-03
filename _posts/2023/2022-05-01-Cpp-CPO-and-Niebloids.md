@@ -138,7 +138,7 @@ find(a.begin(), a.end(), 2);
 
 ### 如何实现CPO和Niebloids
 
-学习如何实现CPO和Niebloids还是有用的，因为作为库作者很可能需要我们自己提供定制点，但CPO和Niebloids实际上不能通过lambda实现，原因在 [A note on namespace \_\_cpo](https://quuxplusone.github.io/blog/2021/12/07/namespace-cpo/)。
+学习如何实现CPO和Niebloids还是有用的，因为作为库作者很可能需要我们自己提供定制点，但CPO和Niebloids实际上不能通过lambda实现，原因在[A note on namespace \_\_cpo](https://quuxplusone.github.io/blog/2021/12/07/namespace-cpo/)。
 
 当然，实现CPO和Niebloids并不需要多么复杂，如果你不想要知道原因（除了定制标准和发明CPO以外没人需要知道原因），照抄下面的模板即可：
 

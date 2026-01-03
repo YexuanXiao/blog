@@ -47,7 +47,7 @@ class wthread
 
 ```
 
-之所以使用 `std::vector` 而不是 `std::deque` 是因为 [STL](https://github.com/microsoft/STL/issues/147) 的实现是错误的。另外 `std::coroutine_handle<>` 是平凡复制并且仅有一个指针的大小，同时队列中通常具有少部分元素，因此性能会比使用 `std::deque` 好。在实践中可以考虑使用环形队列。
+之所以使用 `std::vector` 而不是 `std::deque` 是因为[STL](https://github.com/microsoft/STL/issues/147)的实现是错误的。另外 `std::coroutine_handle<>` 是平凡复制并且仅有一个指针的大小，同时队列中通常具有少部分元素，因此性能会比使用 `std::deque` 好。在实践中可以考虑使用环形队列。
 
 `std::coroutine_handle<>` 是协程句柄，在后面的章节会讲到。协程句柄可以被无参数调用，类似 `std::function<void()>`，但与之不同的是，协程有自己传播异常的方式，因此接下来不需要考虑调用协程句柄会抛出异常。
 

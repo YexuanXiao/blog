@@ -63,4 +63,4 @@ C++ Pimer第125页写道，C++早期版本没有规定 % 是取模还是取余�
 
 2022.01.30补充：
 
-陈硕在 [带符号整数的除法与余数](https://blog.csdn.net/solstice/article/details/5139302) 中提到，C99规定了向零取整。
+陈硕在[带符号整数的除法与余数](https://blog.csdn.net/solstice/article/details/5139302)中提到，C99规定了向零取整。

@@ -26,7 +26,7 @@ UWP使用 `AppWindow` 和 `CoreWindow` 管理标题栏，对于深度定制来�
 
 3. `Microsoft.UI.Windowing.AppWindow` 类，扩展内容到标题栏
 
-   对标题栏定制能力最强的方式，除了按钮本身都可以定制，并且支持各种调整，可以视为用Win32模仿UWP行为，但只能Windows 11用，我个人推测可能是依赖只有Windows 11可用的DWM属性 [DWMWINDOWATTRIBUTE](https://learn.microsoft.com/en-us/windows/win32/api/dwmapi/ne-dwmapi-dwmwindowattribute)
+   对标题栏定制能力最强的方式，除了按钮本身都可以定制，并且支持各种调整，可以视为用Win32模仿UWP行为，但只能Windows 11用，我个人推测可能是依赖只有Windows 11可用的DWM属性[DWMWINDOWATTRIBUTE](https://learn.microsoft.com/en-us/windows/win32/api/dwmapi/ne-dwmapi-dwmwindowattribute)
 
    存在的问题是无法在顶部调整窗口大小，该问题有待解决
 

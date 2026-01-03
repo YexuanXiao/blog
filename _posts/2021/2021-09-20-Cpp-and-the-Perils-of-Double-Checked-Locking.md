@@ -4,7 +4,7 @@ date: "2021-09-20 00:36:00"
 tags: [C++, docs]
 category: blog
 ---
-本文是Scott Meyers和Andrei Alexandrescu在2004年发表的 [论文](https://www.aristeia.com/Papers/DDJ_Jul_Aug_2004_revised.pdf) 的一篇翻译，由于原译者的 [网站](http://blog.jobbole.com/86392/) 已经无法访问，在此整理留作备份，有改动。
+本文是Scott Meyers和Andrei Alexandrescu在2004年发表的[论文](https://www.aristeia.com/Papers/DDJ_Jul_Aug_2004_revised.pdf)的一篇翻译，由于原译者的[网站](http://blog.jobbole.com/86392/)已经无法访问，在此整理留作备份，有改动。
 
 虽然文章是在2004年写的，C++11标准发布后文章中的一些问题也不在存在，但是文章的思想仍然有用。
 

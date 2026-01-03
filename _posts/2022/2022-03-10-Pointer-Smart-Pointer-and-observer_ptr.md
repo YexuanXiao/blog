@@ -5,7 +5,7 @@ tags: [C++]
 category: blog
 ---
 
-本文是Bjarne Stroustrup在2018年发表的一个Proposal [Abandon observer_ptr](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p1408r0.pdf) (P1408R0) 的翻译。Bjarne原本在2014年尝试设计了一种额外的智能指针 `observe_ptr`，发表于 [N2082](http://open-std.org/JTC1/SC22/WG21/docs/papers/2014/n4282.pdf)，但是，后来Bjarne意识到 `observer_ptr` 是愚蠢的，于是就有了这篇文章。虽然 `observer_ptr` 已经被遗弃，但是我想通过Bjarne的这篇文章来说明一个问题：`unique_ptr` 和 `shared_ptr` 不能完全代替裸指针。
+本文是Bjarne Stroustrup在2018年发表的一个Proposal [Abandon observer_ptr](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p1408r0.pdf) (P1408R0) 的翻译。Bjarne原本在2014年尝试设计了一种额外的智能指针 `observe_ptr`，发表于[N2082](http://open-std.org/JTC1/SC22/WG21/docs/papers/2014/n4282.pdf)，但是，后来Bjarne意识到 `observer_ptr` 是愚蠢的，于是就有了这篇文章。虽然 `observer_ptr` 已经被遗弃，但是我想通过Bjarne的这篇文章来说明一个问题：`unique_ptr` 和 `shared_ptr` 不能完全代替裸指针。
 
 <!-- more -->
 
@@ -15,7 +15,7 @@ Bjarne Stroustrup
 
 ### 总结
 
-我提议从 [工作草案C++基础扩展库 第3版](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/n4786.html) 中删除 **std::observer_ptr** 。它是在2014年从 [关于世界上最愚蠢的智能指针的建议（A Proposal for the World's Dumbest Smart Pointer, v4）](http://open-std.org/JTC1/SC22/WG21/docs/papers/2014/n4282.pdf) (N4282) 中采用的，对于一个旨在改变现有的每个C++程序的建议来说，讨论时间非常短。
+我提议从[工作草案C++基础扩展库 第3版](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/n4786.html)中删除 **std::observer_ptr** 。它是在2014年从[关于世界上最愚蠢的智能指针的建议（A Proposal for the World's Dumbest Smart Pointer, v4）](http://open-std.org/JTC1/SC22/WG21/docs/papers/2014/n4282.pdf) (N4282) 中采用的，对于一个旨在改变现有的每个C++程序的建议来说，讨论时间非常短。
 我发现那篇论文的理由和对替代方案的讨论非常简短而且相当薄弱。引用Walter Brown在2013年Urbana-Champaign会议上的讲话：
 
 **目标：摆脱用户代码中的裸指针**
@@ -24,7 +24,7 @@ Bjarne Stroustrup
 
 指针在指向 "事物 "方面非常好，**T\*** 是一个非常好的符号，比冗长的 **std::observer_ptr\<T\>** 好得多。指针不擅长的是代表所有权和直接支持安全迭代 [^1] 。
 
-[^1]: C++的指针由于受到C的影响，许多时候不能进行更好的优化，因为指针操作可能存在重叠，参考之前的文章 [严格别名规则和指针安全性](/blog/2022/01/30/Strict-Aliasing-Rules/)
+[^1]: C++的指针由于受到C的影响，许多时候不能进行更好的优化，因为指针操作可能存在重叠，参考之前的文章[严格别名规则和指针安全性](/blog/2022/01/30/Strict-Aliasing-Rules/)
 
 ### 问题
 
@@ -95,7 +95,7 @@ void g()
 
 对于迭代和对多个对象（如数组）的非所有权引用，**Range** s和 **span** s [^2]（我认为）是一个比 **observer_ptr** s和原始指针混合的更好的解决方案。
 
-[^2]: span设计与2015年的GSL，在C++17中成为标准，observer_ptr设计于2014年，本文写于2018年，参考之前的文章 [C++ std::span](/blog/2022/01/09/std-span/)
+[^2]: span设计与2015年的GSL，在C++17中成为标准，observer_ptr设计于2014年，本文写于2018年，参考之前的文章[C++ std::span](/blog/2022/01/09/std-span/)
 
 ### 替代
 

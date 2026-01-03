@@ -8,7 +8,7 @@ category: blog
 
 <!-- more -->
 
-方案来自 [HARN](https://get233.com/archives/support-macOS-dark-mode-in-safari-web.html)
+方案来自[HARN](https://get233.com/archives/support-macOS-dark-mode-in-safari-web.html)
 
 经过我一番修改，核心代码如下：
 

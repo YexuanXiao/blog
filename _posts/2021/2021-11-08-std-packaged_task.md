@@ -8,7 +8,7 @@ std::packaged\_task是C++11将任务进行包装的一种容器，类似于std::
 
 <!-- more -->
 
-参考cppreference的 [std::packaged_task](https://zh.cppreference.com/w/cpp/thread/packaged_task) 示例 ：
+参考cppreference的[std::packaged_task](https://zh.cppreference.com/w/cpp/thread/packaged_task)示例 ：
 
 ```cpp
 

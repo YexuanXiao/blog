@@ -21,7 +21,7 @@ category: blog
 
 Google的这个指南其实不是很清晰，我简单整理了一下：
 
-1. 登录Google账号，访问 [APIS](https://console.developers.google.com/apis/)。
+1. 登录Google账号，访问[APIS](https://console.developers.google.com/apis/)。
 
 2. 点击左侧的OAuth consent screen，创建。注意，创建后不用Publish，把必须项目填好，其他的默认。
 

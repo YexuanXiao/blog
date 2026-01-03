@@ -8,7 +8,7 @@ category: blog
 
 <!-- more -->
 
-参考 [C++ Core Guidelines](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#t65-use-tag-dispatch-to-provide-alternative-implementations-of-a-function)。
+参考[C++ Core Guidelines](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#t65-use-tag-dispatch-to-provide-alternative-implementations-of-a-function)。
 
 #### T.65: Use tag dispatch to provide alternative implementations of a function使用标签分发提供函数的不同实现
 

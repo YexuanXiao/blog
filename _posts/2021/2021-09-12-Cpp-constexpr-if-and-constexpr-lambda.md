@@ -8,7 +8,7 @@ C++17开始，编译器添加了constexpr if用于模板的编译期判断，以
 
 <!-- more -->
 
-在之前的文章 [C++可变参数模板](/blog/2021/08/11/Cpp-Variadic-Template/) ，有这样的一个函数模板：
+在之前的文章[C++可变参数模板](/blog/2021/08/11/Cpp-Variadic-Template/) ，有这样的一个函数模板：
 
 ```cpp
 

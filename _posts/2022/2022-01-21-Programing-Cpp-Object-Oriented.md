@@ -36,11 +36,11 @@ C不支持类不代表不支持OO，只不过类能够提供额外便利使得OO
 
 主流静态类型面向对象语言实现了基于**类**的继承，包括C++，C\#，Java等，继承实现了组合和多态。
 
-OO的常见错误思想是尽可能的继承（通过分类），但这种思想是不尽合理的：陈硕在 [C++工程实践经验谈](https://github.s3.amazonaws.com/downloads/chenshuo/documents/CppPractice.pdf) 中提到了一个非常恰当的例子：不会飞的企鹅是不是鸟：如果企鹅继承自鸟，鸟实现了飞行接口，那企鹅如何对这个接口进行实现？
+OO的常见错误思想是尽可能的继承（通过分类），但这种思想是不尽合理的：陈硕在[C++工程实践经验谈](https://github.s3.amazonaws.com/downloads/chenshuo/documents/CppPractice.pdf)中提到了一个非常恰当的例子：不会飞的企鹅是不是鸟：如果企鹅继承自鸟，鸟实现了飞行接口，那企鹅如何对这个接口进行实现？
 
 在继承这种设计发明之后，人们就发现了继承关系不能很好的表达现实世界中的继承关系。虽然C++甚至罕见的支持非虚基类的多继承（相比于C\# 和Java的虚基类多继承），把继承关系从树解放成为了图，但是仍然不能解决企鹅该不该继承鸟的问题。
 
-即使不存在上述问题，滥用继承仍然会导致继承关系复杂，毕竟图可比树在理解和实践中都复杂多了。典型例子就是标准库中的iostream，参考陈硕的分析 [C++工程实践(7)：iostream的用途与局限](https://www.cnblogs.com/Solstice/archive/2011/07/17/2108715.html)。
+即使不存在上述问题，滥用继承仍然会导致继承关系复杂，毕竟图可比树在理解和实践中都复杂多了。典型例子就是标准库中的iostream，参考陈硕的分析[C++工程实践(7)：iostream的用途与局限](https://www.cnblogs.com/Solstice/archive/2011/07/17/2108715.html)。
 
 ![iostream](//static.nykz.org/blog/images/2022-01-21/iostream.avif "candark")
 

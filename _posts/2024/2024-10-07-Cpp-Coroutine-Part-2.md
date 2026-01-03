@@ -14,7 +14,7 @@ category: blog
 
 ## 原子操作
 
-C++提供了六个内存序标签去使用四种内存序来描述C++的内存模型，这些内存序的定义比较复杂，如果读者想要全面的学习，可以阅读 [std::memory\_order](https://zh.cppreference.com/w/cpp/atomic/memory_order)、[编程语言内存模型](https://mysteriouspreserve.com/blog/2023/04/19/Programing-Memory-Models-ch/)以及《C++并发编程实战 第二版》等专业资料，本文所讲述的只是一种简化模型。
+C++提供了六个内存序标签去使用四种内存序来描述C++的内存模型，这些内存序的定义比较复杂，如果读者想要全面的学习，可以阅读[std::memory\_order](https://zh.cppreference.com/w/cpp/atomic/memory_order)、[编程语言内存模型](https://mysteriouspreserve.com/blog/2023/04/19/Programing-Memory-Models-ch/)以及《C++并发编程实战 第二版》等专业资料，本文所讲述的只是一种简化模型。
 
 C++原子操作的结果，可以通过观测原子变量的值来定义。无论哪种内存序标签以及何种操作，都保证读取时一定完整的读取到“上一次”储存的值，而不会是两次写入叠加在一起产生的值。“上一次”指的就是观测时观测到的值被写入的那一次。
 
@@ -73,13 +73,13 @@ public:
 
 在其他使用 `wait` 的场景中，例如通过原子实现信号量时，`wait` 需要使用acquire。
 
-通过添加C++20新增的的 `wait` 和 `notify_one` 函数调用，可以做到让锁不再自旋。这项技术是[增加等待增强std::atomic\_flag (P0514R0)](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0514r0.pdf) 中提出的，同时作者给出了性能数据和[参考实现](https://github.com/ogiroux/semaphore/blob/master/lib/semaphore.cpp)。
+通过添加C++20新增的的 `wait` 和 `notify_one` 函数调用，可以做到让锁不再自旋。这项技术是[增加等待增强std::atomic\_flag (P0514R0)](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0514r0.pdf)中提出的，同时作者给出了性能数据和[参考实现](https://github.com/ogiroux/semaphore/blob/master/lib/semaphore.cpp)。
 
 Linus Torvalds指出，一个吞吐量高的锁通常具有更高的延迟，而延迟更低的锁可能花费了更多时间在自旋上，占用了更多的CPU，[内核提供的锁是针对这两点的平衡](https://www.realworldtech.com/forum/?threadid=189711&curpostid=189723)。虽然Linus Torvalds同时声称不要自己实现锁，但实际上我们知道 `wait` 和 `notify` 使用futex实现，因此在Linux上这效果不错。在Windows上，则由 `WaitOnAddress`、`WakeOnAddressSingle` 实现。读者可以自行阅读各大标准库相关源码来观测这点。
 
-实际上 `WaitOnAddress` 也是实现 [Windows Vista开始存在的SRWLock](https://learn.microsoft.com/en-us/archive/msdn-magazine/2012/november/windows-with-c-the-evolution-of-synchronization-in-windows-and-c) 的方式，甚至也是CriticalSection在Windows Vista开始的实现方式（但为了二进制兼容性，CriticalSection无法减小内存占用）。
+实际上 `WaitOnAddress` 也是实现[Windows Vista开始存在的SRWLock](https://learn.microsoft.com/en-us/archive/msdn-magazine/2012/november/windows-with-c-the-evolution-of-synchronization-in-windows-and-c)的方式，甚至也是CriticalSection在Windows Vista开始的实现方式（但为了二进制兼容性，CriticalSection无法减小内存占用）。
 
-`WaitOnAddress` 会发生虚假唤醒，因此需要在循环中调用relaxed `wait` 来检查 `s_` 是否真的被修改为0，而不是仅等待一次。关于 `WaitOnAddress` 还可以阅读 [Raymond Chen的一系列文章](https://devblogs.microsoft.com/oldnewthing/20201214-00/?p=104544)。
+`WaitOnAddress` 会发生虚假唤醒，因此需要在循环中调用relaxed `wait` 来检查 `s_` 是否真的被修改为0，而不是仅等待一次。关于 `WaitOnAddress` 还可以阅读[Raymond Chen的一系列文章](https://devblogs.microsoft.com/oldnewthing/20201214-00/?p=104544)。
 
 由于futex只支持 `sizeof(int)` 大小的数据被 `wait` 和 `notify`，因此上例中固定使用 `std::atomic<int>` 实现锁，而 `WaitOnAddress` 支持1、2、4、8字节，无此限制。
 
@@ -98,7 +98,7 @@ Linus Torvalds指出，一个吞吐量高的锁通常具有更高的延迟，而
 
 信号量的 `release` 函数会将计数增加n，默认是1。在本实现中中固定每次只增加1。
 
-信号量的 `release` [函数强先发生于](https://zh.cppreference.com/w/cpp/atomic/memory_order#%E5%BC%BA%E5%85%88%E5%8F%91%E7%94%9F%E4%BA%8E)调用观察效果结果的 [try\_acquire](https://eel.is/c++draft/thread.sema#cnt-10)，因此可以保证用于安全同步。
+信号量的 `release` [函数强先发生于](https://zh.cppreference.com/w/cpp/atomic/memory_order#%E5%BC%BA%E5%85%88%E5%8F%91%E7%94%9F%E4%BA%8E)调用观察效果结果的[try\_acquire](https://eel.is/c++draft/thread.sema#cnt-10)，因此可以保证用于安全同步。
 
 但信号量比条件变量缺少 `notify_all` 函数，这是由于信号量的概念决定的：信号量用于单一消费者。不过多消费者在一些情况下可以转换为单消费者。在抢占式线程池中，所有线程共用一个条件变量，`notify_all` 可以一次性在线程池销毁时通知所有线程退出，但通过在每个线程池线程退出时使用 `notify_one` 唤醒下一个线程，也能做到同样的目的。对于派发式线程池，也就是本文所实现的，只需要对每个线程独有的信号量使用 `noify_one` 即可。
 

@@ -4,7 +4,7 @@ date: "2025-05-05 14:55:00"
 tags: [C++, docs]
 category: blog
 ---
-该文章是Raymond Chen在4月11日发布的文章 [The case of the UI thread that hung in a kernel call](https://devblogs.microsoft.com/oldnewthing/20250411-00/?p=111066) 的中文翻译，Raymond Chen通过这个客户例子指出了**不能暂停当前进程的线程**的原因：被暂停的线程可能正在持有锁，暂停后该锁无法释放，导致死锁而无法恢复线程。
+该文章是Raymond Chen在4月11日发布的文章[The case of the UI thread that hung in a kernel call](https://devblogs.microsoft.com/oldnewthing/20250411-00/?p=111066)的中文翻译，Raymond Chen通过这个客户例子指出了**不能暂停当前进程的线程**的原因：被暂停的线程可能正在持有锁，暂停后该锁无法释放，导致死锁而无法恢复线程。
 
 <!-- more -->
 

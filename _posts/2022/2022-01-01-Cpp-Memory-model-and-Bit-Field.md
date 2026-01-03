@@ -159,7 +159,7 @@ ISO/IEC 14882 Programming languages C++在第六章，第十章对内存模型�
 
 ### 总结
 
-虽然标准什么都说了，但是好像又没说什么，所以参考 [cppreference](https://zh.cppreference.com/w/cpp/language/bit_field) 总结如下：
+虽然标准什么都说了，但是好像又没说什么，所以参考[cppreference](https://zh.cppreference.com/w/cpp/language/bit_field)总结如下：
 
 #### 概述
 
