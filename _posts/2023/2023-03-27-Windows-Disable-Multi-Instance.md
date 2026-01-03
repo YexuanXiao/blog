@@ -1,14 +1,14 @@
 ---
-title: Windows 禁止应用多实例
+title: Windows禁止应用多实例
 date: "2023-03-27 19:28:00"
 tags: [C++,Windows]
 category: blog
 ---
-“简单”研究了一下 Windows 如何禁止应用开启多实例，实际有两个通用方案：使用 `CreateFileW` 在临时文件夹中创建一个独占的文件实现互斥以及使用 `CreateMutexExW` 创建一个独占的具名互斥锁实现互斥；需要监听端口的程序使用 `bind` 时也自带这种效果，这些方法都能实现原子的互斥。
+“简单”研究了一下Windows如何禁止应用开启多实例，实际有两个通用方案：使用 `CreateFileW` 在临时文件夹中创建一个独占的文件实现互斥以及使用 `CreateMutexExW` 创建一个独占的具名互斥锁实现互斥；需要监听端口的程序使用 `bind` 时也自带这种效果，这些方法都能实现原子的互斥。
 
 <!-- more -->
 
-微软实际上推荐使用 `CreateFileW` 在用户临时文件夹里创建唯一的文件，因为这样可以只禁止单用户多实例不禁止每个用户有自己的实例，但考虑到使用文件的方式会创建不必要的文件，并且获得临时文件夹路径的 API 不保证临时文件夹一定可用（这代表可能因此出现其他的失败情景或者需要进一步处理），因此我选择了一种折衷方案：获得临时文件夹的路径作为具名互斥锁的部分名字。
+微软实际上推荐使用 `CreateFileW` 在用户临时文件夹里创建唯一的文件，因为这样可以只禁止单用户多实例不禁止每个用户有自己的实例，但考虑到使用文件的方式会创建不必要的文件，并且获得临时文件夹路径的API不保证临时文件夹一定可用（这代表可能因此出现其他的失败情景或者需要进一步处理），因此我选择了一种折衷方案：获得临时文件夹的路径作为具名互斥锁的部分名字。
 
 基础代码非常简单：
 
@@ -34,9 +34,9 @@ if (!::CreateMutexExW(nullptr, &name[0], CREATE_MUTEX_INITIAL_OWNER, NULL)) {
 
 ```
 
-注意，由于互斥锁是独占的，因此 `CreateMutexExW` 一定会因为无法创建同名互斥锁而返回 0，不需要使用 `GetLastError` 进行额外的判断。
+注意，由于互斥锁是独占的，因此 `CreateMutexExW` 一定会因为无法创建同名互斥锁而返回0，不需要使用 `GetLastError` 进行额外的判断。
 
-对于 GUI 程序，新实例可以选择将旧实例唤醒并置于顶层，我采用如下设计：将上面的互斥代码放置于程序创建窗口之前，并且在发现已经存在实例的分支中加入如下代码：
+对于GUI程序，新实例可以选择将旧实例唤醒并置于顶层，我采用如下设计：将上面的互斥代码放置于程序创建窗口之前，并且在发现已经存在实例的分支中加入如下代码：
 
 ```cpp
 
@@ -71,6 +71,6 @@ HWND handle; // current window's handle
 
 ```
 
-原理是通过给窗口设置一个辨识应用的属性名（字符串），注意微软的文档有误，`SetPropW` 的第三个参数（属性值的 HANDLE）为必填，如果该值为 0 会导致 `GetPropW` 返回 0（等同于属性不存在），这里使用当前窗口的句柄作为属性的值，并无实际意义。
+原理是通过给窗口设置一个辨识应用的属性名（字符串），注意微软的文档有误，`SetPropW` 的第三个参数（属性值的HANDLE）为必填，如果该值为0会导致 `GetPropW` 返回0（等同于属性不存在），这里使用当前窗口的句柄作为属性的值，并无实际意义。
 
-对于 WinUI 3 应用，微软提供了一种“简单”的方法可以阻止多实例：[App Lifecycle](https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/migrate-to-windows-app-sdk/guides/applifecycle)。
+对于WinUI 3应用，微软提供了一种“简单”的方法可以阻止多实例：[App Lifecycle](https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/migrate-to-windows-app-sdk/guides/applifecycle)。

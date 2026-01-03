@@ -18,7 +18,7 @@ tags: [manga,anime,introduction]
 
 没有那些苍白无力的大道理，没有为了制造卖点而强加的设定。
 
-作者望月淳以 Alice in Wonderland 为原型，用细腻的手法造就了这个荒诞而又动人的童话故事。
+作者望月淳以Alice in Wonderland为原型，用细腻的手法造就了这个荒诞而又动人的童话故事。
 
 <!-- more -->
 

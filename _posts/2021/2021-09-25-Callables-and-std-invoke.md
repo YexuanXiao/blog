@@ -1,14 +1,14 @@
 ---
-title: C++ 可调用对象和 std::invoke
+title: C++可调用对象和std::invoke
 date: "2021-09-25 00:29:00"
 tags: [C++, docs]
 category: blog
 ---
-C++11 添加了 lambda 的支持，这使得 C++ 拥有了 5 种可调用对象：函数，函数指针，lambda，仿函数（Functor）和成员函数。这使在传递可调用对象时不得不对这 5 种方式进行兼容。C++17 引入了 std::invoke 来统一这 5 种可调用对象，大大简化了代码。
+C++11添加了lambda的支持，这使得C++拥有了5种可调用对象：函数，函数指针，lambda，仿函数（Functor）和成员函数。这使在传递可调用对象时不得不对这5种方式进行兼容。C++17引入了std::invoke来统一这5种可调用对象，大大简化了代码。
 
 <!-- more -->
 
-std::invoke 在 GCC 中的实现如下：
+std::invoke在GCC中的实现如下：
 
 ```cpp
 
@@ -31,11 +31,11 @@ invoke(_Callable &&__fn, _Args &&...__args) noexcept(is_nothrow_invocable_v<_Cal
 
 ```
 
-其中 invoke\_result 其实是编译器的一个黑魔法，invoke\_result 代表可调用对象的返回值，invoke\_result\_t 是 invoke\_result 的类型，通过别名模板定义。
+其中invoke\_result其实是编译器的一个黑魔法，invoke\_result代表可调用对象的返回值，invoke\_result\_t是invoke\_result的类型，通过别名模板定义。
 
-is\_nothrow\_invocable\_v 用于检查调用是否合法。
+is\_nothrow\_invocable\_v用于检查调用是否合法。
 
-std::\_\_invoke 内部实际上是将参数传递给了 std::\_\_invoke\_impl：
+std::\_\_invoke内部实际上是将参数传递给了std::\_\_invoke\_impl：
 
 ```cpp
 
@@ -52,7 +52,7 @@ __invoke(_Callable &&__fn, _Args &&...__args) noexcept(__is_nothrow_invocable<_C
 
 ```
 
-std::\_\_invoke\_impl 分别实现了不同情况下的函数调用，有五种重载。
+std::\_\_invoke\_impl分别实现了不同情况下的函数调用，有五种重载。
 
 ```cpp
 
@@ -97,9 +97,9 @@ __invoke_impl(__invoke_memobj_deref, _MemPtr &&__f, _Tp &&__t)
 
 ```
 
-值得注意的是，std::\_\_invoke\_impl 对成员函数进行了额外的处理：它会使用 args 的第一个参数作为类的 this，args 中剩余的参数被传递给 Callable。
+值得注意的是，std::\_\_invoke\_impl对成员函数进行了额外的处理：它会使用args的第一个参数作为类的this，args中剩余的参数被传递给Callable。
 
-对于其他可调用对象，所有 args 被传递给 Callable。
+对于其他可调用对象，所有args被传递给Callable。
 
 ```cpp
 
@@ -133,7 +133,7 @@ int main() {
 
 ```
 
-通过 std::invoke 和 完美转发，能够轻松设计出接收任意可调用对象的函数。
+通过std::invoke和 完美转发，能够轻松设计出接收任意可调用对象的函数。
 
 <div class="ref-label">参考</div>
 <div class="ref-list">
@@ -141,6 +141,6 @@ int main() {
 std::invoke, std::invoke_r
 </a>
 <a href="https://zh.cppreference.com/w/cpp/named_req/Callable">
-C++ 具名要求：可调用 (Callable)
+C++具名要求：可调用 (Callable)
 </a>
 </div>

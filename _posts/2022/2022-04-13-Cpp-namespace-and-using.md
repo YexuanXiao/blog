@@ -1,24 +1,24 @@
 ---
-title: C++ 命名空间和 using
+title: C++命名空间和using
 date: "2022-04-13 10:05:00"
 tags: [C++,docs]
 category: blog
 ---
-之前的文章[关于 C++ 类和命名空间作用域的思考](/blog/2022/04/02/Thinking-About-Scope-of-class-and-namespace/)中简要说明了 `namespace` 的历史。同时 `using` 被发明出来。而 C++11 又由于 `typedef` 存在缺陷，将 `using` 的功能扩展，添加了命名别名的功能。
+之前的文章[关于C++类和命名空间作用域的思考](/blog/2022/04/02/Thinking-About-Scope-of-class-and-namespace/)中简要说明了 `namespace` 的历史。同时 `using` 被发明出来。而C++11又由于 `typedef` 存在缺陷，将 `using` 的功能扩展，添加了命名别名的功能。
 
 <!-- more -->
 
 虽然 `namespace` 的语法存在内在联系和规律，但是不如把所有使用方法展开来的直观：
 
-1. `namespace 命名空间名 { 声明序列 }`
-2. `using namespace 命名空间名;`
-3. `inline namespace 命名空间名` (C++11 起)
+1. `namespace命名空间名 { 声明序列 }`
+2. `using namespace命名空间名;`
+3. `inline namespace命名空间名` (C++11起)
 4. `namespace { 声明序列 }`
 5. `命名空间名 :: 成员名`
-6. `using 命名空间名 :: 成员名;`
-7. `namespace 名字 = 有限定命名空间;`
-8. `namespace 命名空间名 :: 内部命名空间名 { 声明序列 }` (C++17 起)
-9. `namespace 命名空间名::inline 内部命名空间名 { 声明序列 }` (C++20 起)
+6. `using命名空间名 :: 成员名;`
+7. `namespace名字 = 有限定命名空间;`
+8. `namespace命名空间名 :: 内部命名空间名 { 声明序列 }` (C++17起)
+9. `namespace命名空间名::inline内部命名空间名 { 声明序列 }` (C++20起)
 
 解释（详细解释参考 [cppreference: 命名空间](https://zh.cppreference.com/w/cpp/language/namespace)）：
 
@@ -30,7 +30,7 @@ category: blog
 6. `using` 声明：将操纵的名字引入该作用域
 7. 定义命名空间别名
 8. 嵌套（内部）命名空间定义，`namespace A::B {/* */}` 表示 `B` 命名空间在 `A` 中，等价于 `namespace A { namespace B {/* */} }`
-9. 嵌套内联命名空间定义，在 8 的基础上指示内部命名空间是内联的
+9. 嵌套内联命名空间定义，在8的基础上指示内部命名空间是内联的
 
 [^1]: 由于 `using` 指令不在当前命名空间引入新名字，所以 `using` 指令操纵的命名空间中的相同的名字不会和当前作用域内的名字进行重载，而是会被当前命名空间中的名字覆盖（对于非函数模板），所以具有一定危险性，具体规则见 [cppreference: 命名空间](https://zh.cppreference.com/w/cpp/language/namespace#using_.E6.8C.87.E4.BB.A4)。
 

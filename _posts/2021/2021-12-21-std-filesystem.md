@@ -1,35 +1,35 @@
 ---
-title: std::filesystem 初探
+title: std::filesystem初探
 date: "2021-12-21 13:45:00"
 tags: [C++,STL]
 category: blog
 ---
-在 C++17 之前，C++ 的文件系统操作都是依靠吗一些第三方库包装 Windows 或者 POSIX 系统调用来实现的。C++14 时期的 Paper [N4100](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4100.pdf) 提出了文件系统标准库，C++17 中 std::filesystem 正式纳入标准。
+在C++17之前，C++的文件系统操作都是依靠吗一些第三方库包装Windows或者POSIX系统调用来实现的。C++14时期的Paper [N4100](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4100.pdf) 提出了文件系统标准库，C++17中std::filesystem正式纳入标准。
 
 <!-- more -->
 
-std::filesystem 通过两个基础类实现需要的功能：
+std::filesystem通过两个基础类实现需要的功能：
 
 - std::filesystem::directory\_entry：提供对真实存在的目录的访问
 - std::filesystem::path：提供对路径的操作
 
 #### 硬链接
 
-Linux 和 Windows 都支持对文件的硬链接，并且仅允许在同分区内创建硬链接。
+Linux和Windows都支持对文件的硬链接，并且仅允许在同分区内创建硬链接。
 
-硬链接是指向文件数据节点的索引，需要系统提供的文件系统底层 API 才能判断同一个数据节点是否被索引多次。
+硬链接是指向文件数据节点的索引，需要系统提供的文件系统底层API才能判断同一个数据节点是否被索引多次。
 
 在上层应用中，硬链接等同于普通文件。
 
 #### 软链接
 
-Linux 和 Windows 都支持对目录的软链接，并且软链接可以跨分区。
+Linux和Windows都支持对目录的软链接，并且软链接可以跨分区。
 
-同时，Linux 还支持对文件的软链接。
+同时，Linux还支持对文件的软链接。
 
-经过我的测试，Windows 上软链接同时被视为目录。
+经过我的测试，Windows上软链接同时被视为目录。
 
-Linux 上指向目录的软链接应当被视作目录，指向文件的软链接应当被视作文件。
+Linux上指向目录的软链接应当被视作目录，指向文件的软链接应当被视作文件。
 
 可以通过如下代码进行测试：
 
@@ -81,7 +81,7 @@ int main()
 
 ```
 
-注意，Windows 平台上如果一个软链接指向了错误的地点（例如指向文件或者其他神奇的东西），则通过此 path 无法构造 directory\_entry，会抛出 filesystem\_error 异常而当软链接指向的地点为空时不触发异常。
+注意，Windows平台上如果一个软链接指向了错误的地点（例如指向文件或者其他神奇的东西），则通过此path无法构造directory\_entry，会抛出filesystem\_error异常而当软链接指向的地点为空时不触发异常。
 
 不安全：
 
@@ -193,7 +193,7 @@ int main()
 
 ```
 
-由于 Windows 平台上，字符都使用 wchar\_t 而不是 char，这将导致 std::filesystem::path 内部也使用 wchar\_t，不过还好标准库考虑到了这一点，不管是何种方式实现的 path，都可以通过成员函数进行轻松的编码转换：
+由于Windows平台上，字符都使用wchar\_t而不是char，这将导致std::filesystem::path内部也使用wchar\_t，不过还好标准库考虑到了这一点，不管是何种方式实现的path，都可以通过成员函数进行轻松的编码转换：
 
 返回转换到字符串的原生路径名格式：
 

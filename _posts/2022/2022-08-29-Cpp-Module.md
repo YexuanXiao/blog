@@ -4,13 +4,13 @@ date: "2022-08-28 09:30:00"
 tags: [C++]
 category: blog
 ---
-C++20 的一个重要特性是模块，模块是一种全新的源文件组织方式，旨在解决以往使用源文件包含的方式导致翻译单元过大以及模板重复实例化问题，有利于加快编译速度。
+C++20的一个重要特性是模块，模块是一种全新的源文件组织方式，旨在解决以往使用源文件包含的方式导致翻译单元过大以及模板重复实例化问题，有利于加快编译速度。
 
 <!-- more -->
 
 ### 模块单元
 
-一个模块是一个翻译单元，这里的翻译单元不是传统意义上翻译到中间表示（IR）或者机器码（binary）的翻译单元，而是一种新的基于 C++ 抽象机的的模块翻译单元。以往利用 `inline namespace` 和 `static` 来限制链接的可见性，如今可以使用 `export` 关键词来指定是否导出。
+一个模块是一个翻译单元，这里的翻译单元不是传统意义上翻译到中间表示（IR）或者机器码（binary）的翻译单元，而是一种新的基于C++抽象机的的模块翻译单元。以往利用 `inline namespace` 和 `static` 来限制链接的可见性，如今可以使用 `export` 关键词来指定是否导出。
 
 以 `std` 开头的名字不能作为模块名，这些名字是保留的。
 
@@ -56,7 +56,7 @@ export module A:B;
 module A:C;
 
 // A.cpp
-export module A; // 声明主模块单元 A，并且可访问模块分区 B 和 C
+export module A; // 声明主模块单元A，并且可访问模块分区B和C
 
 import :C;
 export import :B;
@@ -70,23 +70,23 @@ export import :B;
 ```cpp
 
 // A.cpp
-export module A;     // 声明模块接口单元 A
-export import :Foo;  // 导入 A:Foo 模块分区
+export module A;     // 声明模块接口单元A
+export import :Foo;  // 导入A:Foo模块分区
 export int baz();    // 导出函数
 
 // A-Foo.cpp
-export module A:Foo; // 声明一个 A 的模块分区 Foo，同时 Foo 也是模块接口单元
-import :Internals;   // 导入 A:Internals
+export module A:Foo; // 声明一个A的模块分区Foo，同时Foo也是模块接口单元
+import :Internals;   // 导入A:Internals
 export int foo() { return 2 * (bar() + 1); } // 导出函数
 
 // A-Int-impl.cpp
-module A:Internals;  // 声明模块分区 Internals，Internals 只有模块 A 能访问，因为没有声明模块接口 
+module A:Internals;  // 声明模块分区Internals，Internals只有模块A能访问，因为没有声明模块接口 
 int bar();
 
 // A-impl.cpp
 
 module A;
-export import :Foo;  // 导入 Foo 分区同时导出
+export import :Foo;  // 导入Foo分区同时导出
 int bar() { return baz() - 10; }
 int baz() { return 30; }
 
@@ -127,7 +127,7 @@ export class A {};
 
 ```
 
-C++20 允许将一个模块单元拆分成多个文件，因此可以对模块进行扩充，就像 `namespace` 一样，但需要导出的声明必须在模块接口单元内导出。
+C++20允许将一个模块单元拆分成多个文件，因此可以对模块进行扩充，就像 `namespace` 一样，但需要导出的声明必须在模块接口单元内导出。
 
 ### 全局模块片段
 
@@ -173,7 +173,7 @@ module :private;
 
 如果需要导入宏，那么可以将宏抽离到一个单独的头文件中，然后全局模块片段中使用 `#include` 导入。
 
-需要使用 C 库或者老的 C++ 库头文件时，也在全局模块片段中使用 `#include` 导入。
+需要使用C库或者老的C++库头文件时，也在全局模块片段中使用 `#include` 导入。
 
 <div class="ref-label">参考</div>
 <div class="ref-list">

@@ -7,7 +7,7 @@ description:
 ---
 转载纽约时报一篇文章《Why I’ve Stopped Telling People I’m Not Chinese》。
 
-作者韩裔美国作家 Euny Hong。
+作者韩裔美国作家Euny Hong。
 
 副标题：“当遇到面对任何人的种族歧视，我们应该本能的愤怒而不是让步。”
 

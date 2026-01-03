@@ -1,10 +1,10 @@
 ---
 date: "2020-07-16 18:45"
-title: 刀剑神域 ExtraEdition
+title: 刀剑神域ExtraEdition
 category: by-talk
 tags: [anime,jottings]
 ---
-刀剑神域 Extra Edition 是 刀剑神域在第一季播出后制作的 OVA 动画，一半是回忆，一半是番外。正好最近刀剑 UW 更新，顺带回忆下第一季。
+刀剑神域Extra Edition是 刀剑神域在第一季播出后制作的OVA动画，一半是回忆，一半是番外。正好最近刀剑UW更新，顺带回忆下第一季。
 
 <!-- more -->
 
@@ -42,7 +42,7 @@ tags: [anime,jottings]
 ![哔哩哔哩概念\_2020-07-16-03-07-14](//static.nykz.org/blog/images/2020-07-16/哔哩哔哩概念__2020-07-16-03-07-14.avif)
 ![哔哩哔哩概念\_2020-07-16-03-07-54](//static.nykz.org/blog/images/2020-07-16/哔哩哔哩概念__2020-07-16-03-07-54.avif)
 
-<p class="pic-comment">还有 4 个月</p>
+<p class="pic-comment">还有4个月</p>
 
 ![哔哩哔哩概念\_2020-07-16-03-11-18](//static.nykz.org/blog/images/2020-07-16/哔哩哔哩概念__2020-07-16-03-11-18.avif)
 ![哔哩哔哩概念\_2020-07-16-03-11-27](//static.nykz.org/blog/images/2020-07-16/哔哩哔哩概念__2020-07-16-03-11-27.avif)
@@ -59,7 +59,7 @@ tags: [anime,jottings]
 ![哔哩哔哩概念\_2020-07-16-03-19-27](//static.nykz.org/blog/images/2020-07-16/哔哩哔哩概念__2020-07-16-03-19-27.avif)
 ![哔哩哔哩概念\_2020-07-16-03-21-37](//static.nykz.org/blog/images/2020-07-16/哔哩哔哩概念__2020-07-16-03-21-37.avif)
 
-<p class="pic-comment">这段打斗还是爽，刀剑III桐人 vs 骑士长都是静止镜头果汁飞溅</p>
+<p class="pic-comment">这段打斗还是爽，刀剑III桐人vs骑士长都是静止镜头果汁飞溅</p>
 
 ![哔哩哔哩概念\_2020-07-16-03-22-05](//static.nykz.org/blog/images/2020-07-16/哔哩哔哩概念__2020-07-16-03-22-05.avif)
 ![哔哩哔哩概念\_2020-07-16-03-23-43](//static.nykz.org/blog/images/2020-07-16/哔哩哔哩概念__2020-07-16-03-23-43.avif)

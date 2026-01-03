@@ -4,7 +4,7 @@ date: "2021-06-14 12:30:00"
 tags: [live2d, JavaScript, docs]
 category: blog
 ---
-以前就有给博客添加一个 live2d 看板娘的想法，但没有实施，直到发现了好看的模型和项目。
+以前就有给博客添加一个live2d看板娘的想法，但没有实施，直到发现了好看的模型和项目。
 
 <!-- more -->
 
@@ -14,13 +14,13 @@ category: blog
 
 这个网站可以实时看对应的模型效果：[live demo](https://github.com/imuncle/live2d)。
 
-我之所以选择 Pio 是因为 Pio 使用了原生 JS，没有其他依赖，方便修改。
+我之所以选择Pio是因为Pio使用了原生JS，没有其他依赖，方便修改。
 
 在你的网站上使用 `live2d` 只需要简单几步：
 
 1. 选择合适模型并得到模型配置文件地址，大部分配置文件的文件名为 `model.json` `index.json`。
 
-2. 在你的网站添加 live2d.js，内容如下：
+2. 在你的网站添加live2d.js，内容如下：
 
    ```javascript
    
@@ -96,23 +96,23 @@ category: blog
 
 3. 这些代码实际上做了几件事:
 
-   1. `load` ：动态顺序加载 js 和 css
-   2. `creatdom` ：建立 dom 节点作为容器
-   3. `initl2d` ：调用 `creatdom` 并创建 live2d 实例
-   4. 调用 `loadScript` 依次加载两个 js 文件并调用 initl2d
-   5. 调用 `loadStyles` 加载 style
+   1. `load` ：动态顺序加载js和css
+   2. `creatdom` ：建立dom节点作为容器
+   3. `initl2d` ：调用 `creatdom` 并创建live2d实例
+   4. 调用 `loadScript` 依次加载两个js文件并调用initl2d
+   5. 调用 `loadStyles` 加载style
 
 4. 你只需要修改模型链接即可完成最基本的功能
 
-5. 你可以 修改 `initl2d` 创建的 `live2dnoireswim` 实例中的 json 配置文件自定义对话
+5. 你可以 修改 `initl2d` 创建的 `live2dnoireswim` 实例中的json配置文件自定义对话
 
 6. 在 `creatdom` 函数中你可以修改 `l2dcvs.width` 和 `l2dcvs.height` 的值来修改看板娘的默认大小
 
 7. `"changeTheme('darktheme')"` 是开启夜间模式用的函数，如果你不知道这是干什么的，或者不支持夜间模式，可以把引号中的内容删除
 
-由于该写的东西我已经写好了，所以你只需要插入这个 `script` 和配置 live2d 就行，Pio 提供了一些文档。
+由于该写的东西我已经写好了，所以你只需要插入这个 `script` 和配置live2d就行，Pio提供了一些文档。
 
-如果你是按照本文来添加看板娘的话，可以直接访问 Pio 文档的 [参数](https://docs.paul.ren/pio/#/?id=%e5%8f%82%e6%95%b0) 部分，或者你想搞清楚我这些函数都干了些什么，也可以看整个文档。
+如果你是按照本文来添加看板娘的话，可以直接访问Pio文档的 [参数](https://docs.paul.ren/pio/#/?id=%e5%8f%82%e6%95%b0) 部分，或者你想搞清楚我这些函数都干了些什么，也可以看整个文档。
 
 虽然上面的代码是为本站服务的，但是我已经把所有需要的代码写在上面，所以你不用担心缺少依赖。
 
@@ -120,6 +120,6 @@ category: blog
 
 为了优化性能所以我写了上面的代码，如果你不考虑性能或者其他的东西，可以直接参考官方文档。
 
-如果有什么问题，可以问我或者 Pio 的作者。
+如果有什么问题，可以问我或者Pio的作者。
 
-由于 Pio 使用了 GPL ，为了防止 GPL 污染，所以本项目不能直接添加 Pio 的代码。上面的代码动态加载了 Pio，并且是从我 fork 后的仓库通过 cdn 完成的，此时 GPL 不生效。
+由于Pio使用了GPL ，为了防止GPL污染，所以本项目不能直接添加Pio的代码。上面的代码动态加载了Pio，并且是从我fork后的仓库通过cdn完成的，此时GPL不生效。

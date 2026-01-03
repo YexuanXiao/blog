@@ -26,7 +26,7 @@ tags: [anime,jottings]
 
 ![哔哩哔哩概念\_2020-07-11-09-43-51](//static.nykz.org/blog/images/2020-07-12/哔哩哔哩概念__2020-07-11-09-43-51.avif)
 
-<p class="pic-comment">和 SAO 一样的问题，外带五官错位</p>
+<p class="pic-comment">和SAO一样的问题，外带五官错位</p>
 
 ![1594434155747](//static.nykz.org/blog/images/2020-07-12/1594434155747.avif)
 
@@ -36,6 +36,6 @@ tags: [anime,jottings]
 
 <p class="pic-comment">佩可莉姆是我的 <span calss="heimu">M.A.O也真实劳模</span></p>
 
-这张截图是 Princess Connect! Re:Dive 动画的截图，这个角度可以看出来凹陷的作用。
+这张截图是Princess Connect! Re:Dive动画的截图，这个角度可以看出来凹陷的作用。
 
-虽然 Princess Connect! Re:Dive 动画里也有类似 SAO 的这个问题，但是并不严重（把凹陷画大点也有一些让脸更瘦的意思，但 SAO 中已经到了画错了的级别）。
+虽然Princess Connect! Re:Dive动画里也有类似SAO的这个问题，但是并不严重（把凹陷画大点也有一些让脸更瘦的意思，但SAO中已经到了画错了的级别）。

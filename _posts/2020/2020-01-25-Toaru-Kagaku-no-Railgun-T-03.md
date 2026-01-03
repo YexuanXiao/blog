@@ -1,6 +1,6 @@
 ---
 date: "2020-01-25 13:00"
-title: 某科学的超电磁炮 T 第三话
+title: 某科学的超电磁炮T第三话
 category: by-talk
 tags: [2020一月新番,anime]
 ---

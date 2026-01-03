@@ -1,14 +1,14 @@
 ---
-title: 使用 PowerShell 扩展 VHD
+title: 使用PowerShell扩展VHD
 date: "2019-07-31 02:00:00"
 tags: [Windows,VHD,diskpart]
 category: blog
 ---
-　 我一直使用 vhd 作为磁盘备份方式，但因为当初设定的容量比目标磁盘小，导致现在没有足够的空间进行备份，于是找来扩展 vhd 的文档，并在此留作备份方便以后查看。
+　 我一直使用vhd作为磁盘备份方式，但因为当初设定的容量比目标磁盘小，导致现在没有足够的空间进行备份，于是找来扩展vhd的文档，并在此留作备份方便以后查看。
 
 <!-- more -->
 
-1. 管理员模式打开 PowerShell
+1. 管理员模式打开PowerShell
 
     ``` powershell
     
@@ -44,7 +44,7 @@ category: blog
     
     ```
 
-    num 为扩展后整个虚拟磁盘的容量，单位为 MB
+    num为扩展后整个虚拟磁盘的容量，单位为MB
 
 5. 连接到虚拟磁盘
 

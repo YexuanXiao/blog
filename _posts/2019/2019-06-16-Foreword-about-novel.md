@@ -20,4 +20,4 @@ category: novel
 
 <p align="right">发表于2019-06-16</p>
 
-<p align="right">By 萧叶轩</p>
+<p align="right">By萧叶轩</p>

@@ -1,5 +1,5 @@
 ---
-title: JavaScript 监听主题切换动作
+title: JavaScript监听主题切换动作
 date: "2020-09-15 00:19:00"
 tags: [JavaScript,docs]
 category: blog

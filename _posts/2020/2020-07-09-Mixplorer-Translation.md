@@ -1,17 +1,17 @@
 ---
-title: MiXplorer 翻译
+title: MiXplorer翻译
 date: "2020-07-09 05:16:00"
 tags: [Android,docs]
 category: backup
 ---
 
-MiXplorer 是 Android 最好的文件管理器。
+MiXplorer是Android最好的文件管理器。
 
 <!-- more -->
 
-2015年的时候在酷安发现了这个文件管理器，凭借娇小的体积，丰富的功能，漂亮的 UI，便捷的操作还有丰富的扩展，MiXplorer 变成为了我的主力文件管理器（另一个是三星自带的文件，因为 Android 6.0 开始取消了第三方文件管理器直接控制 SD 卡的权限，所以第三方文件管理不能剪切 SD 卡的文件，只有自带的才可以）。
+2015年的时候在酷安发现了这个文件管理器，凭借娇小的体积，丰富的功能，漂亮的UI，便捷的操作还有丰富的扩展，MiXplorer变成为了我的主力文件管理器（另一个是三星自带的文件，因为Android 6.0开始取消了第三方文件管理器直接控制SD卡的权限，所以第三方文件管理不能剪切SD卡的文件，只有自带的才可以）。
 
-不过由于这个软件是外国人开发的，所以当时的本地化工作十分不足，但是 MiXplorer 一直支持加载外部语言包，所以索性自己动手翻译。
+不过由于这个软件是外国人开发的，所以当时的本地化工作十分不足，但是MiXplorer一直支持加载外部语言包，所以索性自己动手翻译。
 
 从2016年最初接手时可能大概有的200-300行缝缝补补到现在的700多行，还是很有成就感。
 
@@ -19,16 +19,16 @@ MiXplorer 是 Android 最好的文件管理器。
 
 由于我并没有每个字符串的具体描述，所以翻译难免有些许错误，如果发现，还请在评论区指出。
 
-MiX 现在的语言文件使用 zip 压缩，扩展名为 mil便于 MiX识别，目录结构如下。
+MiX现在的语言文件使用zip压缩，扩展名为mil便于MiX识别，目录结构如下。
 
 values-zh-rCN
 ├── arrays.xml
 ├── plurals.xml
 └── strings.xml
 
-其中 value-zh-rCN 为最上层的文件夹
+其中value-zh-rCN为最上层的文件夹
 
-arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 xml 的辨别不依赖文件名或者放置位置，而是由 xml 标签来辨别）。
+arrays.xml内容如下，其本质是xml定义的数组（其实Android对xml的辨别不依赖文件名或者放置位置，而是由xml标签来辨别）。
 
 这个文件从2016年的时候就没变过。
 
@@ -106,7 +106,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 &lt;/resources&gt;
 
 
-然后是 plurals.xml，这个文件是定义数量的。不过如同前文所述，其实写不写在这个文件里无所谓。
+然后是plurals.xml，这个文件是定义数量的。不过如同前文所述，其实写不写在这个文件里无所谓。
 
 
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
@@ -115,19 +115,19 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;plurals name=&quot;num_items&quot;&gt;
 
-&lt;item quantity=&quot;other&quot;&gt;%d 个项目&lt;/item&gt;
+&lt;item quantity=&quot;other&quot;&gt;%d个项目&lt;/item&gt;
 
 &lt;/plurals&gt;
 
 &lt;plurals name=&quot;num_folders&quot;&gt;
 
-&lt;item quantity=&quot;other&quot;&gt;%d 个文件夹&lt;/item&gt;
+&lt;item quantity=&quot;other&quot;&gt;%d个文件夹&lt;/item&gt;
 
 &lt;/plurals&gt;
 
 &lt;plurals name=&quot;num_files&quot;&gt;
 
-&lt;item quantity=&quot;other&quot;&gt;%d 个文件&lt;/item&gt;
+&lt;item quantity=&quot;other&quot;&gt;%d个文件&lt;/item&gt;
 
 &lt;/plurals&gt;
 
@@ -139,7 +139,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;plurals name=&quot;num_minutes_ago&quot;&gt;
 
-&lt;item quantity=&quot;other&quot;&gt;%d 分钟前&lt;/item&gt;
+&lt;item quantity=&quot;other&quot;&gt;%d分钟前&lt;/item&gt;
 
 &lt;/plurals&gt;
 
@@ -151,31 +151,31 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;plurals name=&quot;num_hours_ago&quot;&gt;
 
-&lt;item quantity=&quot;other&quot;&gt;%d 小时前&lt;/item&gt;
+&lt;item quantity=&quot;other&quot;&gt;%d小时前&lt;/item&gt;
 
 &lt;/plurals&gt;
 
 &lt;plurals name=&quot;num_days_ago&quot;&gt;
 
-&lt;item quantity=&quot;other&quot;&gt;%d 天前&lt;/item&gt;
+&lt;item quantity=&quot;other&quot;&gt;%d天前&lt;/item&gt;
 
 &lt;/plurals&gt;
 
 &lt;plurals name=&quot;num_weeks_ago&quot;&gt;
 
-&lt;item quantity=&quot;other&quot;&gt;%d 周前&lt;/item&gt;
+&lt;item quantity=&quot;other&quot;&gt;%d周前&lt;/item&gt;
 
 &lt;/plurals&gt;
 
 &lt;plurals name=&quot;num_months_ago&quot;&gt;
 
-&lt;item quantity=&quot;other&quot;&gt;%d 月前&lt;/item&gt;
+&lt;item quantity=&quot;other&quot;&gt;%d月前&lt;/item&gt;
 
 &lt;/plurals&gt;
 
 &lt;plurals name=&quot;num_years_ago&quot;&gt;
 
-&lt;item quantity=&quot;other&quot;&gt;%d 年前&lt;/item&gt;
+&lt;item quantity=&quot;other&quot;&gt;%d年前&lt;/item&gt;
 
 &lt;/plurals&gt;
 
@@ -184,19 +184,19 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 最后才是真正的重头戏，strings.xml。
 
-本次更新日期为2020/07/09,支持 MiX 6.47.2。
+本次更新日期为2020/07/09,支持MiX 6.47.2。
 
-百度网盘1：链接: https://pan.baidu.com/s/1J1_OS-YpXMDW6DlW7z4NJw 提取码: mnun
+百度网盘1：链接: https://pan.baidu.com/s/1J1_OS-YpXMDW6DlW7z4NJw提取码: mnun
 
-历史翻译：链接: https://pan.baidu.com/s/1NVo2kwqWqoIhTV8VGbngqA 提取码: dgpr
+历史翻译：链接: https://pan.baidu.com/s/1NVo2kwqWqoIhTV8VGbngqA提取码: dgpr
 
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
 
 &lt;resources&gt;
 
-&lt;string name=&quot;description&quot;&gt;by 萧叶轩&lt;/string&gt;
+&lt;string name=&quot;description&quot;&gt;by萧叶轩&lt;/string&gt;
 
-&lt;string formatted=&quot;false&quot; name=&quot;lollipop_permission_msg&quot;&gt;请选择 %s: %s 来获得权限&lt;/string&gt;
+&lt;string formatted=&quot;false&quot; name=&quot;lollipop_permission_msg&quot;&gt;请选择 %s: %s来获得权限&lt;/string&gt;
 
 &lt;string formatted=&quot;false&quot; name=&quot;not_enough_free_space&quot;&gt;可用空间不足！&lt;/string&gt;
 
@@ -212,11 +212,11 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;add_column&quot;&gt;添加纵行&lt;/string&gt;
 
-&lt;string name=&quot;add_prefix_a&quot;&gt;添加前缀 A&lt;/string&gt;
+&lt;string name=&quot;add_prefix_a&quot;&gt;添加前缀A&lt;/string&gt;
 
 &lt;string name=&quot;add_storage&quot;&gt;添加&lt;/string&gt;
 
-&lt;string name=&quot;add_suffix_a&quot;&gt;添加后缀 A&lt;/string&gt;
+&lt;string name=&quot;add_suffix_a&quot;&gt;添加后缀A&lt;/string&gt;
 
 &lt;string name=&quot;add_tab&quot;&gt;添加标签&lt;/string&gt;
 
@@ -242,7 +242,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;animation&quot;&gt;动画&lt;/string&gt;
 
-&lt;string name=&quot;app_info&quot;&gt;App 信息&lt;/string&gt;
+&lt;string name=&quot;app_info&quot;&gt;App信息&lt;/string&gt;
 
 &lt;string name=&quot;app_name&quot;&gt;Libraries&lt;/string&gt;
 
@@ -328,17 +328,17 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;certificate&quot;&gt;证书&lt;/string&gt;
 
-&lt;string name=&quot;chained_name_iv&quot;&gt;链接名称 IV&lt;/string&gt;
+&lt;string name=&quot;chained_name_iv&quot;&gt;链接名称IV&lt;/string&gt;
 
 &lt;string name=&quot;chars&quot;&gt;字符&lt;/string&gt;
 
-&lt;string name=&quot;chars_count&quot;&gt;%s 个字符&lt;/string&gt;
+&lt;string name=&quot;chars_count&quot;&gt;%s个字符&lt;/string&gt;
 
 &lt;string name=&quot;charset&quot;&gt;字符集&lt;/string&gt;
 
 &lt;string name=&quot;check_connection&quot;&gt;请检查网络连接&lt;/string&gt;
 
-&lt;string name=&quot;check_tcp_server&quot;&gt;请检查目标设备的 TCP 服务是否启动&lt;/string&gt;
+&lt;string name=&quot;check_tcp_server&quot;&gt;请检查目标设备的TCP服务是否启动&lt;/string&gt;
 
 &lt;string name=&quot;choose&quot;&gt;选择&lt;/string&gt;
 
@@ -390,7 +390,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;convert&quot;&gt;转换&lt;/string&gt;
 
-&lt;string name=&quot;converted_x_files&quot;&gt;%s 已转换&lt;/string&gt;
+&lt;string name=&quot;converted_x_files&quot;&gt;%s已转换&lt;/string&gt;
 
 &lt;string name=&quot;converting_x_files&quot;&gt;转换 %s&lt;/string&gt;
 
@@ -450,7 +450,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;delete&quot;&gt;删除&lt;/string&gt;
 
-&lt;string name=&quot;delete_msg&quot;&gt;你确定要删除 %s 吗?&lt;/string&gt;
+&lt;string name=&quot;delete_msg&quot;&gt;你确定要删除 %s吗?&lt;/string&gt;
 
 &lt;string name=&quot;delete_source&quot;&gt;删除源文件&lt;/string&gt;
 
@@ -480,7 +480,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;drag_drop&quot;&gt;支持拖拽&lt;/string&gt;
 
-&lt;string name=&quot;drop_x&quot;&gt;拖动 %s 以&lt;/string&gt;
+&lt;string name=&quot;drop_x&quot;&gt;拖动 %s以&lt;/string&gt;
 
 &lt;string name=&quot;dual_panel_landscape&quot;&gt;双排横向面板&lt;/string&gt;
 
@@ -584,7 +584,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;file_contents&quot;&gt;文件内容&lt;/string&gt;
 
-&lt;string name=&quot;file_doc&quot;&gt;Word 文档&lt;/string&gt;
+&lt;string name=&quot;file_doc&quot;&gt;Word文档&lt;/string&gt;
 
 &lt;string name=&quot;file_empty&quot;&gt;空文件&lt;/string&gt;
 
@@ -594,11 +594,11 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;file_pdf&quot;&gt;Adobe PDF&lt;/string&gt;
 
-&lt;string name=&quot;file_sheet&quot;&gt;Excel 表格&lt;/string&gt;
+&lt;string name=&quot;file_sheet&quot;&gt;Excel表格&lt;/string&gt;
 
-&lt;string name=&quot;file_slide&quot;&gt;PPt 幻灯片&lt;/string&gt;
+&lt;string name=&quot;file_slide&quot;&gt;PPt幻灯片&lt;/string&gt;
 
-&lt;string name=&quot;file_text&quot;&gt;Text 纯文本&lt;/string&gt;
+&lt;string name=&quot;file_text&quot;&gt;Text纯文本&lt;/string&gt;
 
 &lt;string name=&quot;filename&quot;&gt;文件名&lt;/string&gt;
 
@@ -628,9 +628,9 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;from&quot;&gt;从&lt;/string&gt;
 
-&lt;string name=&quot;from_x_tabs&quot;&gt;从标签 %s 选择&lt;/string&gt;
+&lt;string name=&quot;from_x_tabs&quot;&gt;从标签 %s选择&lt;/string&gt;
 
-&lt;string name=&quot;ftp_server&quot;&gt;FTP 服务器&lt;/string&gt;
+&lt;string name=&quot;ftp_server&quot;&gt;FTP服务器&lt;/string&gt;
 
 &lt;string name=&quot;full_name&quot;&gt;全名&lt;/string&gt;
 
@@ -778,7 +778,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;login_prompt&quot;&gt;请登录您的帐户。&lt;/string&gt;
 
-&lt;string name=&quot;lollipop_permission_msg&quot; formatted=&quot;false&quot;&gt;请选择 %s: %s 以获得权限&lt;/string&gt;
+&lt;string name=&quot;lollipop_permission_msg&quot; formatted=&quot;false&quot;&gt;请选择 %s: %s以获得权限&lt;/string&gt;
 
 &lt;string name=&quot;long_press_to_expand&quot;&gt;长按折叠/展开&lt;/string&gt;
 
@@ -856,7 +856,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;meta_director&quot;&gt;指挥者&lt;/string&gt;
 
-&lt;string name=&quot;meta_disc&quot;&gt;CD 编号&lt;/string&gt;
+&lt;string name=&quot;meta_disc&quot;&gt;CD编号&lt;/string&gt;
 
 &lt;!--
 
@@ -928,7 +928,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;min&quot;&gt;最小&lt;/string&gt;
 
-&lt;string name=&quot;min_android&quot;&gt;最小 SDK&lt;/string&gt;
+&lt;string name=&quot;min_android&quot;&gt;最小SDK&lt;/string&gt;
 
 &lt;string name=&quot;mix_task&quot;&gt;合并任务&lt;/string&gt;
 
@@ -1182,7 +1182,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;replace&quot;&gt;替换&lt;/string&gt;
 
-&lt;string name=&quot;replace_a_b&quot;&gt;用 A 替换 B&lt;/string&gt;
+&lt;string name=&quot;replace_a_b&quot;&gt;用A替换B&lt;/string&gt;
 
 &lt;string name=&quot;replace_all&quot;&gt;全部替换&lt;/string&gt;
 
@@ -1250,7 +1250,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;scan&quot;&gt;扫描&lt;/string&gt;
 
-&lt;string name=&quot;scheme_not_valid&quot;&gt;URI 方案无效。&lt;/string&gt;
+&lt;string name=&quot;scheme_not_valid&quot;&gt;URI方案无效。&lt;/string&gt;
 
 &lt;string name=&quot;scroll_alphabet&quot;&gt;ABCDEFGHIJKLMNOPQRSTUVWXYZ&lt;/string&gt;
 
@@ -1348,7 +1348,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;settings_show_tab_bar&quot;&gt;标签栏&lt;/string&gt;
 
-&lt;string name=&quot;settings_show_toast&quot;&gt;显示 Toast 消息&lt;/string&gt;
+&lt;string name=&quot;settings_show_toast&quot;&gt;显示Toast消息&lt;/string&gt;
 
 &lt;string name=&quot;settings_show_tool_bar&quot;&gt;工具栏&lt;/string&gt;
 
@@ -1372,7 +1372,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;share_local_link&quot;&gt;HTTP服务器&lt;/string&gt;
 
-&lt;!-- 我第一眼看这个功能还以为是使用 file:// 这个协议，结果却打开了 HTTP 服务器，于是就这么翻译了
+&lt;!-- 我第一眼看这个功能还以为是使用file:// 这个协议，结果却打开了HTTP服务器，于是就这么翻译了
 
 &lt;string name=&quot;share_local_link&quot;&gt;分享本地链接&lt;/string&gt;
 
@@ -1408,7 +1408,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;signature_algorithm&quot;&gt;签名算法&lt;/string&gt;
 
-&lt;string name=&quot;signed_x_files&quot;&gt;%s 已签名&lt;/string&gt;
+&lt;string name=&quot;signed_x_files&quot;&gt;%s已签名&lt;/string&gt;
 
 &lt;string name=&quot;signing_x_files&quot;&gt;正在签名 %s&lt;/string&gt;
 
@@ -1450,7 +1450,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;sqlite_editor&quot;&gt;SQL编辑器&lt;/string&gt;
 
-&lt;string name=&quot;ssl_not_trusted&quot;&gt;无法验证 OpenSSL证书，您想要继续吗？&lt;/string&gt;
+&lt;string name=&quot;ssl_not_trusted&quot;&gt;无法验证OpenSSL证书，您想要继续吗？&lt;/string&gt;
 
 &lt;string name=&quot;start_on_boot&quot;&gt;开机自启&lt;/string&gt;
 
@@ -1470,7 +1470,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;streaming&quot;&gt;串流…&lt;/string&gt;
 
-&lt;string name=&quot;summary_allow_root&quot;&gt;在设备上申请 Root权限&lt;/string&gt;
+&lt;string name=&quot;summary_allow_root&quot;&gt;在设备上申请Root权限&lt;/string&gt;
 
 &lt;string name=&quot;summary_animations&quot;&gt;开启过渡动画&lt;/string&gt;
 
@@ -1480,7 +1480,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;summary_can_undo&quot;&gt;使某些操作可以恢复&lt;/string&gt;
 
-&lt;string name=&quot;summary_custom_otg&quot;&gt;在 OTG 设备上使用定制驱动&lt;/string&gt;
+&lt;string name=&quot;summary_custom_otg&quot;&gt;在OTG设备上使用定制驱动&lt;/string&gt;
 
 &lt;string name=&quot;summary_draw_tab_close&quot;&gt;在标签栏显示按钮关闭标签&lt;/string&gt;
 
@@ -1488,7 +1488,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;summary_full_wake_lock&quot;&gt;保持屏幕开启直到任务完成&lt;/string&gt;
 
-&lt;string name=&quot;summary_keep_last_modified&quot;&gt;在 Root 设备上保留修改时间&lt;/string&gt;
+&lt;string name=&quot;summary_keep_last_modified&quot;&gt;在Root设备上保留修改时间&lt;/string&gt;
 
 &lt;string name=&quot;summary_merge_tasks&quot;&gt;将相同类型的任务合并为一项&lt;/string&gt;
 
@@ -1500,7 +1500,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;summary_show_tab_bar&quot;&gt;显示一个独立的标签栏&lt;/string&gt;
 
-&lt;string name=&quot;summary_show_toast&quot;&gt;启用 Toasts 消息&lt;/string&gt;
+&lt;string name=&quot;summary_show_toast&quot;&gt;启用Toasts消息&lt;/string&gt;
 
 &lt;string name=&quot;summary_show_tool_bar&quot;&gt;显示一个独立的工具栏&lt;/string&gt;
 
@@ -1528,7 +1528,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;tab_menu&quot;&gt;标签菜单&lt;/string&gt;
 
-&lt;string name=&quot;target_android&quot;&gt;目标 SDK&lt;/string&gt;
+&lt;string name=&quot;target_android&quot;&gt;目标SDK&lt;/string&gt;
 
 &lt;string name=&quot;task_list&quot;&gt;任务列表&lt;/string&gt;
 
@@ -1608,7 +1608,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;uninstalling_x&quot;&gt;正在卸载 %s&lt;/string&gt;
 
-&lt;string name=&quot;unique_iv&quot;&gt;唯一的 IV&lt;/string&gt;
+&lt;string name=&quot;unique_iv&quot;&gt;唯一的IV&lt;/string&gt;
 
 &lt;!-- 又是一个不明所以的词 --&gt;
 
@@ -1630,7 +1630,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;uppercase&quot;&gt;转大写&lt;/string&gt;
 
-&lt;string name=&quot;uri_address&quot;&gt;Uri 地址&lt;/string&gt;
+&lt;string name=&quot;uri_address&quot;&gt;Uri地址&lt;/string&gt;
 
 &lt;string name=&quot;usb&quot;&gt;USB %s&lt;/string&gt;
 
@@ -1644,7 +1644,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;valid_until&quot;&gt;截止到&lt;/string&gt;
 
-&lt;string name=&quot;version&quot;&gt;APK 版本&lt;/string&gt;
+&lt;string name=&quot;version&quot;&gt;APK版本&lt;/string&gt;
 
 &lt;string name=&quot;version_code&quot;&gt;内部版本&lt;/string&gt;
 
@@ -1674,7 +1674,7 @@ arrays.xml 内容如下，其本质是 xml 定义的数组（其实 Android 对 
 
 &lt;string name=&quot;whitespace&quot;&gt;空格&lt;/string&gt;
 
-&lt;string name=&quot;wifi_direct&quot;&gt;WLAN 直连&lt;/string&gt;
+&lt;string name=&quot;wifi_direct&quot;&gt;WLAN直连&lt;/string&gt;
 
 &lt;!--  Windows10取消了Soft AP，推广这个，但体验非常糟糕，只有SamsungFlow能用  --&gt;
 

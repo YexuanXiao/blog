@@ -4,7 +4,7 @@ title: Princess Connect! Re:Dive
 category: by-talk
 tags: [anime,jottings]
 ---
-Princess Connect! Re:Dive 是前年开服的手机游戏，今年被做成了动画。
+Princess Connect! Re:Dive是前年开服的手机游戏，今年被做成了动画。
 
 <!-- more -->
 

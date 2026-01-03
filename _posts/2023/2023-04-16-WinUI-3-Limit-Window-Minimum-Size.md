@@ -1,10 +1,10 @@
 ---
-title: WinUI 3 限制窗口最小宽高
+title: WinUI 3限制窗口最小宽高
 date: "2023-04-16 19:45:00"
 tags: [C++,Windows]
 category: blog
 ---
-WinUI 3 软件开发中最无语的一件事就是限制窗口大小居然需要自己处理 Win32 消息。。。。。
+WinUI 3软件开发中最无语的一件事就是限制窗口大小居然需要自己处理Win32消息。。。。。
 
 <!-- more -->
 
@@ -34,8 +34,8 @@ void InitializeWindowMinSize(winrt::Microsoft::UI::Xaml::Window const& window) {
 
 ```
 
-原理实际上非常简单，但网上对于真正可用的代码却都是缄默不语，所幸找到了 PowerToys 相关的项目中的**历史提交**里的 Workaround [Settings UI](https://github.com/WinUICommunity/SettingsUI/blob/eaa1dd28c73aea7366cceeca485342e6edf389d6/src/SettingsUI/Tools/Helpers/WindowHelper/WindowHelper.ReSizeWindow.cs)。
+原理实际上非常简单，但网上对于真正可用的代码却都是缄默不语，所幸找到了PowerToys相关的项目中的**历史提交**里的Workaround [Settings UI](https://github.com/WinUICommunity/SettingsUI/blob/eaa1dd28c73aea7366cceeca485342e6edf389d6/src/SettingsUI/Tools/Helpers/WindowHelper/WindowHelper.ReSizeWindow.cs)。
 
-之所以强调**历史提交**是因为它已经被删了，PowerToys 目前实际上也没有这个特性。
+之所以强调**历史提交**是因为它已经被删了，PowerToys目前实际上也没有这个特性。
 
-用法很简单，把 362 和 170 改成自己想要的宽和高即可，然后调用 `InitializeWindowMinSize`。不过这本身是 workaround，所以这个方法实际上不怎么好用，因为依赖一个全局变量，假设你想要限制不同窗口有不同的最小大小，则行不通，不过如果你的应用和 UWP 一样使用单一窗口则还算可用。
+用法很简单，把362和170改成自己想要的宽和高即可，然后调用 `InitializeWindowMinSize`。不过这本身是workaround，所以这个方法实际上不怎么好用，因为依赖一个全局变量，假设你想要限制不同窗口有不同的最小大小，则行不通，不过如果你的应用和UWP一样使用单一窗口则还算可用。

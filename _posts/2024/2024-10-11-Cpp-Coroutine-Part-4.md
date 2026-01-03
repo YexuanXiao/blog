@@ -1,14 +1,14 @@
 ---
-title: C++ 协程 - 协程理论
+title: C++协程 - 协程理论
 date: "2024-10-11 16:37:00"
 tags: [C++, docs]
 category: blog
 ---
-协程中最主要的两个概念是 Awaiter 和 Promise，Awaiter 用于协程切换，而 Promise 用于储存用户定义的协程状态信息以及结果。此外，协程还需要一个用于管理协程以及获得协程结果的 Task。
+协程中最主要的两个概念是Awaiter和Promise，Awaiter用于协程切换，而Promise用于储存用户定义的协程状态信息以及结果。此外，协程还需要一个用于管理协程以及获得协程结果的Task。
 
 <!-- more -->
 
-一个返回 Task，函数体内有 `co_await`、`co_yield` 表达式或 `co_return` 语句，且通过 `std::coroutine_traits<Task>` 能获得满足 Promise 要求的类类型的函数（包括成员函数）是协程。`co_await` 表达式用于同步一个 Awaiter 或者一个 Task 的执行，`co_yield` 表达式用于从协程中获取一个值，`co_return` 语句用于在协程返回时输出一个结果。
+一个返回Task，函数体内有 `co_await`、`co_yield` 表达式或 `co_return` 语句，且通过 `std::coroutine_traits<Task>` 能获得满足Promise要求的类类型的函数（包括成员函数）是协程。`co_await` 表达式用于同步一个Awaiter或者一个Task的执行，`co_yield` 表达式用于从协程中获取一个值，`co_return` 语句用于在协程返回时输出一个结果。
 
 ## 协程句柄和无操作协程
 
@@ -26,11 +26,11 @@ category: blog
 
 `done` 函数用于检查协程是否处于*最终暂停点*，在后文会解释。
 
-`operator()` 和 `resume` 函数用于恢复一个*暂停*状态的协程的执行，实际使用哪个看个人习惯。一个例外是处于*最终暂停点*的协程不能这两个函数被恢复。该函数是否会抛出异常取决于 Promise。
+`operator()` 和 `resume` 函数用于恢复一个*暂停*状态的协程的执行，实际使用哪个看个人习惯。一个例外是处于*最终暂停点*的协程不能这两个函数被恢复。该函数是否会抛出异常取决于Promise。
 
 `destroy` 函数用于销毁处于*暂停*状态或者处于*异常*的协程。
 
-除此之外，还有 `address` 和 `from_address` 两个函数，前者用于将协程句柄转换为 `void*`，后者用于还原为协程句柄。这两个函数用于和 C 风格接口进行交互，例如可以编写：
+除此之外，还有 `address` 和 `from_address` 两个函数，前者用于将协程句柄转换为 `void*`，后者用于还原为协程句柄。这两个函数用于和C风格接口进行交互，例如可以编写：
 
 ```cpp
 
@@ -43,19 +43,19 @@ void create_thread(void(*callback)(void*), void* data) noexcept;
 
 ```
 
-`create_thread` 为许多 C 风格异步接口的一般形式，使用 `address` 函数就可以将协程句柄直接转换为 `data`，以 `create_thread(resume_corotine, handle.address());` 的形式适配 C 风格的接口。
+`create_thread` 为许多C风格异步接口的一般形式，使用 `address` 函数就可以将协程句柄直接转换为 `data`，以 `create_thread(resume_corotine, handle.address());` 的形式适配C风格的接口。
 
-用户还可以使用自己定义的 Promise 类型来特化该类模板，在后文会介绍如何定义 Promise。每个协程都会储存唯一一个确定的 Promise 类型的对象。
+用户还可以使用自己定义的Promise类型来特化该类模板，在后文会介绍如何定义Promise。每个协程都会储存唯一一个确定的Promise类型的对象。
 
-使用 Promise 类型特化的协程句柄会增加 3 个成员函数：`promise`、`from_promise`、`operator std::coroutine_handle<void>`。
+使用Promise类型特化的协程句柄会增加3个成员函数：`promise`、`from_promise`、`operator std::coroutine_handle<void>`。
 
-`promise` 和 `from_promise` 用于从协程句柄中获得协程的 Promise 对象的引用，`from_promise` 用于从 Promise 对象的引用中获得协程句柄。由于引用类型不可默认构造，在使用上有些不便，因此一般来说都是储存协程句柄然后使用 `promise` 获得 `promise` 的引用。
+`promise` 和 `from_promise` 用于从协程句柄中获得协程的Promise对象的引用，`from_promise` 用于从Promise对象的引用中获得协程句柄。由于引用类型不可默认构造，在使用上有些不便，因此一般来说都是储存协程句柄然后使用 `promise` 获得 `promise` 的引用。
 
 `operator std::coroutine_handle<void>` 用于将带 `Promise` 类型的协程句柄变为一般形式（`void`）的协程句柄。由于所以协程句柄都是仅储存一个指针，所以该操作是可行的。当协程仅以通用函数使用（例如前文实现过的线程池）时，可以传递 `std::coroutine_handle<void>`。
 
 ## Awaiter
 
-Awaiter 是 `co_await` 运算符的操作数，被称作等待对象，一个等待对象至少有 3 个公开的成员函数：`await_ready`、`await_suspend` 和 `await_resume`：
+Awaiter是 `co_await` 运算符的操作数，被称作等待对象，一个等待对象至少有3个公开的成员函数：`await_ready`、`await_suspend` 和 `await_resume`：
 
 ```cpp
 
@@ -70,7 +70,7 @@ struct awaiter
 
 `K` 必须为 `void`、`bool` 或者 `std::coroutine_handle<T>`；`D` 则通常为 `void` 以及 `U`。
 
-Awaiter 在协程中被作为 `co_await` 的操作数，而 `D` 是 `co_await` 表达式的结果类型。
+Awaiter在协程中被作为 `co_await` 的操作数，而 `D` 是 `co_await` 表达式的结果类型。
 
 在 `co_await x` 时，如果 `x` 的 `await_ready` 函数返回 `true`，那么就会立即执行 `x` 的 `await_resume`，并且 `await_resume` 的返回值就是表达式的结果。
 
@@ -105,7 +105,7 @@ task coro()
 
 ```
 
-现在就可以实现第一章内容讲过的，也是 C++/WinRT 中存在的 `resume_background` 函数：
+现在就可以实现第一章内容讲过的，也是C++/WinRT中存在的 `resume_background` 函数：
 
 ```cpp
 
@@ -190,9 +190,9 @@ struct suspend_never
   - `await_suspend` 返回 `void` 或者返回 `true` 时，不在函数体内（包括放入线程池等隐式方式）恢复自己
   - `await_suspend` 返回协程句柄时，不返回（包括隐式返回）自己
 
-一般情况下，协程都会自动恢复，但有时，我们希望协程在*最终暂停点*暂停，从而可以使用 `done` 和 `destroy`。*最终暂停点*会在后文 Promise 的部分介绍。
+一般情况下，协程都会自动恢复，但有时，我们希望协程在*最终暂停点*暂停，从而可以使用 `done` 和 `destroy`。*最终暂停点*会在后文Promise的部分介绍。
 
-现在还可以实现上下文捕获以及用于恢复的 Awaiter：
+现在还可以实现上下文捕获以及用于恢复的Awaiter：
 
 ```cpp
 
@@ -218,9 +218,9 @@ struct apartment_awaiter
 
 ```
 
-C++/WinRT 原版的 `winrt::apartment_context` 会在默认构造时捕获上下文，但我个人不希望默认构造做多余的事，因此我选择使用和 `resume_background` 一样的接口风格，即调用一个辅助函数产生合适的 `Awaiter`。
+C++/WinRT原版的 `winrt::apartment_context` 会在默认构造时捕获上下文，但我个人不希望默认构造做多余的事，因此我选择使用和 `resume_background` 一样的接口风格，即调用一个辅助函数产生合适的 `Awaiter`。
 
-以及，还可以实现延迟执行任务的 Awaiter：
+以及，还可以实现延迟执行任务的Awaiter：
 
 ```cpp
 
@@ -246,14 +246,14 @@ struct timer_awaiter
 
 ## `await_transform` 和 `operator co_await`
 
-`co_await` 的操作数除了可以是一个 Awaiter 外，还可以通过 3 种方式对操作数进行变换，获得实际的 Awaiter。
+`co_await` 的操作数除了可以是一个Awaiter外，还可以通过3种方式对操作数进行变换，获得实际的Awaiter。
 
 例如 `co_await 1s` 可以自动返回 `timer_awaiter`。
 
 `co_await` 变换步骤如下，假设操作数是 `x`：
 
 1. `x` 是 `initial_susend` 或 `final_suspend` 的返回值  
-   否则，查找 Promise 类型是否存在成员函数 `await_transform`：
+   否则，查找Promise类型是否存在成员函数 `await_transform`：
 
    - 如果找到，那么测试 `promise.await_transform(x)` 是否合法
        - 如果合法则调用它，`x` 现在是调用结果
@@ -267,14 +267,14 @@ struct timer_awaiter
 
 3. 最后，以无限定查找进行 `operator co_await(x)` 调用
 
-   - 如果能调用，则看它是否经过了步骤 2 的变换
-       - 未进行变换，则调用它，并且返回值就是 Awaiter
+   - 如果能调用，则看它是否经过了步骤2的变换
+       - 未进行变换，则调用它，并且返回值就是Awaiter
        - 进行了变换，则存在歧义，编译错误
-   - 如果不能调用，则 `x` 就作为 Awaiter
+   - 如果不能调用，则 `x` 就作为Awaiter
 
-如果通过以上三步确定的 Awaiter 没有三个必须的成员函数或者成员函数不满足要求，那么会编译错误。
+如果通过以上三步确定的Awaiter没有三个必须的成员函数或者成员函数不满足要求，那么会编译错误。
 
-需要注意的是，如果 `await_transform` 存在且在步骤 1 的 `promise.await_transform(x)` 测试中表达式不合法，那么是编译错误。
+需要注意的是，如果 `await_transform` 存在且在步骤1的 `promise.await_transform(x)` 测试中表达式不合法，那么是编译错误。
 
 因此，`apartment_awaiter` 和 `timer_awaiter` 可以成为内部类：
 
@@ -297,13 +297,13 @@ auto operator co_await(std::chrono::duration<Rep, Period> d) noexcept
 
 ## Promise
 
-一个 Task 类型严格对应一个 Promise 类型，因此 Promise 通过 `std::coroutine_traits <Task>::promise_type` 查找到，而不需要上面 `co_await` 的复杂过程。
+一个Task类型严格对应一个Promise类型，因此Promise通过 `std::coroutine_traits <Task>::promise_type` 查找到，而不需要上面 `co_await` 的复杂过程。
 
-Promise 用于储存用户提供的协程状态以及协程返回值。
+Promise用于储存用户提供的协程状态以及协程返回值。
 
 `std::coroutine_traits` 在非用户提供特化的前提下，其 `promise_type` 等于 `Task::promise_type`，如果用户提供了特化，那么该特化就必须提供成员类型 `promise_type`。
 
-`promise_type` 必须有 `get_return_object`、`initial_suspend`、`final_suspend` 和 `unhandled_exception` 四个成员函数。如果任务（Task）是无值的，也就是 `co_return` 不需要返回值时，Promise 有 `return_void` 函数，如果有值，那么 Promise 有 `return_value` 函数。如果协程不返回，那么不需要这两个函数。不满足以上要求的 Promise 不正确。
+`promise_type` 必须有 `get_return_object`、`initial_suspend`、`final_suspend` 和 `unhandled_exception` 四个成员函数。如果任务（Task）是无值的，也就是 `co_return` 不需要返回值时，Promise有 `return_void` 函数，如果有值，那么Promise有 `return_value` 函数。如果协程不返回，那么不需要这两个函数。不满足以上要求的Promise不正确。
 
 ```cpp
 
@@ -320,11 +320,11 @@ struct promise_type
 
 当一个协程被创造（函数被调用）时，首先会检查是否能将函数的所有参数传递给 `promise_type` 的构造函数，如果能，那么依此构造 `promise_type`，该设计是为了让 `promise_type` 有自己储存并且操纵和感知协程参数的能力，如果不能这样构造，那么默认构造 `promise_type`。
 
-然后，调用 `get_return_object()`，返回 Task，此时需要协程的返回值类型 Task 和该函数的返回值类型相匹配，返回的 Task 就是协程作为函数，被调用时候的返回值。
+然后，调用 `get_return_object()`，返回Task，此时需要协程的返回值类型Task和该函数的返回值类型相匹配，返回的Task就是协程作为函数，被调用时候的返回值。
 
 随后，在协程体内调用 `co_await promise.initial_suspend()`。一般来说，对于积极启动的协程，`initial_suspend` 会返回 `suspend_never`，立即执行协程体，而延迟启动的协程会返回 `suspend_always`，使得协程处于*暂停*状态。
 
-上文讲过，返回 `suspend_always` 会使得协程被真正的暂停，此时如果外部不能获得协程句柄以手动恢复协程，那么该协程会发生内存泄漏，因此通常 Task 需要储存当前协程的句柄以提供恢复和销毁协程的能力。
+上文讲过，返回 `suspend_always` 会使得协程被真正的暂停，此时如果外部不能获得协程句柄以手动恢复协程，那么该协程会发生内存泄漏，因此通常Task需要储存当前协程的句柄以提供恢复和销毁协程的能力。
 
 ```cpp
 
@@ -362,7 +362,7 @@ void call_coro()
 
 无论 `initial_suspend` 返回什么，在返回后，协程会返回给调用者，也就是继续执行 `call_coro`。
 
-当协程被恢复时，会恢复协程体的执行，如 Awaiter 一节讲过的一样。
+当协程被恢复时，会恢复协程体的执行，如Awaiter一节讲过的一样。
 
 然后，协程如果在执行时抛出异常，那么会被捕获，再调用 `unhandled_exception`。
 
@@ -381,9 +381,9 @@ void unhandled_exception() noexcept
 
 `unhandled_exception` 如果抛出异常，会传播异常给调用者，同时使得协程处于*异常*状态。处于*异常*状态的协程不能被恢复，只能被销毁。
 
-因此通常的做法是使得 `unhandled_exception` 不抛出异常，在 `promise_type` 中储存 `std::exception_ptr`，并且通过 Task 获取它。
+因此通常的做法是使得 `unhandled_exception` 不抛出异常，在 `promise_type` 中储存 `std::exception_ptr`，并且通过Task获取它。
 
-如果 Task 不需要被同步或者被另一个协程异步的等待，那么就不需要储存该异常，此时得到了 `fire_and_forget`（发后不理）：
+如果Task不需要被同步或者被另一个协程异步的等待，那么就不需要储存该异常，此时得到了 `fire_and_forget`（发后不理）：
 
 ```cpp
 
@@ -422,59 +422,59 @@ struct fire_and_forget
 
 ```
 
-发后不理的协程永不暂停，不返回值，所以是 `return_void`，也不允许有人等待它完成，因此所有提供 Awaiter 的地方都是 `suspend_never`。
+发后不理的协程永不暂停，不返回值，所以是 `return_void`，也不允许有人等待它完成，因此所有提供Awaiter的地方都是 `suspend_never`。
 
 当一个协程具有返回值时，`co_return x;` 会改写为 `promise.return_value(x);`，这代表需要在 `promise` 中储存返回值；而协程不具有返回值时，`co_return;` 会改写为 `promise.return_void()`。
 
-当协程执行完 `co_return` 语句后，会执行 `co_await promise.final_suspend();`，如果返回的 Awaiter 暂停了协程，那么此时协程就处于*最终暂停点*。处于*最终暂停点*的协程可以使用 `done` 来测试，并且使用 `destroy` 进行销毁。如果返回的 Awaiter 没有暂停协程，那么当 Awaiter 的 `await_resume` 返回后，协程会被立即销毁。
+当协程执行完 `co_return` 语句后，会执行 `co_await promise.final_suspend();`，如果返回的Awaiter暂停了协程，那么此时协程就处于*最终暂停点*。处于*最终暂停点*的协程可以使用 `done` 来测试，并且使用 `destroy` 进行销毁。如果返回的Awaiter没有暂停协程，那么当Awaiter的 `await_resume` 返回后，协程会被立即销毁。
 
 `final_suspend` 用于同步两个协程以及管理协程的销毁。
 
-最后需要注意，`final_suspend` 和它返回的 Awaiter 的三个成员函数都不能抛出异常。
+最后需要注意，`final_suspend` 和它返回的Awaiter的三个成员函数都不能抛出异常。
 
 ## Task
 
-在 Promise 一节，实际上已经介绍过一种 Task：`fire_and_forget`，但发后不理只是最简单的情况，通常来说还需要支持异步的等待 Task 完成以及获得 Task 储存的协程结果两个重要功能，以及在协程出现错误后，从协程中获得异常并重新抛出。
+在Promise一节，实际上已经介绍过一种Task：`fire_and_forget`，但发后不理只是最简单的情况，通常来说还需要支持异步的等待Task完成以及获得Task储存的协程结果两个重要功能，以及在协程出现错误后，从协程中获得异常并重新抛出。
 
-如何编写 Task 是一个较为复杂的话题，脱离实际使用场景并不能得出任何有用的结论，因此在下一章中，将会实现完整的利用了线程池的 Task 类以及其 Promise。
+如何编写Task是一个较为复杂的话题，脱离实际使用场景并不能得出任何有用的结论，因此在下一章中，将会实现完整的利用了线程池的Task类以及其Promise。
 
 ## 协程执行流程和生存期
 
 协程的整体执行流程如下：
 
-1. 分配协程帧内存，储存协程状态以及 Promise
-2. 默认构造 Promise 或转发函数的参数构造 Promise
-3. 调用 `get_return_object` 构造 Task 为函数返回值
-4. 调用 `initial_suspend` 获得 Awaiter
+1. 分配协程帧内存，储存协程状态以及Promise
+2. 默认构造Promise或转发函数的参数构造Promise
+3. 调用 `get_return_object` 构造Task为函数返回值
+4. 调用 `initial_suspend` 获得Awaiter
    1. 调用 `await_ready`
    2. 调用 `await_suspend`，为*初始暂停点*
    3. 调用 `await_resume`
 5. 执行函数体
-   - 执行 `co_await` 表达式获得 Awaiter
+   - 执行 `co_await` 表达式获得Awaiter
     1. 调用 `await_ready`
     2. 调用 `await_suspend`，为*暂停点*
     3. 调用 `await_resume`
 6. `co_return` 调用 `return_void` 或者 `return_value`
 7. 销毁 `co_return` 后需要销毁的变量
-8. 如果 1-3 发生异常，则销毁所有变量，并传播异常给调用者；如果 4.2 发生异常，则使得协程处于*最终暂停点*，并销毁构造完成的 task，传播异常给调用者；如果 4.3-6 期间发生异常，销毁当前自动储存期变量，调用 `unhandled_exception`
-9. 调用 `final_suspend` 获得 Awaiter
+8. 如果1-3发生异常，则销毁所有变量，并传播异常给调用者；如果4.2发生异常，则使得协程处于*最终暂停点*，并销毁构造完成的task，传播异常给调用者；如果4.3-6期间发生异常，销毁当前自动储存期变量，调用 `unhandled_exception`
+9. 调用 `final_suspend` 获得Awaiter
    1. 调用 `await_ready`
    2. 调用 `await_suspend`，为*最终暂停点*
    3. 调用 `await_resume`
 10. `await_resume` 返回或者调用 `destroy` 后  
-    销毁参数，Promise 和分配的内存
+    销毁参数，Promise和分配的内存
 
 许传奇的教程提供了一个完整的表现协程执行流程的例子。
 
 协程在每个暂停点都有机会转移控制权给调用者（暂停协程并且不会自动恢复时），调用者必须对暂停的协程进行恢复或者手动销毁以避免泄漏。
 
-对于同步协程，调用时首先执行 1 到 4.1，在*初始暂停点*暂停，然后在 Task 被调用者（同步者）co\_await 时恢复，执行 4.2 到 9.2，在*最终暂停点*暂停，并恢复暂停了的调用者，当调用者执行完成后执行 9.3 到 10。
+对于同步协程，调用时首先执行1到4.1，在*初始暂停点*暂停，然后在Task被调用者（同步者）co\_await时恢复，执行4.2到9.2，在*最终暂停点*暂停，并恢复暂停了的调用者，当调用者执行完成后执行9.3到10。
 
-对于异步协程，调用时执行 1 到 9.2
+对于异步协程，调用时执行1到9.2
 
-- 当协程被有效同步时，在*最终暂停点*暂停并恢复调用者，当调用者执行完成后执行 9.3 到 10 被自己销毁。
-- 当协程快速执行完成时，在*最终暂停点*暂停，并被调用者通过 Task 的析构函数执行 10 销毁。
-- 当协程不被同步并且调用者先行死亡时，协程在*最终暂停点*立即返回并且恢复协程，执行 9.3 到 10 被自己销毁。
+- 当协程被有效同步时，在*最终暂停点*暂停并恢复调用者，当调用者执行完成后执行9.3到10被自己销毁。
+- 当协程快速执行完成时，在*最终暂停点*暂停，并被调用者通过Task的析构函数执行10销毁。
+- 当协程不被同步并且调用者先行死亡时，协程在*最终暂停点*立即返回并且恢复协程，执行9.3到10被自己销毁。
 
 以下是一个异步协程的伪代码：
 
@@ -511,7 +511,7 @@ promise.get_return_object();
 promise.initial_susend();
 co_await suspend_never{};
 co_await resume_background(); -> // 开始执行异步任务
-// 返回执行主协程                 awaiter.await_resume();
+// 返回执行主协程awaiter.await_resume();
 do_something_sync2();            do_something_sync1();
 ...                              ...
 co_await t;                      ...
@@ -533,4 +533,4 @@ co_await t;                      ...
 
 当然，对于发后不理的任务，不需要也不想等待它的结果，也没有任务需要和它同步，因此通常要么禁止对它进行 `co_await`，要么如同上面的实现一样等待它等于 `co_await never_suspend{};`。
 
-由于积极启动的协程的生存期不内嵌于调用者（例如 `fire_and_forget`），因此对于此类协程，必须在堆中分配内存以储存 Promise 以及协程状态，而对于惰性启动的协程，由于其生存期内嵌于调用者，编译器有机会对其进行优化以减少内存分配（[Heap Allocation eLision Optimization](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0981r0.html)）。无论哪种协程，只要编写合适，都能互相进行同步。协程如何实现同步会在下一章进行讲解。
+由于积极启动的协程的生存期不内嵌于调用者（例如 `fire_and_forget`），因此对于此类协程，必须在堆中分配内存以储存Promise以及协程状态，而对于惰性启动的协程，由于其生存期内嵌于调用者，编译器有机会对其进行优化以减少内存分配（[Heap Allocation eLision Optimization](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0981r0.html)）。无论哪种协程，只要编写合适，都能互相进行同步。协程如何实现同步会在下一章进行讲解。

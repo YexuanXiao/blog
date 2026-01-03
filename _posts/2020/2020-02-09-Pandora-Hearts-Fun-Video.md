@@ -22,7 +22,7 @@ tags: [manga,anime]
 <p class="little" align="right">版权归原作者所有</p>
 <br>
 <br>
-另外B站还有原作者望月淳在 2015 年 Pandora Hearts 展上现场上色的视频
+另外B站还有原作者望月淳在2015年Pandora Hearts展上现场上色的视频
 
 [望月淳潘多拉之心原画展绘画过程视频](https://www.bilibili.com/video/av2348817"望月淳潘多拉之心原画展绘画过程视频")
 

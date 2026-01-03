@@ -1,10 +1,10 @@
 ---
-title: TypeScript 手册指北 Part2
+title: TypeScript手册指北Part2
 date: "2022-10-14 23:33:00"
 tags: [TypeScript,Web]
 category: blog
 ---
-TypeScript 手册指北 第二部分，第一部分在 [TypeScript 手册指北 Part1](/blog/2022/10/12/TypeScript-Handbook-Tutorial/)，记录了本人阅读 TypeScript 官方手册的一些想法，包含 Type Manipulation 的内容。
+TypeScript手册指北 第二部分，第一部分在 [TypeScript手册指北Part1](/blog/2022/10/12/TypeScript-Handbook-Tutorial/)，记录了本人阅读TypeScript官方手册的一些想法，包含Type Manipulation的内容。
 
 <!-- more -->
 
@@ -21,9 +21,9 @@ let callAbleMyIdentity: { <Type>(arg: Type): Type } = identity
 
 ```
 
-和 C++ 类似，泛型参数类型只需要在自己的定义内保持一致。并且也支持泛型调用签名。
+和C++类似，泛型参数类型只需要在自己的定义内保持一致。并且也支持泛型调用签名。
 
-另外不同一点是，C++ 中的模板是鸭子类型，模板约束是可选的，而 TypeScript 中则必须受约束：
+另外不同一点是，C++中的模板是鸭子类型，模板约束是可选的，而TypeScript中则必须受约束：
 
 ```ts
 
@@ -38,7 +38,7 @@ function loggingIdentity<Type extends Lengthwise>(arg: Type): Type {
 
 ```
 
-由于上面的这种类型约束可能过于强大了，例如要求 Type 必须含有类型为 `number` 的属性 `length`，而有时候其实不需要约束 `length` 的类型。所以 TypeScript 加入了 `keyof` 关键词来约束属性：
+由于上面的这种类型约束可能过于强大了，例如要求Type必须含有类型为 `number` 的属性 `length`，而有时候其实不需要约束 `length` 的类型。所以TypeScript加入了 `keyof` 关键词来约束属性：
 
 ```ts
 
@@ -56,7 +56,7 @@ getProperty(x, 'a')
 
 #### 泛型类
 
-TypeScript 的泛型类和 C++ 类似：
+TypeScript的泛型类和C++类似：
 
 ```ts
 
@@ -73,7 +73,7 @@ myGenericNumber.add = function (x, y) {
 
 ```
 
-一个和 C++ 不同的地方在于，类的静态成员不能使用泛型参数。
+一个和C++不同的地方在于，类的静态成员不能使用泛型参数。
 
 由于泛型函数的泛型参数类型必须受约束，所以构造函数也得受约束：
 
@@ -88,7 +88,7 @@ function create<Type>(c: { new (): Type }): Type {
 
 #### typeof
 
-Part1 介绍过如何使用 `typeof` 来判断类型，`typeof` 表达式也可放在类型标注位置推断类型：
+Part1介绍过如何使用 `typeof` 来判断类型，`typeof` 表达式也可放在类型标注位置推断类型：
 
 ```ts
 
@@ -98,7 +98,7 @@ let n: typeof s
 function f() {
     return { x: 10, y: 3 }
 }
-type P = ReturnType<typeof f> // 函数是对象而不是类型，所以需要 typeof
+type P = ReturnType<typeof f> // 函数是对象而不是类型，所以需要typeof
 
 ```
 
@@ -119,7 +119,7 @@ type T1 = ReturnType<typeof stringOrNum>
 
 #### keyof
 
-keyof 操作可以获得属性的字面值，并以或的形式结合在一起：
+keyof操作可以获得属性的字面值，并以或的形式结合在一起：
 
 ```ts
 
@@ -179,7 +179,7 @@ type Age = typeof MyArray[number]['age']
 
 #### 条件类型
 
-TypeScript 中可以为变量添加条件，类型自然也可以添加条件：
+TypeScript中可以为变量添加条件，类型自然也可以添加条件：
 
 ```ts
 
@@ -220,7 +220,7 @@ let c = createLabel(Math.random() ? 'hello' : 42)
 
 ```
 
-由于 TypeScript 的泛型约束是强制的，所以有时候需要其他手段来标注属性：
+由于TypeScript的泛型约束是强制的，所以有时候需要其他手段来标注属性：
 
 ```ts
 
@@ -242,7 +242,7 @@ type DogMessageContents = MessageOf<Dog>
 
 ```
 
-TypeScript 还可以通过条件类型来实现类似 C++ 中根据重载实现的 `std::remove_reference` 类型萃取：
+TypeScript还可以通过条件类型来实现类似C++中根据重载实现的 `std::remove_reference` 类型萃取：
 
 ```ts
 
@@ -257,7 +257,7 @@ type Num = Flatten<number>
 // Num = number
 
 type Flatten<Type> = Type extends Array<infer Item> ? Item : Type
-// 使用 infer 关键词
+// 使用infer关键词
 
 type Num = GetReturnType<() => number>
 // Num = number
@@ -272,7 +272,7 @@ type ToArray<Type> = Type extends any ? Type[] : never
 
 ```
 
-有一种情况需要注意：TypeScript 的泛型实参会自动展开联合类型，这意味着泛型会分别对每一个类型进行相同的操作并创造一个新的联合类型：
+有一种情况需要注意：TypeScript的泛型实参会自动展开联合类型，这意味着泛型会分别对每一个类型进行相同的操作并创造一个新的联合类型：
 
 ```ts
 
@@ -377,7 +377,7 @@ type User = Concrete<MaybeUser>
 
 #### 模板字面类型
 
-模板字面类型基于字符串字面类型，模板字符串在 ECMAScript 6 中被引入，TypeScript 使得字符串字面类型可以结合模板字符串使用：
+模板字面类型基于字符串字面类型，模板字符串在ECMAScript 6中被引入，TypeScript使得字符串字面类型可以结合模板字符串使用：
 
 ```ts
 
@@ -392,7 +392,7 @@ type AllLocaleIDs = `${EmailLocaleIDs | FooterLocaleIDs}_id`
 
 ```
 
-模板字符串字面类型的的可变部分必须也是一个字符串字面类型，和 TypeScript 的泛型类似，可变部分如果是一个联合类型，则先将联合类型拆分，分别应用模板，再合并为一个新的联合类型，最后的结果类似笛卡儿积。
+模板字符串字面类型的的可变部分必须也是一个字符串字面类型，和TypeScript的泛型类似，可变部分如果是一个联合类型，则先将联合类型拆分，分别应用模板，再合并为一个新的联合类型，最后的结果类似笛卡儿积。
 
 可以结合上述特性实现根据函数模板自动生成函数名和参数（反射）：
 
@@ -416,4 +416,4 @@ person.on('firstNameChanged', () => {})
 
 ```
 
-TypeScript 还内置了一些编译器实现的类型模板用来处理字符串字面值：`Uppercase`，`Lowercase`，`Capitalize`，`Uncapitalize`。
+TypeScript还内置了一些编译器实现的类型模板用来处理字符串字面值：`Uppercase`，`Lowercase`，`Capitalize`，`Uncapitalize`。

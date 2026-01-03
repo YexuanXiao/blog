@@ -1,14 +1,14 @@
 ---
-title: C++ constexpr if 和 constexpr lambda
+title: C++ constexpr if和constexpr lambda
 date: "2021-09-12 15:50:00"
 tags: [C++, docs]
 category: blog
 ---
-C++17 开始，编译器添加了 constexpr if 用于模板的编译期判断，以及 constexpr lambda 用于常量优化。
+C++17开始，编译器添加了constexpr if用于模板的编译期判断，以及constexpr lambda用于常量优化。
 
 <!-- more -->
 
-在之前的文章 [C++ 可变参数模板](/blog/2021/08/11/Cpp-Variadic-Template/) ，有这样的一个函数模板：
+在之前的文章 [C++可变参数模板](/blog/2021/08/11/Cpp-Variadic-Template/) ，有这样的一个函数模板：
 
 ```cpp
 
@@ -28,11 +28,11 @@ void variadicPrint(T Head, Ts... Tail)
 
 由于可变参数的参数数量可变，所以不得不通过重载可变参数函数模板来实现递归的退出。
 
-这是由于 `void variadicPrint(T Head, Ts... Tail)` 要求至少一个参数，但是 tail 最后会变为 0 个元素被传递给自身，这也隐含着一个事实：tail 可为 0。
+这是由于 `void variadicPrint(T Head, Ts... Tail)` 要求至少一个参数，但是tail最后会变为0个元素被传递给自身，这也隐含着一个事实：tail可为0。
 
-这种写法被称作 SFINAE（Substitution failure is not an error），即编译器对不同重载模板依次匹配，选择最优模板，如果没有最优模板，则认为是错误。
+这种写法被称作SFINAE（Substitution failure is not an error），即编译器对不同重载模板依次匹配，选择最优模板，如果没有最优模板，则认为是错误。
 
-而 C++17 引入了 constexpr if 可以将这两个模板合并为一个：
+而C++17引入了constexpr if可以将这两个模板合并为一个：
 
 ```cpp
 
@@ -46,11 +46,11 @@ void variadicPrint(T head, Ts... tail)
 
 ```
 
-实际上这就是让编译器只在 tail \> 0 的时候才递归的展开自身。
+实际上这就是让编译器只在tail \> 0的时候才递归的展开自身。
 
-C++17 开始，当一个常量表达式中允许对其捕获或引入的每个数据成员进行初始化时，lambda表达式可以被声明为constexpr 或在常量表达式中使用（默认constexpr）。
+C++17开始，当一个常量表达式中允许对其捕获或引入的每个数据成员进行初始化时，lambda表达式可以被声明为constexpr或在常量表达式中使用（默认constexpr）。
 
-简单来说就是 lambda 可用于 constexpr 的环境中，并且在 constexpr 环境中使用的 lambda 默认 constexpr。
+简单来说就是lambda可用于constexpr的环境中，并且在constexpr环境中使用的lambda默认constexpr。
 
 ```cpp
 

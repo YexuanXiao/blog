@@ -1,39 +1,39 @@
 ---
-title: C++ 异常 - 智能指针 
+title: C++异常 - 智能指针 
 date: "2022-04-08 18:28:00"
 tags: [C++]
 category: blog
 ---
-之前的文章 [C++ 异常 - 类和异常](/blog/2022/04/07/C++-Exception-class-and-RAII/)讲述了 C++ 的异常机制，但是单纯学会异常处理的概念和语法是完全不够用的，大部分人对于异常的了解就止步于此了。认识的不足会导致对异常存在非常大的误解。本文从异常出发，讲述 C++11 引入的 `std::unique_ptr` 和 `std::shared_ptr` 两种智能指针如何解决一部分的异常安全问题。
+之前的文章 [C++异常 - 类和异常](/blog/2022/04/07/C++-Exception-class-and-RAII/)讲述了C++的异常机制，但是单纯学会异常处理的概念和语法是完全不够用的，大部分人对于异常的了解就止步于此了。认识的不足会导致对异常存在非常大的误解。本文从异常出发，讲述C++11引入的 `std::unique_ptr` 和 `std::shared_ptr` 两种智能指针如何解决一部分的异常安全问题。
 
 <!-- more -->
 
-本文是《C++ 异常》系列第二篇文章。
+本文是《C++异常》系列第二篇文章。
 
-《C++ 异常》目录：
+《C++异常》目录：
 
-1. [C++ 异常 - 类和异常](/blog/2022/04/07/Cpp-Exception-Class-and-RAII/)
+1. [C++异常 - 类和异常](/blog/2022/04/07/Cpp-Exception-Class-and-RAII/)
 2. 本文
-3. [C++ 异常 - 资源管理](/blog/2022/06/18/Cpp-Exception-Resource-Management/)
-4. [C++ 异常 - 容器和 std::vector](/blog/2022/04/07/Cpp-Exception-Container-and-std-vector/)
-5. [C++ 异常 - 守卫](/blog/2024/07/29/Cpp-Exception-Guards/)
+3. [C++异常 - 资源管理](/blog/2022/06/18/Cpp-Exception-Resource-Management/)
+4. [C++异常 - 容器和std::vector](/blog/2022/04/07/Cpp-Exception-Container-and-std-vector/)
+5. [C++异常 - 守卫](/blog/2024/07/29/Cpp-Exception-Guards/)
 
 ### 智能指针基础
 
 #### `std::unique_ptr`
 
-顾名思义，`std::unique_ptr` 是一种独占所有权的指针容器，实际上就是一个异常安全的 Handle 类模板，独占效果是使用移动来实现的。
+顾名思义，`std::unique_ptr` 是一种独占所有权的指针容器，实际上就是一个异常安全的Handle类模板，独占效果是使用移动来实现的。
 
 由于 `std::unique_ptr` 通过析构函数无条件的释放内存，所以可以保证发生异常时资源不泄露。
 
-之前的文章 [C++ 异常 - 类和异常](/blog/2022/04/07/C++-Exception-Class-and-RAII/)提到了异常导致内存泄漏的一个案例：
+之前的文章 [C++异常 - 类和异常](/blog/2022/04/07/C++-Exception-Class-and-RAII/)提到了异常导致内存泄漏的一个案例：
 
 ```cpp
 
 void foo(){
     int* a = new int{}; // 此对象在诱因发生时出现内存泄漏
     int* b = new int{}; // 内存泄漏诱因
-    delete a;           // 若 b的内存分配失败，则此语句不会被执行
+    delete a;           // 若b的内存分配失败，则此语句不会被执行
     delete b;
 }
 
@@ -52,7 +52,7 @@ void foo(){
 
 ```
 
-此时若 b 的构造抛出异常，则 a 能够被析构，也就没有内存泄漏。
+此时若b的构造抛出异常，则a能够被析构，也就没有内存泄漏。
 
 `std::unique_ptr` 还能自定义删除器（默认使用 `operator delete`）：
 
@@ -80,7 +80,7 @@ void foo(){
 
 其中 `void` 是返回值，由于 `unique_ptr` 的删除器是放在析构函数里运行的，所以返回值无意义； `int*` 是函数参数，表示删除器接受一个 `int` 的指针。
 
-此处使用了 lambda 作为删除器，`[](int* p) { delete p; }` 这个 lambda 能转换为函数类型 `void(int*)` 的函数指针。
+此处使用了lambda作为删除器，`[](int* p) { delete p; }` 这个lambda能转换为函数类型 `void(int*)` 的函数指针。
 
 `std::unique_ptr` 不能复制，只能移动：
 
@@ -111,7 +111,7 @@ std::unique_ptr<int> pass_unique1(std::unique_ptr<int>&& p){
 void foo(){
     std::unique_ptr<int> p(new int(1));
     auto p1 = pass_unique(std::move(p));
-    auto p2 = pass_unique1(std::move(p1)); // 注意，不能两次移动 p
+    auto p2 = pass_unique1(std::move(p1)); // 注意，不能两次移动p
 }
 
 ```
@@ -123,7 +123,7 @@ void foo(){
 1. 如果对象的数据成员复杂，可以使用 `unique_ptr` 间接管理
 2. 如果对象的数据成员简单，可以直接使用移动操作，避免麻烦
 
-注意，就算不使用构造函数，也必须使用 RAII 的思想管理资源，释放操作和构造必须在一个模块内。
+注意，就算不使用构造函数，也必须使用RAII的思想管理资源，释放操作和构造必须在一个模块内。
 
 #### `std::shared_ptr`
 
@@ -131,9 +131,9 @@ void foo(){
 
 于是标准委员会设计了另一种智能指针 `std::shared_ptr`，顾名思义，是共享型指针。`std::shared_ptr` 使用引用计数实现，引用计数也是最简单的自动内存回收方法算法之一。
 
-引用计数的优点就是简单粗暴，加之 C++ 提供了 `std::weak_ptr` 作为辅助，很难遇到在其他使用引用计数实现 GC 的语言中的循环引用问题。如果实际需求非常复杂，也可也自行实现标记清除算法的局部 GC。
+引用计数的优点就是简单粗暴，加之C++提供了 `std::weak_ptr` 作为辅助，很难遇到在其他使用引用计数实现GC的语言中的循环引用问题。如果实际需求非常复杂，也可也自行实现标记清除算法的局部GC。
 
-引用计数的思路非常简单，当指针被复制时，引用计数加 1，每次析构的时候不去真正的析构对象，而是将引用计数减 1，当引用计数减为 0 时才析构对象。
+引用计数的思路非常简单，当指针被复制时，引用计数加1，每次析构的时候不去真正的析构对象，而是将引用计数减1，当引用计数减为0时才析构对象。
 
 `std::shared_ptr` 的引用计数是线程安全的，但是读写操作不是线程安全的（标准库中大多数涉及到线程安全的模板/对象都如此设计）。
 
@@ -175,7 +175,7 @@ void foo(){
 
 `std::shared_ptr` 将其他成员放入动态储存区中分配的原因是，其他成员可能包括强引用计数，弱引用计数和分配器（allocator），如果将这些成员放入栈中可能造成过多的栈分配开销（若放入自由储存区则共享这些成员），并且实际上 `std::shared_ptr` 使用了类型擦除技术，只要指针类型相同，就是相同类型的 `std::shared_ptr<T>`。
 
-虽然 `std::shared_ptr` 和 `std::unique_ptr` 都有针对 C 风格数组的特化版本，但是仍然建议使用 `std::array` 或者 `std::vector`。
+虽然 `std::shared_ptr` 和 `std::unique_ptr` 都有针对C风格数组的特化版本，但是仍然建议使用 `std::array` 或者 `std::vector`。
 
 标准库模板还提供 `std::allocate_shared`，用于使用自定义的分配器。
 
@@ -193,7 +193,7 @@ foo(std::unique_ptr<X>(new X), std::unique_ptr<Y>(new Y));
 
 ```
 
-这是一个函数调用表达式，问题在于，C++ 17 之前没有规定函数调用表达式中，以何种顺序计算调用过程中需要用到的值，所以 `new X` 和 `new Y` 可能发生在构造 `unique_ptr<X>` 之前，因为此时没有 `unique_ptr<X>` 被构造，所以第二个 `new` 表达式若抛出异常，则第一个 `new` 表达式发生内存泄漏。
+这是一个函数调用表达式，问题在于，C++ 17之前没有规定函数调用表达式中，以何种顺序计算调用过程中需要用到的值，所以 `new X` 和 `new Y` 可能发生在构造 `unique_ptr<X>` 之前，因为此时没有 `unique_ptr<X>` 被构造，所以第二个 `new` 表达式若抛出异常，则第一个 `new` 表达式发生内存泄漏。
 
 改进的方法是使用 `std::make_unique`：
 
@@ -203,7 +203,7 @@ foo(std::make_unique<X>(), std::make_unique<Y>());
 
 ```
 
-由于 `std::make_unique` 是一个函数调用，所以 C++ 确保一定先构造出一个 `unique_ptr<X>`，再构造出另一个 `unique_ptr<X>`。
+由于 `std::make_unique` 是一个函数调用，所以C++确保一定先构造出一个 `unique_ptr<X>`，再构造出另一个 `unique_ptr<X>`。
 
 若第二个 `unique_ptr<X>` 构造失败，则已经构造的 `unique_ptr<X>` 可以被自动析构。
 
@@ -217,8 +217,8 @@ foo(std::make_unique<X>(), std::make_unique<Y>());
 
 ```cpp
 
-std::unique_ptr<int> a(new int); // 提到了 2 次 int
-auto b = std::make_unique<int>(); // 只提到了一次 int
+std::unique_ptr<int> a(new int); // 提到了2次int
+auto b = std::make_unique<int>(); // 只提到了一次int
 auto c{ std::make_unique<int>() }; // 激进地
 
 ```
@@ -272,6 +272,6 @@ std::unique_ptr
 《C++ Primer》第五版
 </span>
 <span>
-《C++ 程序设计语言》第四版
+《C++程序设计语言》第四版
 </span>
 </div>

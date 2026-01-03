@@ -1,18 +1,18 @@
 ---
-title: C++ 模板元编程 - 标签派发
+title: C++模板元编程 - 标签派发
 date: "2022-03-28 20:09:00"
 tags: [C++]
 category: blog
 ---
-标签派发是 C++20 引入 concept 之前模板编程的一个手段：由于 C++ 不支持函数模板的偏特化，所以为了实现“偏特化”而产生的一个技巧。
+标签派发是C++20引入concept之前模板编程的一个手段：由于C++不支持函数模板的偏特化，所以为了实现“偏特化”而产生的一个技巧。
 
 <!-- more -->
 
 参考 [C++ Core Guidelines](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#t65-use-tag-dispatch-to-provide-alternative-implementations-of-a-function)。
 
-#### T.65: Use tag dispatch to provide alternative implementations of a function 使用标签分发提供函数的不同实现
+#### T.65: Use tag dispatch to provide alternative implementations of a function使用标签分发提供函数的不同实现
 
-##### Reason 原因
+##### Reason原因
 
 - A template defines a general interface.
 - 模板定义普遍接口。
@@ -21,7 +21,7 @@ category: blog
 - Performance.
 - 性能
 
-##### Example 示例
+##### Example示例
 
 This is a simplified version of std::copy (ignoring the possibility of non-contiguous sequences)
 
@@ -66,7 +66,7 @@ This is a general and powerful technique for compile-time algorithm selection.
 
 这是一个可以在编译时选择算法的普遍和强大的技术。
 
-##### Note 注意
+##### Note注意
 
 When concepts become widely available such alternatives can be distinguished directly:
 

@@ -30,7 +30,7 @@ category: blog
 (() => {
     const postText = document.body.querySelector('article');// 选择文章部分
     const topProcess = document.createElement('div');// 创建进度条元素
-    const halfWindow = window.screen.height / 3;// 计算 1/3 的窗口高度
+    const halfWindow = window.screen.height / 3;// 计算1/3的窗口高度
     const articleHeight = postText.clientHeight;// 获得文章长度
     topProcess.id = 'progress';// 设置id
     document.body.appendChild(topProcess);// 添加进度条到body

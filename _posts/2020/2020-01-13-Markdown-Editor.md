@@ -1,7 +1,7 @@
 ---
 date: "2020-01-14 12:30"
 update: "2020-09-15 01:43"
-title: Markdown 内嵌 HTML
+title: Markdown内嵌HTML
 category: blog
 tags: [markdown,Windows,docs]
 ---
@@ -13,7 +13,7 @@ tags: [markdown,Windows,docs]
 
 | 注意事项 | 否则 |
 | :-------: | :---: |
-| 必须使用较严格的 HTML |
+| 必须使用较严格的HTML |
 | 元素必须被正确嵌套 | 标签被转义 |
 | 非空元素必须被正确的关闭 | 标签被转义 |
 | 属性的值必须使用引号 | 标签被转义 |
@@ -23,12 +23,12 @@ tags: [markdown,Windows,docs]
 | 空标签后需添加换行 | 下一行被忽略 |
 | 统一代码缩进方式 | 排版混乱 |
 | 段与段之间需要2个换行 | 行与行粘连 |
-| 特殊字符和 HTML 标签使用转义符 | 当作元素 |
+| 特殊字符和HTML标签使用转义符 | 当作元素 |
 | 首行缩进使用 \&emsp; | 不显示缩进 |
 
 <br>
 
-### 常用 HTML 标签
+### 常用HTML标签
 
 <br>
 
@@ -116,6 +116,6 @@ x<sup>n</sup>
 
 <br><br>
 
-### Markdown 语法范例
+### Markdown语法范例
 
 参见 [Page Test](/blog/2019/03/28/markdown-test/)

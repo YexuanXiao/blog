@@ -1,32 +1,32 @@
 ---
-title: C++ 异常 - 守卫
+title: C++异常 - 守卫
 date: "2024-07-29 19:52:00"
 tags: [C++, docs]
 category: blog
 ---
-前几篇文章讲述了异常的基本概念和如何保证基本的异常安全，本文则综合并且结合最佳实践讲述如何编写正确的 C++ 代码。
+前几篇文章讲述了异常的基本概念和如何保证基本的异常安全，本文则综合并且结合最佳实践讲述如何编写正确的C++代码。
 
 <!-- more -->
 
-本文是《C++ 异常》系列第五篇文章。
+本文是《C++异常》系列第五篇文章。
 
-《C++ 异常》目录：
+《C++异常》目录：
 
-1. [C++ 异常 - 类和异常](/blog/2022/04/07/Cpp-Exception-Class-and-RAII/)
-2. [C++ 异常 - 智能指针](/blog/2022/04/08/Cpp-Exception-Smart-Pointer/)
-3. [C++ 异常 - 资源管理](/blog/2022/06/18/Cpp-Exception-Resource-Management/)
-4. [C++ 异常 - 容器和 std::vector](/blog/2022/04/07/Cpp-Exception-Container-and-std-vector/)
+1. [C++异常 - 类和异常](/blog/2022/04/07/Cpp-Exception-Class-and-RAII/)
+2. [C++异常 - 智能指针](/blog/2022/04/08/Cpp-Exception-Smart-Pointer/)
+3. [C++异常 - 资源管理](/blog/2022/06/18/Cpp-Exception-Resource-Management/)
+4. [C++异常 - 容器和std::vector](/blog/2022/04/07/Cpp-Exception-Container-and-std-vector/)
 5. 本文
 
 ## 守卫，很多的守卫
 
-守卫（guard）和句柄类并列为 RAII 最主要的应用，同时，守卫也是保证异常安全的最重要组成。
+守卫（guard）和句柄类并列为RAII最主要的应用，同时，守卫也是保证异常安全的最重要组成。
 
 典型的守卫包括 `lock_guard`，`unique_lock`，以及 `unique_ptr`。
 
 ### lock\_guard
 
-lock\_guard 的典型实现如下：
+lock\_guard的典型实现如下：
 
 ```cpp
 
@@ -62,14 +62,14 @@ void run_task(mutex& m, task_queue& q)
     auto task = std::move(q.top());
     q.pop();
 
-    // #1 其他代码
+    // #1其他代码
 
     task(); // 错误
 }
 
 ```
 
-`lock_guard l{m};` 能保证在 \#1 抛出异常时，自动解锁；即使 \#1 永不抛出异常，`l` 的存在也可以避免漏写解锁导致死锁的错误；在 \#1 存在使用 `return;` 提前返回时，这种模式也能避免多次写出 `m.unlock()`，减少重复。
+`lock_guard l{m};` 能保证在 \#1抛出异常时，自动解锁；即使 \#1永不抛出异常，`l` 的存在也可以避免漏写解锁导致死锁的错误；在 \#1存在使用 `return;` 提前返回时，这种模式也能避免多次写出 `m.unlock()`，减少重复。
 
 但以上代码有致命缺陷：`l` 会在 `task` 执行后才被析构，会导致代码变成串行执行。这种代码典型的出现在使用独立的锁保护一个线程不安全的结构时。
 
@@ -91,7 +91,7 @@ void run_task(mutex& m, task_queue& q)
         q.pop();
     }
 
-    // #1 其他代码
+    // #1其他代码
 
     task();
 }
@@ -424,7 +424,7 @@ public:
 
 ```
 
-这段代码实际上是错误的，因为如果 \#2 处调用 `T` 的构造函数抛出异常，之前分配的 `p_` 就会泄漏。
+这段代码实际上是错误的，因为如果 \#2处调用 `T` 的构造函数抛出异常，之前分配的 `p_` 就会泄漏。
 
 因此，通常的改进方式如下：
 
@@ -483,7 +483,7 @@ void emplace_(U&& u)
 
 ```
 
-此时，在 \#2 抛出异常后，`allocate_guard` 就会保护 `p_`，不发生泄漏，并且不使用 `catch(...)` 和 `throw;`。
+此时，在 \#2抛出异常后，`allocate_guard` 就会保护 `p_`，不发生泄漏，并且不使用 `catch(...)` 和 `throw;`。
 
 实际上之前文章中介绍过的 `std::uninitialized_copy` 函数也可以使用相同的手法代替，这里留给读者做思考题。在我实现的 [basic\_json](https://github.com/yexuanXiao/basic_json/) 中，就同时用到了这两种手法。
 
@@ -546,7 +546,7 @@ class allocate_guard
 
 ### unique\_ptr
 
-读到这里，相信读者一定彻底学会了 unique\_ptr，因此这一节讨论的是一些非常细致，微妙的问题。
+读到这里，相信读者一定彻底学会了unique\_ptr，因此这一节讨论的是一些非常细致，微妙的问题。
 
 上述各种守卫以及不完整版 `unique_lock`，对比 `vector_base`、`std::unique_ptr` 以及完整版 `unique_lock`有什么区别？
 
@@ -560,4 +560,4 @@ class allocate_guard
 
 成为句柄类后，将拥有守卫一般不具有的轻量的默认构造，移动构造和移动赋值。这些新具有的函数使句柄类能够作为容器的元素，能够作为结构体的子对象。但同时不要忘记，`unique_lock`，`vector_base` 仍然是守卫。
 
-`std::unique_ptr` 实际上应该回归它的本职工作，即作为守卫，而不是句柄类使用，因为 `std::unique_ptr` 并没有有意义的构造函数，它不过是无条件的储存指针而已，通常，我们需要的是特殊化，专用化的句柄类，例如 `vector_base`，或者某一个 `file` 类，而不是 `std::unique_ptr`。`std::unique_ptr` 没有有意义的构造函数使其必须配合 `std::make_unique` 使用，这是一种劣化。LLVM 的代码就使用 `std::make_unique` 编写，但让 `std::unique_ptr` 拥有一个和 `std::make_unique` 等效的构造函数，才更符合 RAII，对用户来说更加轻松。
+`std::unique_ptr` 实际上应该回归它的本职工作，即作为守卫，而不是句柄类使用，因为 `std::unique_ptr` 并没有有意义的构造函数，它不过是无条件的储存指针而已，通常，我们需要的是特殊化，专用化的句柄类，例如 `vector_base`，或者某一个 `file` 类，而不是 `std::unique_ptr`。`std::unique_ptr` 没有有意义的构造函数使其必须配合 `std::make_unique` 使用，这是一种劣化。LLVM的代码就使用 `std::make_unique` 编写，但让 `std::unique_ptr` 拥有一个和 `std::make_unique` 等效的构造函数，才更符合RAII，对用户来说更加轻松。

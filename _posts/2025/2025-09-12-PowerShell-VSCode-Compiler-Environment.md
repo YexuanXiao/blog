@@ -1,15 +1,15 @@
 ---
-title: PowerShell 和 VSCode 下的编译器环境
+title: PowerShell和VSCode下的编译器环境
 date: "2025-09-11 10:41:00"
 tags: [Windows, docs]
 category: blog
 ---
 
-总有人问我使用 Windows 时如何快速的切换不同编译器环境，实际上在不同层次有不同的方法，可以做到非常灵活。
+总有人问我使用Windows时如何快速的切换不同编译器环境，实际上在不同层次有不同的方法，可以做到非常灵活。
 
 <!-- more -->
 
-对于 Visual Studio，可以编写以下 PowerShell 函数来实现快速启动：
+对于Visual Studio，可以编写以下PowerShell函数来实现快速启动：
 
 ```powershell
 
@@ -25,7 +25,7 @@ function VS-Env {
 
 ```
 
-对于 GCC 和 Clang，用类似的方法添加 Path：
+对于GCC和Clang，用类似的方法添加Path：
 
 ```powershell
 
@@ -64,7 +64,7 @@ function GCC-Env {
 
 ```
 
-如果你使用 Windows 终端，那么可以设置 PowerShell 的启动参数，通过下拉菜单快速切换：
+如果你使用Windows终端，那么可以设置PowerShell的启动参数，通过下拉菜单快速切换：
 
 ```powershell
 
@@ -76,7 +76,7 @@ PowerShell -NoExit -Command "& VS-Env amd64"
 
 三者皆可。
 
-VSCode 的 CMakeTools 提供一个功能叫做用户本地工具包，使用该 JSON 配置不同编译器后，VSCode 的状态栏就可以快速切换编译器。
+VSCode的CMakeTools提供一个功能叫做用户本地工具包，使用该JSON配置不同编译器后，VSCode的状态栏就可以快速切换编译器。
 
 ```json
 
@@ -109,9 +109,9 @@ VSCode 的 CMakeTools 提供一个功能叫做用户本地工具包，使用该 
 
 ```
 
-具体如何使用可以参考 CMakeTools 的文档。
+具体如何使用可以参考CMakeTools的文档。
 
-最后，CMake 本身支持使用 CMakePresets.json 来快速设置编译器环境。
+最后，CMake本身支持使用CMakePresets.json来快速设置编译器环境。
 
 最简例子如下：
 
@@ -144,4 +144,4 @@ VSCode 的 CMakeTools 提供一个功能叫做用户本地工具包，使用该 
 
 ```
 
-使用 `cmake --preset default` 或者 CMakeTools 在 VSCode 状态栏提供的按钮就可以指定使用某个编译器配置和构建项目。
+使用 `cmake --preset default` 或者CMakeTools在VSCode状态栏提供的按钮就可以指定使用某个编译器配置和构建项目。

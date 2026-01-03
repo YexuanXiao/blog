@@ -4,7 +4,7 @@ date: "2022-09-01 01:30:00"
 tags: [C++]
 category: blog
 ---
-C++11 开始增加了 `std::chrono` 这个时间库，可以在编译期进行时间换算以及提供计时功能。同时还可以配合 `std::condition_variable` 来实现定时唤醒功能。
+C++11开始增加了 `std::chrono` 这个时间库，可以在编译期进行时间换算以及提供计时功能。同时还可以配合 `std::condition_variable` 来实现定时唤醒功能。
 
 <!-- more -->
 
@@ -23,11 +23,11 @@ template<
 
 ```
 
-`ratio` 是一个类模板，两个模板参数分别表示分子和分母，例如 `std::ratio<1, 2>` 就是 1/2。
+`ratio` 是一个类模板，两个模板参数分别表示分子和分母，例如 `std::ratio<1, 2>` 就是1/2。
 
-`duration` 第二个参数默认是 `std::ratio<1>`，代表这个 `duration` 以 1 秒为单位。
+`duration` 第二个参数默认是 `std::ratio<1>`，代表这个 `duration` 以1秒为单位。
 
-如果有一个 `duration` 的 `Period` 是 `std::ratio<1, 10>`，那么这个 `duration` 与单位为 1 秒的 `duration` 换算时就要变成 1/10。
+如果有一个 `duration` 的 `Period` 是 `std::ratio<1, 10>`，那么这个 `duration` 与单位为1秒的 `duration` 换算时就要变成1/10。
 
 标准库预定义了一些 `duration` 特化的别名用于方便使用：
 
@@ -42,7 +42,7 @@ template<
 - `std::chrono::months`       (C++20)
 - `std::chrono::years`        (C++20)
 
-MSVC 的实现中，从 `days` 开始 `Rep` 的类型是 `int`，更小的单位使用 `long long`，保证计算不会溢出。
+MSVC的实现中，从 `days` 开始 `Rep` 的类型是 `int`，更小的单位使用 `long long`，保证计算不会溢出。
 
 ```cpp
 
@@ -50,7 +50,7 @@ MSVC 的实现中，从 `days` 开始 `Rep` 的类型是 `int`，更小的单位
 
 int main() {
 	namespace chrono = std::chrono;
-    chrono::nanoseconds nano_time{ 3000 }; // 表示 3000 纳秒
+    chrono::nanoseconds nano_time{ 3000 }; // 表示3000纳秒
 	static_assert(std::same_as <chrono::duration<long long, std::nano>, chrono::nanoseconds>); // true
 }
 
@@ -75,7 +75,7 @@ int main() {
 
 ```
 
-C++14 起，为了方便使用 `duration`，标准库提供了一系列字面量：
+C++14起，为了方便使用 `duration`，标准库提供了一系列字面量：
 
 - `operator""h`   表示小时的 `duration` 字面量
 - `operator""min` 表示分钟的 `duration` 字面量
@@ -88,15 +88,15 @@ C++14 起，为了方便使用 `duration`，标准库提供了一系列字面量
 
 `std::chrono` 提供了系统时钟 `system_clock` 和单调时钟 `steady_clock`，这两个时钟虽然是类，但是构造它们的对象没意义，都是通过静态成员函数使用，最常用的是使用 `now` 静态成员函数获得当前时间。
 
-C++20 起 `system_clock` 被规定为使用 Unix 时间（Posix 时间），即从格林威治时间 1970 年 01 月 01 日 00 时 00 分 00 秒起至现在的总秒数，并且使用 UTC 时区。大部分系统都使用这个时间，或者提供与之转换的工具。1970 年 01 月 01 日 00 时 00 分 00 秒也叫 Unix epoch。
+C++20起 `system_clock` 被规定为使用Unix时间（Posix时间），即从格林威治时间1970年01月01日00时00分00秒起至现在的总秒数，并且使用UTC时区。大部分系统都使用这个时间，或者提供与之转换的工具。1970年01月01日00时00分00秒也叫Unix epoch。
 
-系统时钟有一个特点是不单调，换句话说有可能因为系统和网络时钟同步，或者用户的手动调整，导致下一个时间减上一个时间为负。由于使用了 Unix 时间，所以 `system_clock` 可以和 `time_t` 进行转换，通过 `system_clock::to_time_t` 和 `system_clock::from_time_t`。
+系统时钟有一个特点是不单调，换句话说有可能因为系统和网络时钟同步，或者用户的手动调整，导致下一个时间减上一个时间为负。由于使用了Unix时间，所以 `system_clock` 可以和 `time_t` 进行转换，通过 `system_clock::to_time_t` 和 `system_clock::from_time_t`。
 
 当然，有一些情况 `system_clock` 也是单调的，可以通过 `is_steady` 这个静态成员函数（谓词）判断。
 
-如果需要单调时间，可以使用 `steady_clock`，`steady_clock` 保证物理上晚的时间一定大于物理上早的时间，但是要注意一点，`steady` 获得的时间的起始点不是 1970 年，大部分实现中是系统开机时刻，不要和系统时钟的起始点混淆。
+如果需要单调时间，可以使用 `steady_clock`，`steady_clock` 保证物理上晚的时间一定大于物理上早的时间，但是要注意一点，`steady` 获得的时间的起始点不是1970年，大部分实现中是系统开机时刻，不要和系统时钟的起始点混淆。
 
-`system_clock` 一般用于描述现实时间，`steady_clock` 一般用于程序内部计算使用。C++20 开始，标准库还提供了一些其他的时钟，不过不常用。
+`system_clock` 一般用于描述现实时间，`steady_clock` 一般用于程序内部计算使用。C++20开始，标准库还提供了一些其他的时钟，不过不常用。
 
 时钟和时钟之间可以通过 `clock_cast` 转换（C++20），和 `duration_cast` 类似。
 
@@ -123,7 +123,7 @@ template<
 
 ### 年月日表示法
 
-由于闰秒闰年的存在，使得不能直接计算出协调世界时（UTC），不过好消息是前几天（2022 年 11 月 18 日）国际计量大会决定 2035 年之后不再使用闰秒，因此 13 年后计算 UTC 时间可以简化不少。但是也因此 C++ 标准库并未直接提供从 UTC 时间得到 Unix 时间的方式，需要用 C 的库函数间接获得：
+由于闰秒闰年的存在，使得不能直接计算出协调世界时（UTC），不过好消息是前几天（2022年11月18日）国际计量大会决定2035年之后不再使用闰秒，因此13年后计算UTC时间可以简化不少。但是也因此C++标准库并未直接提供从UTC时间得到Unix时间的方式，需要用C的库函数间接获得：
 
 ```cpp
 
@@ -133,7 +133,7 @@ struct tm_impl {
     int tm_hour;
     int tm_mday;
     int tm_mon;
-    int tm_year; // 从 1990 年开始的年数
+    int tm_year; // 从1990年开始的年数
     int tm_wday; // 从星期日开始的天数
     int tm_yday; // 从一月开始的天数
     int tm_isdst; // 夏令时，不要用
@@ -141,12 +141,12 @@ struct tm_impl {
 };
 
 int main() {
-    std::tm time{}; // 首先构造一个全 0 的 tm
+    std::tm time{}; // 首先构造一个全0的tm
     time.year = 2035 - 1990; // 设置年份
     std::time_t unix_time = std::mktime(&time);
-    // 转换为 表示 Unix 时间的 time_t
+    // 转换为 表示Unix时间的time_t
     auto time_point = std::chrono::system_clock::from_time_t(unix_time);
-    // 转换为 time_point
+    // 转换为time_point
 }
 
 ```

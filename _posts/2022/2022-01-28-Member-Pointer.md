@@ -1,10 +1,10 @@
 ---
-title: C++ 成员指针
+title: C++成员指针
 date: "2022-01-28 06:34:00"
 tags: [C++]
 category: blog
 ---
-C 中存在两种指针：函数指针和对象指针，并且其宽度典型为 CPU 位数。而由于 C++ 引入了类，从而产生了新的指针种类：成员数据指针和成员函数指针。
+C中存在两种指针：函数指针和对象指针，并且其宽度典型为CPU位数。而由于C++引入了类，从而产生了新的指针种类：成员数据指针和成员函数指针。
 
 <!-- more -->
 
@@ -18,12 +18,12 @@ struct C { int m; };
  
 int main()
 {
-    int C::* p = &C::m;          // 指向类 C 的数据成员 m，实际上相当于 m 在类 C 中相对于起始地址的偏移量
+    int C::* p = &C::m;          // 指向类C的数据成员m，实际上相当于m在类C中相对于起始地址的偏移量
     C c = {7};
-    std::cout << c.*p << std::endl;   // 通过 c 的地址和偏移量 p 打印出 int 值 7
+    std::cout << c.*p << std::endl;   // 通过c的地址和偏移量p打印出int值7
     C* cp = &c;
     cp->m = 10;
-    std::cout << cp->*p << std::endl; // 打印 10
+    std::cout << cp->*p << std::endl; // 打印10
 }
 
 ```
@@ -41,7 +41,7 @@ int main()
     int Derived::* dp = bp;
     Derived d;
     d.m = 1;
-    std::cout << d.*dp << ' ' << d.*bp << std::endl; // 打印 1 1
+    std::cout << d.*dp << ' ' << d.*bp << std::endl; // 打印1 1
 }
 
 ```
@@ -69,7 +69,7 @@ int main()
 
 ```
 
-上面这个代码看似 `a == 0`，`b == 1` 都为真，但实际上都等于 1：神奇的**成员指针访问运算符 `operator.*`**会在 `d.*bp` 时 `static_cast<Base2>(d)`，完整过程即 `*(int*)(reinterpret_cast<void *>(&static_cast<Base2>(d)) + dp)` 先将 `d` 的地址转换为 `d` 中 `Base2` 的地址，再根据 `Base2` 的地址加上偏移量 `bp`，再以 `int` 类型解引用指针。
+上面这个代码看似 `a == 0`，`b == 1` 都为真，但实际上都等于1：神奇的**成员指针访问运算符 `operator.*`**会在 `d.*bp` 时 `static_cast<Base2>(d)`，完整过程即 `*(int*)(reinterpret_cast<void *>(&static_cast<Base2>(d)) + dp)` 先将 `d` 的地址转换为 `d` 中 `Base2` 的地址，再根据 `Base2` 的地址加上偏移量 `bp`，再以 `int` 类型解引用指针。
 
 ```asm
 
@@ -82,7 +82,7 @@ main:
     movl    $1, -32(%rbp)
     movq    -8(%rbp), %rax
     leaq    -36(%rbp), %rdx
-    addq    $4, %rdx        // 此处是 Derived 转 Base2
+    addq    $4, %rdx        // 此处是Derived转Base2
     addq    %rdx, %rax
     movl    (%rax), %eax
     movl    %eax, -20(%rbp)
@@ -113,7 +113,7 @@ int main()
  
     Derived d;
     d.m = 7;
-    std::cout << d.*bp << std::endl; // OK：打印 7
+    std::cout << d.*bp << std::endl; // OK：打印7
  
     Base b;
     std::cout << b.*bp << std::endl; // 未定义行为
@@ -121,26 +121,26 @@ int main()
 
 ```
 
-成员指针的被指向类型也可以是成员指针自身：成员指针可为多级，而且在每级可以有不同的 cv 限定。指针和成员指针的混合也可以多级组合：
+成员指针的被指向类型也可以是成员指针自身：成员指针可为多级，而且在每级可以有不同的cv限定。指针和成员指针的混合也可以多级组合：
 
 ```cpp
 
 struct A
 {
     int m;
-    int A::* const p;// 指向非 const 成员的 const 指针
+    int A::* const p;// 指向非const成员的const指针
 };
  
 int main()
 {
-    int A::* const A::* p1 = &A::p;// 指向（A 的）数据成员的非 const 指针
-    // 该成员是一个指向【（A 的）非 const 成员】的 const 指针
+    int A::* const A::* p1 = &A::p;// 指向（A的）数据成员的非const指针
+    // 该成员是一个指向【（A的）非const成员】的const指针
     const A a = {1, &A::m};
-    std::cout << a.*(a.*p1) << std::endl; // 打印 1
+    std::cout << a.*(a.*p1) << std::endl; // 打印1
  
-    // 指向一个【指向（A 的）非 const 成员的 const 指针】的常规非 const 指针
+    // 指向一个【指向（A的）非const成员的const指针】的常规非const指针
     int A::* const* p2 = &a.p;
-    std::cout << a.**p2 << std::endl; // 打印 1
+    std::cout << a.**p2 << std::endl; // 打印1
 }
 
 ```
@@ -158,11 +158,11 @@ struct C
  
 int main()
 {
-    void (C::* p)(int) = &C::f; // 指向类 C 的成员函数 f 的指针
+    void (C::* p)(int) = &C::f; // 指向类C的成员函数f的指针
     C c;
-    (c.*p)(1);                  // 打印 1
+    (c.*p)(1);                  // 打印1
     C* cp = &c;
-    (cp->*p)(2);                // 打印 2
+    (cp->*p)(2);                // 打印2
 }
 
 ```
@@ -207,7 +207,7 @@ int main()
     void (Base::* bp)(int) = static_cast<void (Base::*)(int)>(dp);
  
     Derived d;
-    (d.*bp)(1); // OK：打印 1
+    (d.*bp)(1); // OK：打印1
  
     Base b;
     (b.*bp)(2); // 未定义行为
@@ -215,7 +215,7 @@ int main()
 
 ```
 
-由于 C++ 引入了多继承和虚继承，所以成员指针（尤其是函数指针）的宽度不一定为一倍指针宽度：
+由于C++引入了多继承和虚继承，所以成员指针（尤其是函数指针）的宽度不一定为一倍指针宽度：
 
 - 单倍宽度：对于非继承或者单继承类
   - 成员变量在类的内存分布中的偏移量
@@ -223,7 +223,7 @@ int main()
 - 双倍宽度：多继承且函数为虚
   - `this` 指针调整值 + 虚表偏移量
 
-C++ 标准未对此做出过多描述，不过编译器普遍支持上述情况。由于 C++ 继承存在更复杂情况，此时成员函数指针实现可能更为复杂，但并未得到广泛支持。
+C++标准未对此做出过多描述，不过编译器普遍支持上述情况。由于C++继承存在更复杂情况，此时成员函数指针实现可能更为复杂，但并未得到广泛支持。
 
 <div class="ref-label">参考</div>
 <div class="ref-list">

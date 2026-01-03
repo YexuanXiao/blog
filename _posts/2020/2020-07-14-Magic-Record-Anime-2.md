@@ -1,6 +1,6 @@
 ---
 date: "2020-07-14 20:50"
-title: 魔法少女小圆外传动画 魔法记录 2
+title: 魔法少女小圆外传动画 魔法记录2
 category: by-talk
 tags: [2020一月新番,anime]
 ---

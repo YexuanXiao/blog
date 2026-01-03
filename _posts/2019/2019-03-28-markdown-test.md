@@ -5,17 +5,17 @@ tags: [markdown,docs]
 category: blog
 ---
 
-本页用于展示本站支持的所有页内功能，不限于 Markdown 基础功能，以及一些独有扩展。
+本页用于展示本站支持的所有页内功能，不限于Markdown基础功能，以及一些独有扩展。
 
 <!-- more -->
 
 ## 独有扩展
 
-将所有 title="candark" 的图片，在黑色模式下自动翻转颜色
+将所有title="candark" 的图片，在黑色模式下自动翻转颜色
 
 ![M.P.O.](/assets/images/svgs/mpo.svg "candark")
 
-将所有 title="canisdark" 的深色图片，在黑色模式下自动翻转颜色
+将所有title="canisdark" 的深色图片，在黑色模式下自动翻转颜色
 
 ![M.P.O.](/assets/images/svgs/mpo.svg "canisdark")
 
@@ -74,15 +74,15 @@ observer.observe(element, config);
 > 即更长的单词或短语的缩写形式，前提是开启识别HTML标签时，已默认开启
 
 The <abbr title="Hyper Text Markup Language">HTML</abbr> specification is maintained by the <abbr title="World Wide Web Consortium">W3C</abbr>.
-### 引用 Blockquotes
+### 引用Blockquotes
 
-> 引用文本 Blockquotes
+> 引用文本Blockquotes
 
-引用的行内混合 Blockquotes
+引用的行内混合Blockquotes
 
 > 引用：如果想要插入空白换行`即<br />标签`，在插入处先键入两个以上的空格然后回车即可，[普通链接](https://www.mdeditor.com/)。
 
-### 锚点与链接 Links
+### 锚点与链接Links
 
 [普通链接](https://mpo.moe/)
 
@@ -106,11 +106,11 @@ The <abbr title="Hyper Text Markup Language">HTML</abbr> specification is mainta
 
 [2]: //baidu.com
 
-注意，不管第一种把内容插入到哪里，永远显示在文档底部，第二种方式的内容必须为 url，并且不单独列出内容。
+注意，不管第一种把内容插入到哪里，永远显示在文档底部，第二种方式的内容必须为url，并且不单独列出内容。
 
-### 多语言代码高亮 Codes
+### 多语言代码高亮Codes
 
-#### 行内代码 Inline code
+#### 行内代码Inline code
 
 
 执行命令：`npm install marked`
@@ -137,7 +137,7 @@ function test() {
 }
 ```
 
-#### HTML 代码 HTML codes
+#### HTML代码HTML codes
 ```html
 <!DOCTYPE html>
 <html>
@@ -158,14 +158,14 @@ function test() {
 </html>
 ```
 
-### 图片 Images
+### 图片Images
 
 图片加链接 (Image + Link)：
 
 [![](/assets/images/svgs/mpo.svg)](/assets/images/svgs/mpo.svg"markdown")
 
 ----
-### 列表 Lists
+### 列表Lists
 
 #### 无序列表（减号）Unordered Lists (-)
 
@@ -190,7 +190,7 @@ function test() {
     * 列表二
     * 列表三
 
-#### 有序列表 Ordered Lists (-)
+#### 有序列表Ordered Lists (-)
 
 1. 第一行
 2. 第二行
@@ -210,7 +210,7 @@ function test() {
 
 -------------
 
-### 绘制表格 Tables
+### 绘制表格Tables
 
 | 项目        | 价格   |  数量  |
 | ----------: | :----- | :----: |
@@ -249,7 +249,7 @@ Content Cell  | Content Cell
 
 **表格中用作对齐的那一行的冒号表示对齐方式** 
 
-#### 特殊符号 HTML Entities Codes
+#### 特殊符号HTML Entities Codes
 
 &copy; &  &uml; &trade; &iexcl; &pound;
 &amp; &lt; &gt; &yen; &euro; &reg; &plusmn; &para; &sect; &brvbar; &macr; &laquo; &middot;

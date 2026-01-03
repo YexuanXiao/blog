@@ -1,5 +1,5 @@
 ---
-title: 使用 Operator Mono 作为 VSCode 字体
+title: 使用Operator Mono作为VSCode字体
 date: "2021-05-24 17:38:00"
 tags: [VSCode,docs]
 category: blog
@@ -11,8 +11,8 @@ category: blog
 方案来自：[Font](https://github.com/beichensky/Font)
 
 1. 下载 [Operator Mono](https://github.com/beichensky/Font/tree/master/Operator%20Mono) 中的字体并安装。
-2. 在 VSCode 中按 Ctrl+Shift+P 打开命令面板，搜索 首选项: 打开设置 (json)，并点击打开。
-3. 在最外层大括号中加入如下内容（注意在json中，列表的最后一项没有逗号），重启 VSCode 即可：
+2. 在VSCode中按Ctrl+Shift+P打开命令面板，搜索 首选项: 打开设置 (json)，并点击打开。
+3. 在最外层大括号中加入如下内容（注意在json中，列表的最后一项没有逗号），重启VSCode即可：
 
 ```json
 

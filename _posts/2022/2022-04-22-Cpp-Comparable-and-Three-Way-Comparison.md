@@ -1,16 +1,16 @@
 ---
-title: C++ 可比较性和三路比较
+title: C++可比较性和三路比较
 date: "2022-04-22 16:07:00"
 tags: [C++]
 category: blog
 ---
-三路比较 (Three-Way Comparison) 运算是 C++20 新增的一种支持重载的比较运算，旨在解决以往 C++ 需要写过多的比较运算符重载和多次比较效率问题，三路比较运算符又被称为宇宙飞船运算符。三路比较运算并不返回布尔值，而是返回包装枚举的三类对象：`std::strong_ordering`，`std::weak_ordering` 和 `std::partial_ordering`。三路比较使得有序容器的元素插入最坏情况只需要一次三路比较和两次值判断，使得插入字符串这种线性时间比较类的算法的时间复杂度从 Θ(2n) 降低到了 Θ(n)，和以往相比简化了一次比较过程从而提高了效率。
+三路比较 (Three-Way Comparison) 运算是C++20新增的一种支持重载的比较运算，旨在解决以往C++需要写过多的比较运算符重载和多次比较效率问题，三路比较运算符又被称为宇宙飞船运算符。三路比较运算并不返回布尔值，而是返回包装枚举的三类对象：`std::strong_ordering`，`std::weak_ordering` 和 `std::partial_ordering`。三路比较使得有序容器的元素插入最坏情况只需要一次三路比较和两次值判断，使得插入字符串这种线性时间比较类的算法的时间复杂度从 Θ(2n) 降低到了 Θ(n)，和以往相比简化了一次比较过程从而提高了效率。
 
 <!-- more -->
 
-### C++20 之前
+### C++20之前
 
-C++20 之前，一共支持 6 种比较运算符重载：
+C++20之前，一共支持6种比较运算符重载：
 
 ```cpp
 
@@ -23,7 +23,7 @@ bool operator!=(L, R);
 
 ```
 
-同时，也支持 6 种作为成员函数的比较运算符重载。
+同时，也支持6种作为成员函数的比较运算符重载。
 
 由于重载范围过于庞大，在实践中一般遵循如下约定：
 
@@ -34,7 +34,7 @@ bool operator!=(L, R);
 
 上述约定能提高代码清晰度，但是正确实现这些重载仍然是一个复杂的工程。
 
-C++20 添加了三路比较运算符的重载，此后只需要实现两个重载函即可：
+C++20添加了三路比较运算符的重载，此后只需要实现两个重载函即可：
 
 ```cpp
 
@@ -71,12 +71,12 @@ void insert(const Comparable &x, Container &v){
 
 可以看出，`a == b` 全等于 `!(a > b) && !(a < b)`
 
-大部分 STL 有序容器都遵循此规则，这种基本的比较方案非常自然，但是也存在着问题：
+大部分STL有序容器都遵循此规则，这种基本的比较方案非常自然，但是也存在着问题：
 
 1. 必须实现 `<` 和 `>` 运算符的重载
 2. 必须保证重载的正确实现，否则集合的有序性将被破坏
 
-基于以上原因，C++ 提出了比较性和有序性的一些概念：
+基于以上原因，C++提出了比较性和有序性的一些概念：
 
 - 等价（equivalent）：若 `f(a)` 和 `f(b)` 存在相同副作用，则对于 `f`，`a` 等价于 `b`。
 
@@ -104,17 +104,17 @@ void insert(const Comparable &x, Container &v){
 | strong\_equality  |      | equal      | nonequal      |                    |
 | weak\_equality    |      | equivalent | nonequivalent |                    |
 
-强有序必须比较所有成员/元素。大部分 STL 有序容器要求为弱有序。`std::string` 的备选有序类型为弱有序。
+强有序必须比较所有成员/元素。大部分STL有序容器要求为弱有序。`std::string` 的备选有序类型为弱有序。
 
 ### 实践
 
-在 C++20 之前比较运算符的重载不能声明为 `default`，但是 C++20 放开了此限制，任意比较运算符的重载都可以声明为 `default`，编译器会生成强有序（如成员有 `double` 则应为部分有序）的比较运算的重载。
+在C++20之前比较运算符的重载不能声明为 `default`，但是C++20放开了此限制，任意比较运算符的重载都可以声明为 `default`，编译器会生成强有序（如成员有 `double` 则应为部分有序）的比较运算的重载。
 
-在定义 `operator==` 后，编译器可以自动生成 `operator!=`，在定义 `operator<=>` 后，编译器可以自动生成其他 4 种比较运算。
+在定义 `operator==` 后，编译器可以自动生成 `operator!=`，在定义 `operator<=>` 后，编译器可以自动生成其他4种比较运算。
 
 此外，对于非成员的 `operator<=>`，编译器会生成相反参数顺序的重载，相比之前减少了冗余。
 
-C++20 根据有序概念设计了 3 种对象：
+C++20根据有序概念设计了3种对象：
 
 - `std::strong_ordering`
 - `std::weak_ordering`
@@ -122,7 +122,7 @@ C++20 根据有序概念设计了 3 种对象：
 
 其中 `std::strong_ordering` 和 `std::weak_ordering` 提供了用户定义类型转换运算符的重载，所以可以向下转换。
 
-以往的比较函数返回布尔值，而三路比较运算符返回枚举，三种 ordering 对象就是对枚举的包装，枚举的值就是上面的数值表示。
+以往的比较函数返回布尔值，而三路比较运算符返回枚举，三种ordering对象就是对枚举的包装，枚举的值就是上面的数值表示。
 
 三路比较满足如下规律：
 
@@ -134,7 +134,7 @@ C++20 根据有序概念设计了 3 种对象：
 - `(a <=> b <= 0) == bool(a <= b)` is true
 - `(a <=> b >= 0) == bool(a >= b)` is true
 
-一个正确实现的三路比较必须满足以上规律，标准库提供了 `three_way_comparable` 这个概念用于验证此规律，该 concept 在 \<compare\> 中定义。
+一个正确实现的三路比较必须满足以上规律，标准库提供了 `three_way_comparable` 这个概念用于验证此规律，该concept在 \<compare\> 中定义。
 
 以下是使用三路比较运算符的简单实践：
 
@@ -211,8 +211,8 @@ void testValue()
 	assert(std::strong_ordering::greater == static_cast<std::strong_ordering>(1));
 	assert(std::strong_ordering::equal == std::strong_ordering::equivalent);
 	assert(std::weak_ordering::equivalent == std::strong_ordering::equivalent);
-	// std::partial_ordering::unordered 的值由实现定义
-	double a = NAN; // NAN 宏在<cmath>中定义，double的比较是partial，和NAN比较返回unordered
+	// std::partial_ordering::unordered的值由实现定义
+	double a = NAN; // NAN宏在<cmath>中定义，double的比较是partial，和NAN比较返回unordered
 	double b = 0.0;
 	assert(std::partial_ordering::unordered == a <=> b);
 }

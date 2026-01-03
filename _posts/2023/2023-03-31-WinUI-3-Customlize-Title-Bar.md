@@ -1,38 +1,38 @@
 ---
-title: WinUI 3 自定义标题栏
+title: WinUI 3自定义标题栏
 date: "2023-03-31 11:15:00"
 tags: [C++,Windows]
 category: blog
 ---
-Windows 自定义标题栏一直是个麻烦问题，WinUI 3 毫不意外的继承了这个性质，由于 WinUI 3 是纯粹的 Win32 应用，因此和所有 Win32 应用一样使用系统窗口，造成了许多问题，这两天踩了许多坑后在此分享一下经验。
+Windows自定义标题栏一直是个麻烦问题，WinUI 3毫不意外的继承了这个性质，由于WinUI 3是纯粹的Win32应用，因此和所有Win32应用一样使用系统窗口，造成了许多问题，这两天踩了许多坑后在此分享一下经验。
 
 <!-- more -->
 
-UWP 使用 `AppWindow` 和 `CoreWindow` 管理标题栏，对于深度定制来说会受到 UWP API 限制（无法使用任何 `HWND` API），但统一的框架使得 UWP 的标题栏最方便使用，此外 UWP 还使用更高的标题栏和按钮。
+UWP使用 `AppWindow` 和 `CoreWindow` 管理标题栏，对于深度定制来说会受到UWP API限制（无法使用任何 `HWND` API），但统一的框架使得UWP的标题栏最方便使用，此外UWP还使用更高的标题栏和按钮。
 
-但是 WinUI 3 的窗口是传统窗口，目前允许甚至推荐使用 `HWND` 和 Win32 API，因此 WinUI 3 的标题栏注定和 UWP 有区别，目前来说 WinUI 3 提供了 3 种标题栏：
+但是WinUI 3的窗口是传统窗口，目前允许甚至推荐使用 `HWND` 和Win32 API，因此WinUI 3的标题栏注定和UWP有区别，目前来说WinUI 3提供了3种标题栏：
 
-1. Windows 默认
+1. Windows默认
 
 2. `Microsoft.UI.Xaml.Window` 类，扩展内容到标题栏
 
-   Window 虽然支持扩展内容到标题栏，但窗口管理按钮的左侧有一小部分无法定制，参考 Windows 11 的多标签文件文件资源管理器，该位置强制保留用于拖拽窗口使用
+   Window虽然支持扩展内容到标题栏，但窗口管理按钮的左侧有一小部分无法定制，参考Windows 11的多标签文件文件资源管理器，该位置强制保留用于拖拽窗口使用
 
    同时窗口管理按钮贴靠窗口顶部并且不能占满整个标题栏的高度，在标题栏底部和按钮之间有间隙
 
-   使用 `ContentDialog` 时标题栏顶部 32 像素无法应用遮罩效果
+   使用 `ContentDialog` 时标题栏顶部32像素无法应用遮罩效果
 
-   此外该方法存在按钮标志“--，\[\]，\>\<” 细小的问题，这个问题或许可以通过自己设置 WindowChrome 的属性解决，我没做深入研究
+   此外该方法存在按钮标志“--，\[\]，\>\<” 细小的问题，这个问题或许可以通过自己设置WindowChrome的属性解决，我没做深入研究
 
 3. `Microsoft.UI.Windowing.AppWindow` 类，扩展内容到标题栏
 
-   对标题栏定制能力最强的方式，除了按钮本身都可以定制，并且支持各种调整，可以视为用 Win32 模仿 UWP 行为，但只能 Windows 11 用，我个人推测可能是依赖只有 Windows 11 可用的 DWM 属性 [DWMWINDOWATTRIBUTE](https://learn.microsoft.com/en-us/windows/win32/api/dwmapi/ne-dwmapi-dwmwindowattribute)
+   对标题栏定制能力最强的方式，除了按钮本身都可以定制，并且支持各种调整，可以视为用Win32模仿UWP行为，但只能Windows 11用，我个人推测可能是依赖只有Windows 11可用的DWM属性 [DWMWINDOWATTRIBUTE](https://learn.microsoft.com/en-us/windows/win32/api/dwmapi/ne-dwmapi-dwmwindowattribute)
 
    存在的问题是无法在顶部调整窗口大小，该问题有待解决
 
 使用第二种方案的话只需要简单几个步骤：
 
-首先设置如下的 XAML。
+首先设置如下的XAML。
 
 ```xaml
 
@@ -66,7 +66,7 @@ UWP 使用 `AppWindow` 和 `CoreWindow` 管理标题栏，对于深度定制来�
 
 然后对 `Window` 对象调用 `SetTitleBar`，参数为 `AppTitleBar` 对象，最后设置 `Window` 对象的属性 `ExtendsContentIntoTitleBar` 为 `true` 即可。
 
-使用第三种方案的话也要添加如上的 Xaml，然后在 App.xaml.cpp 中添加如下代码：
+使用第三种方案的话也要添加如上的Xaml，然后在App.xaml.cpp中添加如下代码：
 
 ```cpp
 
