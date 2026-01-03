@@ -34,7 +34,8 @@ textarea {
 }
 
 .main-container {
-	max-width: 1024px
+	max-width: 1024px;
+	text-autospace: normal
 }
 
 #logo {
