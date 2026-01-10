@@ -31,7 +31,6 @@ Other files with 3rd-party licences can be found [here](/assets/README.md).
 + DIYGod  - [APlayer](https://github.com/DIYgod/APlayer) - MIT
 + YexuanXiao - [Pio-ts](https://github.com/YexuanXiao/Pio-ts) - MIT
 + metowolf - [MetingJS](https://github.com/metowolf/MetingJS) - MIT
-+ Vinta Chen - [pangu.js](https://github.com/vinta/pangu.js/) - MIT
 + Dreamer-Paul - [Pio](https://github.com/Dreamer-Paul/Pio) - GPL-2.0
 + mathjax.org - [MathJax](https://github.com/mathjax/MathJax) - Apache-2.0
 

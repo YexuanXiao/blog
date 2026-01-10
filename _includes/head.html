@@ -17,6 +17,10 @@
 	<link rel="stylesheet" href="//static.nykz.org/Single/bulma.tiny.css">
 	<link rel="stylesheet" href="{{ site.alternateurl }}/assets/styles/core.css">
 	<link rel="stylesheet" href="{{ site.alternateurl }}/assets/styles/dark.css">
+	<link rel="stylesheet" href="//static.nykz.org/Single/APlayer.min.css">
+	{% if site.live2d.enable == true %}
+    <link rel="stylesheet" href="//static.nykz.org/Single/Pio.css">
+    {% endif %}
 	{% comment %} select article pages {% endcomment %}
 	{% if page.layout == 'post' %}
 	<link rel="stylesheet" href="{{ site.alternateurl }}/assets/styles/article.css">

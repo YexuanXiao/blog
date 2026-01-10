@@ -1,18 +1,22 @@
 ---
 layout: null
 ---
-'use strict';
 /* 2020-2026 YexuanXiao under the MIT License */
 
+// live2D dialog
+function render(text) {
+	window.Noire ? window.Noire.Message(text) : console.warn("Noire doesn't exist!")
+}
+
 // for the random quote in the title
-(async () => {
+{
 	const response = await fetch('/assets/slogan.txt')
 	const text = await response.text()
 	const lines = text.split('\n')
 	const randLine = lines[Math.floor((Math.random() * lines.length) + 1)]
 	document.getElementById('quote').textContent = randLine
 	setTimeout(() => { render(randLine) }, 100000)
-})()
+}
 
 // function for control search manu and navbar menu display or not
 // 0 for hide search-menu
@@ -20,7 +24,7 @@ layout: null
 // 2 for close navbar-menu
 
 const closeMenu = (() => {
-	const searchMenu = document.body.querySelector('#search-panel>div')
+	const searchMenu = document.getElementById('search-panel').lastElementChild
 	const navbarBurger = document.getElementById('menu-burger')
 	const navbarMenu = document.getElementById('navbar-menu')
 	return (x) => {
@@ -44,6 +48,8 @@ const closeMenu = (() => {
 		menu.classList.toggle('is-active')
 		closeMenu(0)
 	})
+	// disable checkbox hack
+	menu.classList.remove('js-disabled')
 }
 
 // footnote dynamic popup tooltips
@@ -74,15 +80,12 @@ for (const sup of document.body.querySelectorAll('sup.footnote-ref')) {
 
 // check search bar value to display search-menu
 const checkInput = (() => {
-	const input = document.body.querySelector('#search-panel>input')
+	const input = document.getElementById('search-panel').firstElementChild
 	return () => {
 		closeMenu(2)
 		const inputValue = input.value
 		render(`{% if site.i18n.l2dmessage.search %}{{ site.i18n.l2dmessage.search }}{% else %}Searching{% endif %} ${inputValue} ...`)
-		if (!inputValue)
-			closeMenu(0)
-		else
-			closeMenu(1)
+		closeMenu(inputValue ? 1 : 0)
 	}
 })()
 
@@ -98,7 +101,7 @@ document.getElementById('navbar').addEventListener('click', (event) => {
 
 // make navbar flow on the top and progress bar
 {
-	const navbar = document.body.querySelector('#navbar')
+	const navbar = document.getElementById('navbar')
 	const topProcess = document.createElement('div')
 	const article = document.body.querySelector('article')
 	const container = document.body.querySelector('.main-container')

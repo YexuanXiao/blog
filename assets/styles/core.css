@@ -96,7 +96,7 @@ article code {
 */
 @media screen and (max-width:1023px) {
 	#navbar-menu.is-active,
-	#menu-toggle:checked~#navbar-menu {
+	#menu-toggle:checked~#navbar-menu.js-disabled {
 		display: block
 	}
 

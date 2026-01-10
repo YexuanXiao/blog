@@ -31,8 +31,7 @@ window.Noire = new Pio({
 		night:false
 	},
 	model: [
-		{% if site.live2d.enable == true %}{% for module in site.live2d.modules %}{% if forloop.last == true %} '{{ module }}' {% else %} '{{ module }}', {% endif %}{% endfor %}{% endif %}
+		{% for module in site.live2d.modules %}{% if forloop.last == true %} '{{ module }}' {% else %} '{{ module }}', {% endif %}{% endfor %}
 	],
 	tips: true
 });
-loadStyles('//static.nykz.org/Single/Pio.css')

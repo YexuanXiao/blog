@@ -1,28 +1,4 @@
-<script>
-	function loadStyles(url) {
-		const link = document.createElement('link')
-		link.type = 'text/css'
-		link.rel = 'stylesheet preload'
-		link.as = 'style'
-		link.href = url
-		document.head.appendChild(link)
-	}
-	function loadScript(url) {
-		const script = document.createElement('script')
-		script.src = url
-		script.async = false
-		document.body.appendChild(script)
-	}
-	// live2D dialog
-	function render(text) {
-		Noire ? Noire.Message(text) : console.warn("Noire doesn't exist!")
-	}
-	{
-		const navbarBurger = document.body.querySelector('#navbar>div>.navbar-burger')
-		navbarBurger.classList.remove('is-hidden')
-	}
-</script>
-<script src="/assets/scripts/core.js">
+<script type=module src="/assets/scripts/core.js">
 </script>
 <script type="module">
 	// search
@@ -49,7 +25,6 @@
 <script type="module">
 	// music box
 	import MetingJSElement from '//static.nykz.org/Single/Meting.js'
-	loadStyles('//static.nykz.org/Single/APlayer.min.css')
 	if (customElements && !customElements.get('meting-js')) {
 		customElements.define('meting-js', MetingJSElement)
 	}
