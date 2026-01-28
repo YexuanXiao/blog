@@ -1,4 +1,4 @@
 source "https://rubygems.org"
     gem 'jekyll'
     gem 'jekyll-paginate'
-    gem 'jekyll-commonmark'
+    gem "commonmarker", "~> 0.23.4"

@@ -22,8 +22,9 @@ Abhishek Nagekar - [Soot-Spirits](https://github.com/abhn/Soot-Spirits) - MIT
 
 + Jeremy Thomas - [bulma](https://github.com/jgthms/bulma) - MIT
 + Christian - [Simple-Jekyll-Search](https://github.com/christian-fei/Simple-Jekyll-Search) - MIT
++ Jekyll - [jekyll-commonmark](https://github.com/jekyll/jekyll-commonmark) - MIT
 
-Other files with 3rd-party licences can be found [here](/assets/README.md).
+Other files with 3rd-party licences can be found [here](/assets/README.md)
 
 ### Optional 3rd-party Components (Code is not include directly)
 

@@ -132,64 +132,10 @@ document.getElementById('navbar').addEventListener('click', (event) => {
 	})
 }
 
-// conversion language's brachylogy to full name
-function bra2Full(language) {
-	language = language.toLowerCase()
-	switch (language) {
-		case 'asm':
-			return 'Assembly'
-		case 'cpp':
-		case 'c++':
-		case 'cxx':
-			return 'C++'
-		case 'cuda':
-			return 'CUDA C++'
-		case 'csharp':
-		case 'cs':
-			return 'C#'
-		case 'fsharp':
-			return 'F#'
-		case 'javascript':
-		case 'js':
-			return 'JavaScript'
-		case 'plaintext':
-			return 'Text'
-		case 'powershell':
-			return 'PowerShell'
-		case 'rs':
-		case 'rust':
-			return 'Rust'
-		case 'ruby':
-			return 'Ruby'
-		case 'ts':
-		case 'typescript':
-			return 'TypeScript'
-		case 'vb':
-		case 'visualbasic':
-			return 'VisualBasic'
-		default:
-			return language.toUpperCase()
-	}
-}
-
 // add a button for <pre> to copy code to clipboard
-for (let element of document.body.querySelectorAll('div.highlight')) {
-	element = element.parentNode
-	element.className = `${element.className} message is-primary`
-	const header = document.createElement('div')
-	header.className = 'message-header'
-	const begin = element.className.indexOf('language') + 9
-	const end = element.className.indexOf(' ', begin)
-	const icon = document.createElement('span')
-	icon.className = 'sw sw-code is-capitalized'
-	icon.setAttribute('aria-hidden', 'true')
-	icon.innerText = ` ${bra2Full(element.className.substring(begin, end))}`
-	header.appendChild(icon)
-	const code = element.querySelector('.highlight')
-	const button = document.createElement('span')
-	button.className = 'sw sw-document copy-code'
-	header.appendChild(button)
-	element.insertBefore(header, code)
+for (const button of document.body.querySelectorAll('span.copy-code')) {
+	button.classList.remove('is-hidden')
+	const code = button.parentNode.nextElementSibling
 	button.addEventListener('click', async () => {
 		try {
 			await navigator.clipboard.writeText(code.textContent.trim())
