@@ -19,19 +19,16 @@ C++/WinRT协程是积极启动的协程，这代表只要协程被调用，即�
 如果一个C++/WinRT协程的协程体是同步的，例如只有 `co_return` 语句，而没有其他 `co_await` 语句，那么调用该协程前后不会改变线程。
 
 ```cpp
-
 // 使用co_await等待该协程不会改变线程
 IAsyncAction foo()
 {
     co_return;
 }
-
 ```
 
 积极启动的设计来源于WinRT本身，使得外部调用者可以使用取消代替等待（同步）来结束一个异步任务。
 
 ```cpp
-
 auto task = AsyncTask();
 // other sync or async code
 if (canceled) {
@@ -39,7 +36,6 @@ if (canceled) {
 } else {
 	co_await task;
 }
-
 ```
 
 也可以把 `task` 存起来。
@@ -99,7 +95,6 @@ C++/WinRT异步编程中需要主要关心以下两点：调用会更改线程�
 例如，每隔1秒更新一次UI中的计数，在 `co_await` 后必须将线程切换回UI线程后更新内容：
 
 ```cpp
-
 auto&& canceled = co_await winrt::get_cancellation_token();
 co_await wil::resume_foreground(text.DispatcherQueue());
 for (unsigned x = 0u; !canceled(); ++x) {
@@ -109,7 +104,6 @@ for (unsigned x = 0u; !canceled(); ++x) {
     // 切换回UI线程
 	co_await wil::resume_foreground(text.DispatcherQueue());
 }
-
 ```
 
 当使用事件处理函数时，产生事件的线程即是事件处理函数被执行的线程。通常来说，应该确保所有事件都是由一个线程发出的。否则，请确保所有读取和修改操作都得到正确同步。

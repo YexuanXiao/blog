@@ -11,7 +11,6 @@ category: blog
 类模板的基本语法很简单：
 
 ```cpp
-
 #include <iostream>
 #include <string>
 template <class T1, class T2>
@@ -33,7 +32,6 @@ int main()
 	Person q("Tom", 1);
 	Person<std::string, int> r("Tom", 1);
 }
-
 ```
 
 注意，由于C++11不能自动推导出模板的类型，所以模板实例化出的p和q不能在C++11标准下编译通过，需要C++14。
@@ -45,7 +43,6 @@ int main()
 类模板由于使用了通用数据类型，所以类作为函数参数时也和普通类有所区别，表现在形参上：
 
 ```cpp
-
 #include <iostream>
 #include <string>
 template <class T1, class T2>
@@ -86,7 +83,6 @@ int main()
 	show_Name1(r);
 	show_Name2(r);
 }
-
 ```
 
 `show_Name` 是指定参数类型，这种方法直接指定了所有具体参数类型。

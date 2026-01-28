@@ -39,7 +39,6 @@ category: blog
 单例模式传统的实现方法是，当对象第一次使用时将其实例化，并用一个指针指向该对象，实现代码如下：
 
 ```cpp
-
 // from the header file以下代码来自头文件
 class Singleton
 {
@@ -61,7 +60,6 @@ Singleton *Singleton::instance()
     }
     return pInstance;
 }
-
 ```
 
 在单线程环境下，虽然中断会引起某些问题，但大体上这段代码可以运行得很好。如果代码运行到 `Singleton::instance()` 内部时发生中断，而中断处理程序调用的也是 `Singleton::instance()`，可以想象你将会遇到什么样的麻烦。因此，如果撇开中断不考虑，那么这个实现在单线程环境下可以运行得很好。
@@ -77,7 +75,6 @@ Singleton *Singleton::instance()
 将经典的单例实现成支持线程安全性是很容易的事，只需要在判断pInstance之前加锁即可：
 
 ```cpp
-
 Singleton *Singleton::instance()
 {
     Lock lock; // acquire lock (params omitted for simplicity) 加锁（为了简便起见，代码中忽略了加锁所需要的参数）
@@ -87,7 +84,6 @@ Singleton *Singleton::instance()
     }
     return pInstance;
 } // release lock (via Lock destructor) // 解锁（通过Lock的析构函数实现）
-
 ```
 
 这个解决办法的缺点在于可能会导致昂贵的程序执行代价：每次访问该函数都需要进行一次加锁操作。但实际中，我们只有pInstance初始化时需要加锁。也就是说加锁操作只有 `instance()` 第一次被调用时才是必要的。如果在程序运行过程中， `instance()` 被调用了n次，那么只有第一次调用锁起了作用。既然另外的n - 1次锁操作都是没必要的，那么我们为什么还要付出n次锁操作的代价呢？DCLP就是设计来解决这个问题的。
@@ -99,7 +95,6 @@ DCLP的关键之处在于我们观察到的这一现象：调用者在调用 `in
 以下是DCLP经典的实现代码：
 
 ```cpp
-
 Singleton *Singleton::instance()
 {
     if (pInstance == 0)
@@ -112,7 +107,6 @@ Singleton *Singleton::instance()
     }
     return pInstance;
 }
-
 ```
 
 定义DCLP的文章中讨论了一些实现中的问题（例如，对单例指针加上volatile限定 [^4] 的重要性，以及多处理器系统上独立缓存的影响，这两点我们将在下文讨论；但关于某些读写操作需要确保原子性这一点本文不予讨论），但他们都没有考虑到一个更基本的问题：DCLP的执行过程中必须确保机器指令是按一个可接受的顺序执行的。本文将着重讨论这个基本问题。
@@ -124,9 +118,7 @@ Singleton *Singleton::instance()
 我们再来思考一下初始化pInstance的这行代码：
 
 ```cpp
-
 pInstance = new Singleton;
-
 ```
 
 这条语句实际做了三件事情：
@@ -140,7 +132,6 @@ pInstance = new Singleton;
 请看下面这段代码。我们将pInstance初始化的那行代码分解成我们上文提及的三个步骤来完成，把步骤1（内存分配）和步骤3（指针赋值）写成一条语句，接着写步骤2（构造Singleton对象）。正常人当然不会这么写代码，可是编译器却有可能将我们上文写出的DCLP源码生成出以下形式的等价代码：
 
 ```cpp
-
 Singleton *Singleton::instance()
 {
     if (pInstance == 0)
@@ -155,7 +146,6 @@ Singleton *Singleton::instance()
     }
     return pInstance;
 }
-
 ```
 
 一般情况下，将DCLP源码转化成这种代码是不正确的，因为在步骤2调用Singleton的构造函数时，有可能抛出异常（exception）。如果异常抛出，很重要的一点在于pInstance的值还没发生改变。这就是为什么一般来说编译器不会把步骤2和步骤3的位置对调。然而，在某些条件下，生成的这种代码是合法的。最简单的一种情况是编译器可以保证Singleton构造函数不会抛出异常（例如通过内联化后的流分析（post-inlining flow analysis），当然这不是唯一情况。有些抛出异常的构造函数会自行调整指令顺序，因此才会出现这个问题。
@@ -180,7 +170,6 @@ Singleton *Singleton::instance()
 C/C++标准根据抽象机器的可见行为（observable behavior）定义了正确的程序行为。但抽象机器里并非所有行为都可见。例如下文中这个简单的函数：
 
 ```cpp
-
 void Foo()
 {
     int x = 0, y = 0;       // Statement 1语句1
@@ -188,7 +177,6 @@ void Foo()
     y = 10;                 // Statement 3语句3
     printf("%d, %d", x, y); // Statement 4语句4
 }
-
 ```
 
 这个函数看起来挺傻，但它可能是Foo调用其它内联函数展开后的结果。
@@ -231,7 +219,6 @@ C/C++的编译器和链接器执行这些优化操作时，只会受到C/C++标�
 [^8]: David Bacon, Joshua Bloch, Jeff Bogda, Cliff Click, Paul Hahr, Doug Lea, Tom May, Jan-Willem Maessen, John D. Mitchell, Kelvin Nilsen, Bill Pugh, and Emin Gun Sirer. The “Double-Checked Locking Pattern is Broken” Declaration. Available at http://www.cs.umd.edu/∼pugh/java/memoryModel/DoubleCheckedLocking.html.
 
 ```cpp
-
 Singleton *Singleton::instance()
 {
     Singleton *tmp = pInstance;
@@ -251,7 +238,6 @@ Singleton *Singleton::instance()
     }
     return tmp;
 }
-
 ```
 
 Arch Robison指出这种解决办法杀伤力过大了：从技术上说，我们并不需要完整的双向屏障。第一道屏障可以防止另一个线程先执行Singleton构造函数之后的代码，第二道屏障可以防止pInstance初始化的代码先于Singleton对象的初始化。有一组称作“请求”和“释放”操作可以比单纯用硬件支持内存关卡具有更高的效率。
@@ -265,24 +251,20 @@ Arch Robison指出这种解决办法杀伤力过大了：从技术上说，我�
 第二，尽管从本质上讲DCLP并不局限于单例模式，但以DCLP的方式使用单例模式往往会导致编译器去优化跟线程安全有关的语句。因此，你必须避免用DCLP实现Singleton模式。由于DCLP每次调用 `instance()` 时都需要加一个同步锁，如果你（或者你的客户）很在意加锁引起的性能问题，你可以建议你的客户将 `instance()` 返回的指针缓存起来，以达到最小化调用 `instance()` 的目的。例如，你可以建议他不要这么写代码：
 
 ```cpp
-
 Singleton::instance() -> transmogrify();
 Singleton::instance() -> metamorphose();
 Singleton::instance() -> transmute();
 clients do things this way :
-
 ```
 
 而应该将上述代码改写成：
 
 ```cpp
-
 Singleton * const instance =
 Singleton::instance(); // cache instance pointer用变量存instance()指针
 instance -> transmogrify();
 instance -> metamorphose();
 instance -> transmute();
-
 ```
 
 要实现这个想法有个有趣的办法，就是鼓励用户尽量在每个需要使用Singleton对象的线程开始时，只调用一次 `instance()`，之后该线程就可直接使用缓存在局部变量中的指针。使用该方法的代码，对每个线程都只需要承担一次 `instance()` 调用的代价即可。

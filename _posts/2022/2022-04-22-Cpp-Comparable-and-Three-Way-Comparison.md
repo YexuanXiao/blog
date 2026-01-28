@@ -13,14 +13,12 @@ category: blog
 C++20之前，一共支持6种比较运算符重载：
 
 ```cpp
-
 bool operator<(L, R);
 bool operator>(L, R);
 bool operator<=(L, R);
 bool operator>=(L, R);
 bool operator==(L, R);
 bool operator!=(L, R);
-
 ```
 
 同时，也支持6种作为成员函数的比较运算符重载。
@@ -37,10 +35,8 @@ bool operator!=(L, R);
 C++20添加了三路比较运算符的重载，此后只需要实现两个重载函即可：
 
 ```cpp
-
 bool operator==(L, R);
 bool operator<=>(L, R);
-
 ```
 
 三路比较运算符可以生成四种偏序/全序比较运算符的重载，等于运算符可以生成不等于运算符的重载。
@@ -52,7 +48,6 @@ bool operator<=>(L, R);
 任何一个有序集合的创建，都需要对元素进行比较，为了达到全序的目的，大部分算法遵从此规则：如果 `a < b` 和 `a > b` 都不成立，则 `a == b` 成立。
 
 ```cpp
-
 void insert(const Comparable &x, Container &v){
 
     if(t = nullptr){
@@ -66,7 +61,6 @@ void insert(const Comparable &x, Container &v){
         /* 相等 */
     };
 }
-
 ```
 
 可以看出，`a == b` 全等于 `!(a > b) && !(a < b)`
@@ -139,7 +133,6 @@ C++20根据有序概念设计了3种对象：
 以下是使用三路比较运算符的简单实践：
 
 ```cpp
-
 #include <compare>
 #include <cassert>
 #include <cmath>
@@ -251,7 +244,6 @@ int main() {
 	testUserDefined();
 	CompareExample();
 }
-
 ```
 
 <div class="ref-label">参考</div>

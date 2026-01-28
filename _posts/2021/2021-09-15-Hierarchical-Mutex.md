@@ -11,7 +11,6 @@ C++并发编程实战第二版展示了一种C++多线程设计技巧hierarchica
 `hierarchical_mutex` 可以理解为是一种半自动的 `std::lock`，`std::lock` 是使用原子操作去防止死锁，保证顺序，而 `hierarchical_mutex` 是使用数字顺序作为层次保证互斥器的逻辑顺序正确从而防止死锁。
 
 ```cpp
-
 class hierarchical_mutex
 {
     std::mutex internal_mutex;
@@ -60,7 +59,6 @@ public:
 };
 thread_local size_t
     hierarchical_mutex::this_thread_hierarchy_value(0xffffffff); // 8
-
 ```
 
 `hierarchical_mutex` 中有3个数字记录，分别是：

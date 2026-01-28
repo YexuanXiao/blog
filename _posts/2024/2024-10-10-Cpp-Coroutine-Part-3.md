@@ -11,7 +11,6 @@ category: blog
 根据现有信息，可以大致拟划出线程池需要的非静态数据成员（出于教学目的，只依赖C++标准库，如有需求可以自行调整）：
 
 ```cpp
-
 class thread_pool
 {
     bool exit_flag_{};                                  // 线程池结束标记
@@ -27,7 +26,6 @@ class thread_pool
     mutex lazy_mutex_;                                  // 保护延迟任务的锁
     mutex priority_mutex_;                              // 保护优先级任务的锁
 }
-
 ```
 
 ## 工作线程
@@ -35,7 +33,6 @@ class thread_pool
 为了让协程能在指定线程运行，需要为每个线程分配一个队列，保护队列的锁，同时还需要有一个信号量用于暂停线程以及线程对象本身。
 
 ```cpp
-
 class wthread
 {
 	using vector = std::vector<std::coroutine_handle<>>;
@@ -44,7 +41,6 @@ class wthread
 	vector w_{};                        // 待执行队列
 	mutex m_{};                         // 保护队列的锁
 }
-
 ```
 
 之所以使用 `std::vector` 而不是 `std::deque` 是因为[STL](https://github.com/microsoft/STL/issues/147)的实现是错误的。另外 `std::coroutine_handle<>` 是平凡复制并且仅有一个指针的大小，同时队列中通常具有少部分元素，因此性能会比使用 `std::deque` 好。在实践中可以考虑使用环形队列。
@@ -54,7 +50,6 @@ class wthread
 为了能够让拥有指定线程ID的任务能够找到该线程，添加比较函数，以及 `join` 函数，用于关闭线程池时清理线程防止泄漏：
 
 ```cpp
-
 bool operator==(std::thread::id id)
 {
 	return t_.get_id() == id;
@@ -73,7 +68,6 @@ void push_back(std::coroutine_handle<> c)
 	}
 	s_.release();
 }
-
 ```
 
 `push_back` 函数用于添加任务，使用 `release` 函数通知信号量以唤醒该线程 。
@@ -81,7 +75,6 @@ void push_back(std::coroutine_handle<> c)
 因此，任务循环如下：
 
 ```cpp
-
 void consume(thread_pool& pool) noexcept
 {
 	while (true)
@@ -97,7 +90,6 @@ void consume(thread_pool& pool) noexcept
 		t();
 	}
 }
-
 ```
 
 `consume` 中的所有函数都不会失败，因此锁定和解锁可以直接使用成员函数而不需要使用 `unique_lock`。注意在调用 `t` 之前需要解锁，否则会变成阻塞执行。
@@ -107,12 +99,10 @@ void consume(thread_pool& pool) noexcept
 然后实现线程启动：
 
 ```cpp
-
 void start(thread_pool& pool)
 {
 	t_ = std::jthread([this, &pool] { consume(pool); });
 }
-
 ```
 
 由于工作线程需要等到线程池的其他成员都准备好后再启动，因此需要给工作线程特设一个 `start` 函数用于启动线程。由于基本的互斥锁都是不能移动的，想要让互斥锁移动需要将锁独立分配在堆上，而在本例中不需要这么复杂，因此本例中不能使用移动构造函数来让 `wthread` 使用移动的方式延迟绑定到线程（而 `std::thread` 由于不储存锁因此可以使用移动的方式）。
@@ -122,11 +112,9 @@ void start(thread_pool& pool)
 在线程池销毁时，工作线程可能由于没有剩余任务而等待在 `s_.acquire()` 调用上，还需要一个 `wake()` 函数用于在线程池结束时唤醒线程让线程有序退出。
 
 ```cpp
-
 void wake() noexcept {
 	s_.release();
 }
-
 ```
 
 至此，工作线程基本完成了，但实际上还有一个额外的设计，将在后文补充。
@@ -140,7 +128,6 @@ void wake() noexcept {
 因此，完整版的工作线程实现如下：
 
 ```cpp
-
 class wthread
 {
 	using vector = std::vector<std::coroutine_handle<>>;
@@ -212,7 +199,6 @@ public:
 		t_ = std::jthread([this, &pool] { consume(pool); });
 	}
 };
-
 ```
 
 `push_back` 和 `push_back_and_add` 的区别是：
@@ -223,7 +209,6 @@ public:
 然后，给线程池类添加上使用该就序列表的函数：
 
 ```cpp
-
 // 尝试将线程从就绪列表中取出并且发送任务
 bool try_run_(std::coroutine_handle<> handle)
 {
@@ -235,7 +220,6 @@ bool try_run_(std::coroutine_handle<> handle)
 	pending_list_.pop_back();
 	return true;
 }
-
 ```
 
 唯一需要注意的是 `push_back_and_add` 函数调用可能失败，因此需要在 `pending_list_.pop_back()` 前调用它并且使用 `std::lock_guard` 保护到最后。
@@ -245,7 +229,6 @@ bool try_run_(std::coroutine_handle<> handle)
 这部分其实没什么好说的，将 `lazy_task` 和 `priority_task` 实现为聚合类即可：
 
 ```cpp
-
 struct priority_task
 {
 	std::coroutine_handle<> handle;
@@ -264,7 +247,6 @@ struct lazy_task
 		return rhs.time <=> time;
 	}
 };
-
 ```
 
 注意，延迟任务需要小根堆，而 `std::priority_queue` 默认是大根堆，因此需要调换延迟任务的比较函数的左侧参数和右侧参数对此进行调整。
@@ -274,7 +256,6 @@ struct lazy_task
 到此为止，如何实现该函数以及非常简单了：
 
 ```cpp
-
 void priority_loop_()
 {
 	while (true)
@@ -290,7 +271,6 @@ void priority_loop_()
 			priority_queue_.pop();
 	}
 }
-
 ```
 
 整体和工作线程的任务循环类似，但唯一不同的是，工作线程是严格的1:1通知和消费，而优先级任务循环不是，因此需要检查队列是否为空。
@@ -300,7 +280,6 @@ void priority_loop_()
 实现延迟任务循环则略微复杂：
 
 ```cpp
-
 void lazy_loop_()
 {
 	while (true)
@@ -336,7 +315,6 @@ void lazy_loop_()
 		}
 	}
 }
-
 ```
 
 首先，`lazy_waiter_.acquire()` 保证仅仅在队列中有元素时才返回，因此无需在入口判断队列是否为空。其次在未到时间时，先解锁再使用 `try_acquire_until`，这非常类似于条件变量的 `try_wait_until`，但不同于条件变量，此时并不需要重新上锁，而是进入下一轮。最后，`task` 需要复制而不是仅仅使用左值引用，因为锁无论在等待分支还是执行分支都会先被无条件解除。
@@ -344,7 +322,6 @@ void lazy_loop_()
 ## 线程池构造和析构
 
 ```cpp
-
 thread_pool(std::size_t num = 0uz)
 	: work_threads_(std::max<std::size_t>({ std::thread::hardware_concurrency(), num, 2uz }))
 {
@@ -372,7 +349,6 @@ void exit() noexcept
 	for (auto& i : work_threads_)
 		i.join();
 }
-
 ```
 
 线程池构造时，首先计算好合适的线程数量，然后循环将就序列表填充并且启动工作线程，最后启动优先级任务线程和延迟任务线程。之所以要在函数体内启动，是为了防止过早启动的线程访问到未初始化的其他成员。
@@ -384,7 +360,6 @@ void exit() noexcept
 ## 上下文及其捕获
 
 ```cpp
-
 class context
 {
 	std::thread::id tid_;
@@ -412,7 +387,6 @@ static context capture_context() noexcept
 {
 	return context{ std::this_thread::get_id() };
 }
-
 ```
 
 上下文即线程ID，但为了确保不会误用，禁止用户从线程ID转换为上下文。
@@ -422,7 +396,6 @@ static context capture_context() noexcept
 最后要实现的就是任务发起函数：
 
 ```cpp
-
 void run_once(std::coroutine_handle<> callback, std::size_t priority = 0uz)
 {
 	std::lock_guard lock{ priority_mutex_ };
@@ -449,7 +422,6 @@ void run_in(std::coroutine_handle<> callback, context ctx)
 	// 上下文是损坏的，程序有BUG
 	std::abort();
 }
-
 ```
 
 函数的逻辑非常简单，唯一需要注意的是 `emplace` 要早于 `release`，保证异常安全，其余内容留给读者自行思考。

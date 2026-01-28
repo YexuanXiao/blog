@@ -18,19 +18,15 @@ category: blog
 现在就可以根据以上信息得到四句修改注册表的命令：
 
 ```powershell
-
 //深色
 reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize /v SystemUsesLightTheme /t REG_DWORD /d 0 /f
 reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize /v AppsUseLightTheme /t REG_DWORD /d 0 /f
-
 ```
 
 ```powershell
-
 //浅色
 reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize /v SystemUsesLightTheme /t REG_DWORD /d 1 /f
 reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize /v AppsUseLightTheme /t REG_DWORD /d 1 /f
-
 ```
 
 此时需要老朋友 任务计划程序 来定时执行的命令：
@@ -55,17 +51,14 @@ reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize /v App
 由于任务计划本身是不包含逻辑判断的，那么就需要使用Powershell或者C++来进行判断。
 
 ```powershell
-
 PowerShell if(([int](Get-Date -Format %H) -gt 6) -and ([int](Get-Date -Format %H) -lt 20)) {reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize /v SystemUsesLightTheme /t REG_DWORD /d 1 /f} else {reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize /v SystemUsesLightTheme /t REG_DWORD /d 0 /f}
 
 PowerShell if(([int](Get-Date -Format %H) -gt 6) -and ([int](Get-Date -Format %H) -lt 20)) {reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize /v AppsUseLightTheme /t REG_DWORD /d 1 /f} else {reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize /v AppsUseLightTheme /t REG_DWORD /d 0 /f}
-
 ```
 
 或者C++ :
 
 ```cpp
-
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
@@ -84,7 +77,6 @@ int main()
        system("reg add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v AppsUseLightTheme /t REG_DWORD /d 0 /f");
    }
 }
-
 ```
 
 <br>
@@ -159,28 +151,22 @@ int main()
 然后将想要更换的两张壁纸放入这个目录，再在之前设置好的开关机触发的任务计划中添加如下操作：
 
 ```powershell
-
 PowerShell if(([int](Get-Date -Format %H) -gt 6) -and ([int](Get-Date -Format %H) -lt 20)) {reg add reg add "hkcu\control panel\desktop" /v wallpaper /d "浅色图片地址" /f} else {reg add reg add "hkcu\control panel\desktop" /v wallpaper /d "深色图片地址" /f /t REG_DWORD /d 0 /f}
 RunDll32.exe USER32.DLL,UpdatePerUserSystemParameters
-
 ```
 
 浅色触发的：
 
 ```powershell
-
 reg add reg add "hkcu\control panel\desktop" /v wallpaper /d "浅色图片地址" /f /t REG_DWORD /d 0 /f
 RunDll32.exe USER32.DLL,UpdatePerUserSystemParameters
-
 ```
 
 深色触发的：
 
 ```powershell
-
 reg add reg add "hkcu\control panel\desktop" /v wallpaper /d "深色图片地址" /f /t REG_DWORD /d 0 /f
 RunDll32.exe USER32.DLL,UpdatePerUserSystemParameters
-
 ```
 
 即可实现随着自动切换颜色模式而切换壁纸。

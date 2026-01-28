@@ -15,14 +15,12 @@ C++用constexpr关键词设计了一系列辅助编译器优化的特性，此�
 如果一个类是聚合类，那么就可以使用聚合初始化：
 
 ```cpp
-
 class Location{
 public:
     int x;
     int y;
 };
 Location pt = {10, 10};
-
 ```
 
 在聚合类的基础上，还可以衍生出一个新的概念，字面值常量类。
@@ -39,7 +37,6 @@ Location pt = {10, 10};
 那么首要的，字面值常量类需要constexpr构造函数：
 
 ```cpp
-
 class Location{
 public:
     constexpr Location(int _x, int _y) :x(_x),y(_y){}
@@ -49,7 +46,6 @@ public:
 };
 
 constexpr Location l = {10, 10};
-
 ```
 
 这时，Location就从聚合类变为了字面值常量类，编译器就会对Location的成员进行编译期求值。

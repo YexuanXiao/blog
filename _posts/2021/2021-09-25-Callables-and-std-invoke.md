@@ -11,7 +11,6 @@ C++11添加了lambda的支持，这使得C++拥有了5种可调用对象：函�
 std::invoke在GCC中的实现如下：
 
 ```cpp
-
 template <typename _Functor, typename... _ArgTypes>
 struct invoke_result
     : public __invoke_result<_Functor, _ArgTypes...>
@@ -28,7 +27,6 @@ invoke(_Callable &&__fn, _Args &&...__args) noexcept(is_nothrow_invocable_v<_Cal
     return std::__invoke(std::forward<_Callable>(__fn),
                          std::forward<_Args>(__args)...);
 }
-
 ```
 
 其中invoke\_result其实是编译器的一个黑魔法，invoke\_result代表可调用对象的返回值，invoke\_result\_t是invoke\_result的类型，通过别名模板定义。
@@ -38,7 +36,6 @@ is\_nothrow\_invocable\_v用于检查调用是否合法。
 std::\_\_invoke内部实际上是将参数传递给了std::\_\_invoke\_impl：
 
 ```cpp
-
 template <typename _Callable, typename... _Args>
 constexpr typename __invoke_result<_Callable, _Args...>::type
 __invoke(_Callable &&__fn, _Args &&...__args) noexcept(__is_nothrow_invocable<_Callable, _Args...>::value)
@@ -49,13 +46,11 @@ __invoke(_Callable &&__fn, _Args &&...__args) noexcept(__is_nothrow_invocable<_C
     return std::__invoke_impl<__type>(__tag{}, std::forward<_Callable>(__fn),
                                       std::forward<_Args>(__args)...);
 }
-
 ```
 
 std::\_\_invoke\_impl分别实现了不同情况下的函数调用，有五种重载。
 
 ```cpp
-
 //1
 template <typename _Res, typename _Fn, typename... _Args>
 constexpr _Res
@@ -94,7 +89,6 @@ __invoke_impl(__invoke_memobj_deref, _MemPtr &&__f, _Tp &&__t)
     return (*std::forward<_Tp>(__t)).*__f;
 }
 
-
 ```
 
 值得注意的是，std::\_\_invoke\_impl对成员函数进行了额外的处理：它会使用args的第一个参数作为类的this，args中剩余的参数被传递给Callable。
@@ -102,7 +96,6 @@ __invoke_impl(__invoke_memobj_deref, _MemPtr &&__f, _Tp &&__t)
 对于其他可调用对象，所有args被传递给Callable。
 
 ```cpp
-
 #include <functional>
 #include <iostream>
  
@@ -130,7 +123,6 @@ int main() {
     std::cout << "num_: " << std::invoke(&Foo::num_, foo) << std::endl;
     std::invoke(Print(), 18);
 }
-
 ```
 
 通过std::invoke和 完美转发，能够轻松设计出接收任意可调用对象的函数。

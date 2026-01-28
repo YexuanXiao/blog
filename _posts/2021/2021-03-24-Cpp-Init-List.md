@@ -13,25 +13,21 @@ category: blog
 `class-name parameter-list(optional)except-spec(optional)attr(optional){}`
 
 ```cpp
-
 class A {
     const int a;
     int b;
     A(int i):a(10),b(i){
     }
 };
-
 ```
 
 并且，如果派生类想要调用基类的构造函数，那么只能在初始化列表中调用。
 
 ```cpp
-
 class B :public A {
     A:B(){
     }
 };
-
 ```
 
 派生类中包括默认在内的构造函数也可以通过上述方法调用其他重载的构造函数进行初始化。
@@ -43,14 +39,12 @@ class B :public A {
 对于C++来说，struct和class都可以声明一个类，但是在C中没有类的概念，只有struct结构体。当一个类所有成员都是public，没有使用类内初始化，没有构造函数，没有基类也没有使用虚函数，此时可以使用初始化列表的形式初始化成员。
 
 ```cpp
-
 struct Data {
     int ival;
     string s;
 };
 
 Data a = {0,"string"};
-
 ```
 
 初始化列表中顺序需要和类的成员声明顺序一致。

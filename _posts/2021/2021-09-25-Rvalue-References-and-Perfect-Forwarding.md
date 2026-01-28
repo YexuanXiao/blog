@@ -13,7 +13,6 @@ C++11开始增加了移动语义和右值引用，这使得函数的重载变得
 上一篇文章[C++ std::move](/blog/2021/09/23/std-move/)中提到过 `std::remove_reference` 和 `static_cast` 用于实现 `std::move`，而 `std::forward` 也是用这两个组件实现的：
 
 ```cpp
-
 template <typename T>
 constexpr T&& forward(std::remove_reference_t<T> &t) noexcept
 {
@@ -25,7 +24,6 @@ constexpr T&& forward(std::remove_reference_t<T> &&t) noexcept
 {
     return static_cast<T&&>(t);
 }
-
 ```
 
 std::forward会将输入的参数原封不动地传递到下一个函数中，如果输入的参数是左值，那么传递给下一个函数的参数的也是左值；如果输入的参数是右值，那么传递给下一个函数的参数的也是右值。
@@ -55,7 +53,6 @@ std::forward会将输入的参数原封不动地传递到下一个函数中，�
 右值引用只能绑定到右值上，左值除了可以绑定到左值上，在某些条件下还可以绑定到右值上。这里某些条件绑定右值为：常量左值引用绑定到右值，非常量左值引用不可绑定到右值。
 
 ```cpp
-
 std::string f()
 {
     return string("abc");
@@ -66,7 +63,6 @@ std::string f()
     const std::string &s = f(); // still legal?
     std::cout << s << std::endl;
 }
-
 ```
 
 `g` 是合法的，原因是 `s` 是个左值，类型是常量引用，而 `f()` 返回右值，前面提到常量左值引用可以绑定到右值。
@@ -74,20 +70,17 @@ std::string f()
 可以用下面的例子来说明引用折叠：
 
 ```cpp
-
 template<typename T>
 void f(T&& param);
 
 int a;
 f(a);   // 传入左值,那么上述的T&& 是左值引用
 f(1);   // 传入右值,那么上述的T&& 是右值引用
-
 ```
 
 右值引用最常见的特性是延长临时对象的生命周期：
 
 ```cpp
-
 class A
 {
 public:
@@ -115,7 +108,6 @@ int main()
     std::cout << (typeid(A) == typeid(c)) << std::endl;
     std::cout << (typeid(A) == typeid(d)) << std::endl;
 }
-
 ```
 
 虽然 `c` 是右值引用，但是在使用的过程中，还是如同普通的左值引用。
@@ -131,7 +123,6 @@ int main()
 而完美转发是指让右值可以不断地以右值的身份传递下去：
 
 ```cpp
-
 #include <iostream>
 
 void F(int x)
@@ -157,7 +148,6 @@ int main()
     G(i); // 正确
     G(5); // 错误
 }
-
 ```
 
 这段代码实际上无法编译，但是证实了完美转发的存在，并且包含了右值引用，引用折叠。

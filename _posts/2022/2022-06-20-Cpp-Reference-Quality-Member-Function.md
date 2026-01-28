@@ -13,12 +13,10 @@ C++11开始，非静态成员函数增加了**引用限定修饰（ref-qualifier
 观察如下代码：
 
 ```cpp
-
 int main() {
 	std::string ("aaa") + std::string ("bbb") = std::string("cccc");
 	(std::string("aaa") + std::string("bbb")).capacity();
 }
-
 ```
 
 虽然可能正常人都不会这么写，但是C++中这是合法的。之前我多次提到过，C++为了让用户自定义类型也如同基本类型一样使用，所以允许运算符重载，但是有一点是不一样的：右值的基本类型只有读取操作，而右值的用户自定义类型可以有写入操作。
@@ -26,7 +24,6 @@ int main() {
 例如：
 
 ```cpp
-
 int foo(int x)
 {
     return x;
@@ -36,7 +33,6 @@ int main() {
     6 = 5;      // 错误
     foo(6) = 5; // 错误
 }
-
 ```
 
 但是，正如上面所展示的 `std::string` 一样，一个用户自定义类型的右值却是可以被赋值的，造成这种情况的原因可以从**赋值运算符的声明**中看出来：`string& operator=(const string& rhs)`。观察会发现，该赋值运算符的重载**只约束了参数和返回值，没约束 `*this`**，这就导致 `*this` 无论是一个左值，还是一个右值，都可以被赋值。
@@ -52,7 +48,6 @@ int main() {
 C++11开始，引入了一种新的语法，引用限定：
 
 ```cpp
-
 struct S
 {
     void member();
@@ -69,7 +64,6 @@ int main()
     s.rvalue();   // error
     S{}.rvalue(); // okay
 }
-
 ```
 
 至此，C++终于能对 `*this` 进行约束。所有的非静态成员函数都可以有**引用限定修饰**，包括 `operator=`，`operator+`，`operator-` 等等。
@@ -91,7 +85,6 @@ WG21的保守很快就让自己付出了代价。。。
 2017年初，range-v3 issue \#573中的一段代码引起了注意：
 
 ```cpp
-
 struct C
 {
     explicit C(std::string a) : bar(a) {}
@@ -109,7 +102,6 @@ int main()
         std::cout << c.bar << std::endl;
     }
 }
-
 ```
 
 注意，这里 `views::transform` 的参数 `lambda` 的返回值类型是什么？
@@ -127,12 +119,10 @@ Ranges（STL2）的最大优点不就是用Concept限定了STL算法，使得它
 这实在不怪Concepts。作为排序算法，最主要的要求之一其实就是元素必须是可交换的，而Swappable本身就蕴含了迭代器元素类型得是Readable和Writable的（毕竟交换核心就是个 `*a = std::move(*b)` 嘛...）这里的重点是Writable概念，毕竟正常观念中一个右值作为临时对象，并不应该是能修改的，毕竟所做的修改很快就会丢失。Writable的原始实现十分简单：
 
 ```cpp
-
 template <class Out, class T>
 concept bool Writable = requires(Out& o, T&& t) {
     *o = std::forward<T>(t); // not required to be equality preserving
 };
-
 ```
 
 本质上不过是简单的对 `*o` 进行赋值。然而，`*o` 的类型自然就是元素类型——这种时候就是一个右值 `std::string`，所以上面的 `ranges::sort` 本质上就是在测试 `std::string{} = std::string{}` 能不能合法（将 `move` 过后的右值 `std::string` 赋给元素类型，同样是右值 `std::string`）——而不幸的是，这个十分怪异且无意义的语句居然是合法的。
@@ -142,26 +132,22 @@ concept bool Writable = requires(Out& o, T&& t) {
 好在，Eric Niebler最后找到了一个解决方案。虽然他自己也承认是一个hack，但是STL2 issue \#381中提出的解决方案算是在语言层面上无法逆转这个错误的前提下最好的方案之一了。简单的来说，虽然C++成员函数默认都是不区分左右值的（从而导致了右值可修改的问题），但是它们至少从最开始就做对了一件事情——常量区分。默认来说，成员函数都是可变的——常量对象并不能调用啥cv-qualifier都没有的成员函数。因此，至少绝大多数赋值函数都没有 `const` 修饰（因为这是默认值） ，从而常量对象不能被赋值（当然，这是件大好事）。在左右值通过赋值操作符本身的ref-qualifier区分这一手段已经永远失效的情况下，新的解决方案就是使用这一操作符的常量性进行区分：对于右值Range，只要它的元素类型的常量对象是能赋值的，我们就认为这是一个代理引用类，从而通过；否则就不满足Writable。因此，新的Writable要求变成了这样：
 
 ```cpp
-
 template <class Out, class T>
 concept bool Writable = requires(Out& o, T&& t) {
     *o = std::forward<T>(t); // not required to be equality preserving
     const_cast<const reference_t<Out>&&>(*o) =
        std::forward<T>(t);   // not required to be equality preserving
 };
-
 ```
 
 新的这一条 `const_cast` 要求其实就是针对右值Range的：根据引用折叠规则，正常的左值Range实际上这条 `const_cast` 是没有意义的（注意！这里非常之复杂，在 `T = int&` 的时候，`const T = int& const = int&`，所以 `const T&& = (const T)&& = (int &)&& = int &`，没有 `const` 哦！），从而两个要求是重复的。而对于右值Range来说，元素类型不是引用，所以这里的 `const_cast` 实际上加入了常量性， 第二个要求也就是说这个常量对象必须能够赋值。举个例子：
 
 ```cpp
-
 int main() {
     int i{2}, j{3};
     const std::tuple<int&> t{i}, t2{j};
     t = t2; // OKAY
 }
-
 
 ```
 
@@ -176,7 +162,6 @@ int main() {
 对90% 的类来说，特殊成员中赋值操作符的定义应该带上 `&` 来仅限左值使用，也就是标准形式应该只有下面这些：
 
 ```cpp
-
 S& S::operator=(const S& other) & {/* ... */ return *this;}               // 复制赋值（正常）
 S& S::operator=(this S& self, const S& other) {/* ... */ return self; }   // 复制赋值（显式对象参数）
 
@@ -186,7 +171,6 @@ S& S::operator=(this S& self, S&& other) {/* ... */ return self; }        // 移
 // 或者：二合一选择
 S& S::operator=(S other) & { swap(other); return *this;}                  // 复制+移动赋值（copy-and-swap）
 S& S::operator=(this S& self, S other) { self.swap(other); return self; } // 复制+移动赋值（copy-and-swap，显式对象参数）
-
 ```
 
 用上显式对象参数是不是就觉得用 & 修饰很自然了呢？感觉不修饰才不对吧，反正显式对象参数压根不让你表示原来的无ref-qualifier。

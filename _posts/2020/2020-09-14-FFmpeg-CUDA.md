@@ -20,7 +20,6 @@ CUDA是建立在NVIDIA的GPUs上的一个通用并行计算平台和编程模型
 执行 `nvidia-smi` 可以得到 显卡情况以及正在使用显卡的程序
 
 ```powershell
-
 Mon Sep 14 06:56:10 2020
 +-----------------------------------------------------------------------------+
 | NVIDIA-SMI 451.82       Driver Version: 451.82       CUDA Version: 11.0     |
@@ -39,7 +38,6 @@ Mon Sep 14 06:56:10 2020
 |=============================================================================|
 |    0   N/A  N/A     11072      C   ...am Files\Tools\ffmpeg.exe    N/A      |
 +-----------------------------------------------------------------------------+
-
 ```
 
 然后去下载FFmpeg，并添加到 `PATH` 环境变量。
@@ -47,13 +45,11 @@ Mon Sep 14 06:56:10 2020
 执行 `ffmpeg -hwaccels` 可以得到该版本FFmpeg支持的硬件加速器。
 
 ```powershell
-
 Hardware acceleration methods:
 cuda
 dxva2
 qsv
 d3d11va
-
 ```
 
 dxva和d3d11va是解码器，cuda是NVIDIA CUDA，qsv是Intel Quick Sync Video。本文重点使用CUDA。
@@ -63,11 +59,9 @@ dxva和d3d11va是解码器，cuda是NVIDIA CUDA，qsv是Intel Quick Sync Video�
 由于使用了硬件编码器，所以nvenc\_hevc的参数比libx265少很多，本人简单测试得到了一个可以用的完整参数：
 
 ```powershell
-
 ffmpeg -i input.mkv -map 0 -c copy -c:v hevc_nvenc -preset slow -tune 1 -b:v 5000k -profile:v main10 -level 6 -b_ref_mode 1 -bf 4 -c:a copy out.mkv
 
 // -map 0 -c copy -c:v hevc_nvenc这种顺序和写法能保证ffmpeg复制所有其他不进行编码的流
-
 ```
 
 由于FFmpeg在4.4的时候修改了NVENC的程序，所以之前的参数现在不可用。
@@ -97,7 +91,6 @@ ffmpeg -i input.mkv -map 0 -c copy -c:v hevc_nvenc -preset slow -tune 1 -b:v 500
 附：批量转换视频，需要C++20
 
 ```cpp
-
 #include <filesystem>
 #include <format>
 #include <iostream>
@@ -174,11 +167,9 @@ int main()
         fs::rename(p2, p1);
     }
 }
-
 ```
 
 ```powershell
-
 ffmpeg -i file // 查看文件基本信息
 
 ffmpeg -codecs // 查看可用解码器
@@ -186,5 +177,4 @@ ffmpeg -codecs // 查看可用解码器
 ffmpeg -h encoder=hevc_nvenc // 获得编码器详细用法
 
 ffmpeg -ss 5:55.551 -i 2.mkv -vframes 1 2.png // 按帧截图，不是100%准确但是比直接用ffmpeg输出png准确
-
 ```

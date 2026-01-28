@@ -77,7 +77,6 @@ C++ 20全新设计了一类被叫做CPO（customization point object，定制点
 另一种方式是使用ADL两步法：
 
 ```cpp
-
 class A {
     friend void swap(A& lhs, A& rhs);
 }
@@ -88,7 +87,6 @@ using std::swap;
 swap(a, b);
 int i{}, j{};
 swap(i, j);
-
 ```
 
 由于 `swap(a, b)` 进行的是无限定查找，同时 `A` 不是标量类型，并且 `using` 声明不是函数声明（不会阻止ADL），因此ADL生效，找到了 `A::swap` 并使用，而后面的 `swap(i, j)` 中由于 `int` 是基础类型，因此不应用ADL，并且当前作用域存在 `std::swap`，因此找到了 `std::swap` 并使用。
@@ -112,7 +110,6 @@ Niebloids是C++ 20添加的Ranges新算法的一种叫法，Niebloids采用了�
 例如：
 
 ```cpp
-
 using std::vector;
 using namespace std::ranges;
 // or using std::ranges::find;
@@ -120,7 +117,6 @@ using namespace std::ranges;
 vetcor<int> a;
 find(a.begin(), a.end(), 2);
 // should call std::ranges::find
-
 ```
 
 但是现在存在两个问题：
@@ -143,7 +139,6 @@ find(a.begin(), a.end(), 2);
 当然，实现CPO和Niebloids并不需要多么复杂，如果你不想要知道原因（除了定制标准和发明CPO以外没人需要知道原因），照抄下面的模板即可：
 
 ```cpp
-
 namespace xxx {
   namespace iter_swap {
     struct fn {
@@ -154,5 +149,4 @@ namespace xxx {
     inline constexpr auto iter_swap = iter_swap::fn{};
   }
 }
-
 ```

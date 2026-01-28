@@ -11,10 +11,8 @@ C++的一大特性是能够通过指针直接管理内存，但是C++提供的�
 C++的指针可以对任何类型的数据构成进行二次解释，但是解释结果的正确是有前提的，举个简单例子：
 
 ```cpp
-
 int a = 1; // 假设int为32位
 float d = *(float*)(&a);
-
 ```
 
 这段代码在大部分编译器的默认配置下都是可以直接编译通过的，但是很明显，d的值是没意义的。
@@ -24,7 +22,6 @@ float d = *(float*)(&a);
 再有如下例子：
 
 ```cpp
-
 class A
 {
     int a = 1;
@@ -40,7 +37,6 @@ int main()
     B b;
     A a = *(A*)(&a);
 }
-
 ```
 
 因为 `A` 是 `B` 的基类，理所当然的支持 `B` 到 `A` 的向上转换，所以 `A` 和 `B` 是兼容类型。
@@ -60,7 +56,6 @@ int main()
 例如：
 
 ```cpp
-
 int i = 7;
 char* pc = (char*)(&i);
 if(pc[0] == (char)7) { // 通过char别名使用是OK的
@@ -68,7 +63,6 @@ if(pc[0] == (char)7) { // 通过char别名使用是OK的
 } else {
     puts("This system is big-endian");
 }
-
 ```
 
 此处使用 `char` 指针来读取 `int` 的首个字节，用于判断大小端，这是合理的。
@@ -78,7 +72,6 @@ if(pc[0] == (char)7) { // 通过char别名使用是OK的
 **cppreference提出了一种“极端”条件下影响编译器优化的例子：**
 
 ```cpp
-
 // int* 与double* 不能别名使用
 void f1(int *pi, double *pd, double d)
 {   // 编译器认为pi和pd没有潜在关联
@@ -94,7 +87,6 @@ void f2(int *pi, struct S *ps, struct S s)
     // 从 *pi的读取必须在每次通过 *ps写入后进行
     for (int i = 0; i < *pi; i++) *ps++ = s;
 }
-
 ```
 
 在违反严格别名规则的要求下，例如 `f1` 的 `pi` 和 `pd` 指向同一地址，编译器可能优化产生错误结果。
@@ -123,7 +115,6 @@ C标准委员会的解决方案是使用严格别名规则和 `restrict` 关键�
 [^2]: [P2131R0](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p2131r0.html)确认了P0593R6已经纳入标准。
 
 ```cpp
-
 struct X { int a, b; };
 X* make_x() {
 	X* p = (X*)malloc(sizeof(struct X));
@@ -131,7 +122,6 @@ X* make_x() {
 	p->b = 2;
 	return p;
 }
-
 ```
 
 未定义行为发生在对 `p->a` 和 `p->b` 的赋值上，`malloc` 仅仅申请了一块内存空间，并没有在该内存空间上构造对象，所以不存在对象 `*p`，也就不能执行 `p->a` 和 `p->b`。
@@ -141,7 +131,6 @@ X* make_x() {
 [^1]: 布置new的使用参见之前的文章[C++ new和delete](/blog/2021/08/23/new-and-delete/)。
 
 ```cpp
-
 #include <new>
 struct X { int a, b; };
 X* make_x() {
@@ -150,7 +139,6 @@ X* make_x() {
 	p->b = 2;
 	return p;
 }
-
 ```
 
 换句话说，C++中只有使用了 `new` 表达式，才做到了在内存中构造对象。
@@ -160,7 +148,6 @@ X* make_x() {
 P0593R6中还指出了如下问题：
 
 ```cpp
-
 void process(Stream* stream) {
     unique_ptr<char[]> buffer = stream->read();
     if (buffer[0] == FOO)
@@ -168,7 +155,6 @@ void process(Stream* stream) {
     else
         process_bar(reinterpret_cast<Bar*>(buffer.get())); // #2
 }
-
 ```
 
 许多程序试图访问一段来自网络或者文件的比特流，虽然你确定 \#1处的强制转换是合法的，但是这不代表它满足C++对**对象**和解引用的要求。
@@ -184,7 +170,6 @@ P0593R6提出，纯粹的内存数据没有明确的生命周期，对于C++来�
 还有如下的例子：
 
 ```cpp
-
 #include <new>
 
 struct X {
@@ -196,7 +181,6 @@ int main() {
 	new(&p) X{ 8 }; // placement new的返回值不应该忽略
 	int b = p.n; //未定义行为，b的值是不确定的
 }
-
 ```
 
 上述代码出现ub的原因是没有通过 `new` 的返回值来初始化b，这将导致编译器做出错误优化：编译器认为 `X::n` 是 `const`，并且 `p` 是一个栈上对象，所以 `p.n` 是一个常量，所以 `int b = p.n` 可以被移动到它的上一句的前面。
@@ -206,7 +190,6 @@ int main() {
 C++17引入了一个新的设施 `std::launder` 来修正潜在的依赖顺序：
 
 ```cpp
-
 #include <new>
 
 struct X {
@@ -221,7 +204,6 @@ int main() {
 	auto new_ptr = std::launder(&p);
 	int d = new_ptr->n; // 标准定义行为，std::launder的返回值可以重复使用
 }
-
 ```
 
 注意 `int c = p.n` 仍然是未定义行为，因为依赖修正仅存在于依赖于 `std::launder` 的语句，而 `int c = p.n` 并没有依赖 `std::launder`。

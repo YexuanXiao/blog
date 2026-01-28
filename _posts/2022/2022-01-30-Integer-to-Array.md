@@ -9,7 +9,6 @@ category: blog
 <!-- more -->
 
 ```cpp
-
 #include <algorithm>
 #include <concepts>
 
@@ -64,13 +63,11 @@ const char* itoa_all(char* buff, T value) {
         static_assert(std::unsigned_integral<T>||std::signed_integral<T>, "Wrong integral.");
     }
 }
-
 ```
 
 测试代码：
 
 ```cpp
-
 #include <cstddef>
 #include <iostream>
 
@@ -98,5 +95,4 @@ int main() {
     itoa_all(a, ULLONG_MAX);
     std::cout << a << std::endl;
 }
-
 ```

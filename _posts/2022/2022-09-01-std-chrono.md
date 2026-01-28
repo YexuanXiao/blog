@@ -15,12 +15,10 @@ C++11开始增加了 `std::chrono` 这个时间库，可以在编译期进行时
 `duration` 是个类模板，两个参数，第一个参数是储存时常用的类型，第二个参数是用于换算单位的分数，这个分数由 `std::ratio` 表示。
 
 ```cpp
-
 template<
     class Rep,
     class Period = std::ratio<1>
 > class duration;
-
 ```
 
 `ratio` 是一个类模板，两个模板参数分别表示分子和分母，例如 `std::ratio<1, 2>` 就是1/2。
@@ -45,7 +43,6 @@ template<
 MSVC的实现中，从 `days` 开始 `Rep` 的类型是 `int`，更小的单位使用 `long long`，保证计算不会溢出。
 
 ```cpp
-
 #include <chrono>
 
 int main() {
@@ -53,7 +50,6 @@ int main() {
     chrono::nanoseconds nano_time{ 3000 }; // 表示3000纳秒
 	static_assert(std::same_as <chrono::duration<long long, std::nano>, chrono::nanoseconds>); // true
 }
-
 ```
 
 不同 `Period` 的 `duration` 可以进行加减乘除模这些算术运算，还可以进行比较。
@@ -63,7 +59,6 @@ int main() {
 可以通过 `duration::count` 获得 `duration` 内部储存的数值，类型和 `Rep` 一致，标准库提供了 `duration_cast` 模板用于将一种 `duration` 转换到另外一种：
 
 ```cpp
-
 #include <chrono>
 
 int main() {
@@ -72,7 +67,6 @@ int main() {
 	constexpr auto second_to_day = chrono::duration_cast<chrono::days>(a_day_time);
 	static_assert(second_to_day.count() == 1);
 }
-
 ```
 
 C++14起，为了方便使用 `duration`，标准库提供了一系列字面量：
@@ -105,12 +99,10 @@ C++20起 `system_clock` 被规定为使用Unix时间（Posix时间），即从�
 ### `std::chrono::time_point`
 
 ```cpp
-
 template<
     class Clock,
     class Duration = typename Clock::duration
 > class time_point;
-
 ```
 
 `time_point` 表示一个时间点，不同时钟的时间点不一样。`time_point` 的第一个模板参数是时钟类型，第二个参数是 `duration` （时间单位），默认根据时钟类型决定时间单位。
@@ -126,7 +118,6 @@ template<
 由于闰秒闰年的存在，使得不能直接计算出协调世界时（UTC），不过好消息是前几天（2022年11月18日）国际计量大会决定2035年之后不再使用闰秒，因此13年后计算UTC时间可以简化不少。但是也因此C++标准库并未直接提供从UTC时间得到Unix时间的方式，需要用C的库函数间接获得：
 
 ```cpp
-
 struct tm_impl {
     int tm_sec;
     int tm_min;
@@ -148,7 +139,6 @@ int main() {
     auto time_point = std::chrono::system_clock::from_time_t(unix_time);
     // 转换为time_point
 }
-
 ```
 
 ### 例子
@@ -156,7 +146,6 @@ int main() {
 可以使用如下代码简单的测量函数执行时间：
 
 ```cpp
-
 int main()
 {
     auto pre = std::chrono::steady_clock::now();
@@ -164,7 +153,6 @@ int main()
     auto now = std::chrono::steady_clock::now();
     std::cout << "Time difference: " << std::chrono::duration_cast<std::chrono::milliseconds>(pre - now).count() << " milliseconds\n";
 }
-
 ```
 
 <div class="ref-label">参考</div>

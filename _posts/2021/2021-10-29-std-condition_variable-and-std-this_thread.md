@@ -18,7 +18,6 @@ std::this\_thread在 `<thread>` 中提供了4个函数：
 参考如下代码：
 
 ```cpp
-
 #include <thread>
 #include <mutex>
 #include <iostream>
@@ -57,7 +56,6 @@ int main()
     t1.join();
     t2.join();
 }
-
 ```
 
 这段代码很简单，是使用两个线程对同一个n自增，然后输出n的值。
@@ -69,13 +67,11 @@ int main()
 此外，还有一个最简单的例子是改进的自旋锁：
 
 ```cpp
-
 while (!flag)
 {
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
 };
 do_some_thing();
-
 ```
 
 这段代码会每100毫秒判断一次标记是否可用，防止阻塞住整个线程。
@@ -96,7 +92,6 @@ std::condition\_variable顾名思义是条件变量，其主要有两类成员�
 参考cppreference的代码：
 
 ```cpp
-
 #include <iostream>
 #include <condition_variable>
 #include <thread>
@@ -143,7 +138,6 @@ int main()
     t1.join();
     t2.join();
 }
-
 ```
 
 显然条件变量是一种更高级的控制，它使得操作共享数据的线程能够主动通知等待中的线程。
@@ -151,7 +145,6 @@ int main()
 C++并发编程实战第二版 提供了使用条件变量实现的线程安全的队列：
 
 ```cpp
-
 #include <queue>
 #include <memory>
 #include <mutex>
@@ -221,7 +214,6 @@ public:
         return data_queue.empty();
     }
 };
-
 ```
 
 通过观察能发现，这个类的push函数在执行过程中对条件变量执行了notify\_one函数，而此时如果有一个wait\_and\_pop函数正在等待，那么这次push就会唤醒wait\_and\_pop。

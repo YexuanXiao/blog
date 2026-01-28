@@ -13,7 +13,6 @@ category: blog
 经过我一番修改，核心代码如下：
 
 ```javascript
-
 let media = window.matchMedia('(prefers-color-scheme: dark)');
 let prefersDarkMode = media.matches;
 let callback = (e) => {
@@ -29,5 +28,4 @@ if (typeof media.addEventListener === 'function') {
 } else if (typeof media.addListener === 'function') {
     media.addListener(callback);
 }
-
 ```

@@ -23,13 +23,11 @@ C++的很多特性是随着编译器的升级而一同出现的，而模板是�
 例如：
 
 ```cpp
-
 template <class T> void swap(T a1, T a2) {
     T temp = a1;
     a1 = a2;
     a2 = temp;
 }
-
 ```
 
 这是一个没有返回值的函数模板，这个模板的作用和普通的函数作用一样。
@@ -49,7 +47,6 @@ C++支持*隐式类型转换*，所以如果是这种形式： `return a1/a2` �
 还有一种情况：当你的 _**返回值类型和函数模板没关系**_ 的时候，实际上编译器是可以推导出正确的返回值类型的。
 
 ```cpp
-
 #include <iostream>
 
 template <class T>
@@ -85,7 +82,6 @@ int main()
 	std::cout << Minus(a, b) << std::endl;
 	std::cout << Plus(a, b) << std::endl;
 }
-
 ```
 
 其中Divis，Compare和Minus函数需要C++14才能编译，因为C++11 _**不支持返回值的类型推导**_ 。
@@ -95,7 +91,6 @@ int main()
 除了这两种方法以外，还可以使用**尾置返回类型**：
 
 ```cpp
-
 #include <iostream>
 
 template <class T>
@@ -110,16 +105,13 @@ int main()
 	std::cout << Pointer(a) << std::endl;
 	std::cout << &a << std::endl;
 }
-
 ```
 
 注意Compare函数使用了比较运算符，而对于自定义的类可能不包含比较运算符的**重载函数**，此时可以 _**重载函数模板**_ ：
 
 ```cpp
-
 template <>
 bool P_Compare(P &p1, P &p2){
     //compare
 }
-
 ```

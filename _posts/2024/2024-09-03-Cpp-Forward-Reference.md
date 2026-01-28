@@ -15,7 +15,6 @@ C++ 11发明右值引用后，结合模板带来了一个优雅的参数传递�
 转发引用实例化可能会存在 `U&`，`const U&` 和 `U&&` 三种情况，这三者除了表达转发外，还可以将前两者划分为复制语义，将后者划分为移动语义。
 
 ```cpp
-
 #include <string>
 
 template<typename T, template U>
@@ -32,7 +31,6 @@ int main()
     emplace(t, b);            // #2
     emplace(t, std::move(c)); // #3
 }
-
 ```
 
 \#1，\#2，\#3分别会使 `emplace` 实例化出 `string&`，`string const&` 和 `string&&` 三个版本，也就是 `U` 是 `string&`，`string const&` 和 `string`
@@ -46,7 +44,6 @@ int main()
 重新复习 `std::forward` 的实现：
 
 ```cpp
-
 template <typename T>
 constexpr T&& forward(std::remove_reference_t<T> &t) noexcept
 {
@@ -58,15 +55,12 @@ constexpr T&& forward(std::remove_reference_t<T> &&t) noexcept
 {
     return static_cast<T&&>(t);
 }
-
 ```
 
 现在编写一个使用完美转发的函数模板 `foo`：
 
 ```cpp
-
 template<class T> void foo(T&& t){ std::forward<T>(t); }
-
 ```
 
 `std::forward` 分别提供 `T&&` 和 `T&` 的重载，返回 `T&&`，那么当 `foo` 的实参是右值，就会匹配 `std::forward<int>(int&&)`，返回 `int&&` 也就是右值；实参是左值，`T` 是 `int&`，就会匹配 `std::forward<int&>(int&)`，返回值由 `int& &&` “折叠为” `int&`，也就是返回左值。

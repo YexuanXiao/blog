@@ -9,7 +9,6 @@ C++中的枚举类提供了一种定义常量的方式，但直接使用枚举�
 <!-- more -->
 
 ```cpp
-
 #include <cassert>
 
 class State {
@@ -57,5 +56,4 @@ int main() {
     State state = State::Ready;
     state = a;
 }
-
 ```

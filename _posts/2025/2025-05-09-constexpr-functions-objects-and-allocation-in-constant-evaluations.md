@@ -47,7 +47,6 @@ C++20允许常量求值时使用 `::new` 和 `::delete`，该特性是配合 `co
 从C++20开始，编写这样的代码成为可能：
 
 ```cpp
-
 consteval/constexpr std::vector<char> foo() {
     std::vector<char> x;
     x.append_range("must allocate");
@@ -55,7 +54,6 @@ consteval/constexpr std::vector<char> foo() {
 }
 
 static_assert(foo().size() == 14);
-
 ```
 
 注意，变量 `x` 不具有也不能为 `constexpr`，这是C++标准为了保持 `constexpr` 和 `consteval` 在此处行为一致而设置的怪癖。同样的限制发生在所有 `constexpr` 变量上，**无论它具有何种储存期**。
@@ -63,7 +61,6 @@ static_assert(foo().size() == 14);
 例如：
 
 ```cpp
-
 consteval/constexpr std::vector<char> foo() {
     std::vector<char> x;
     x.append_range("must allocate");
@@ -75,13 +72,11 @@ auto constexpr y = foo(); // 无法编译！
 consteval bar() {
     constexpr auto x = foo(); // 无法编译！
 }
-
 ```
 
 相同问题的表现还包括：`constexpr` 函数只可以在*明显常量求值表达式*中使用 `consteval` 函数，也就是说
 
 ```cpp
-
 consteval std::vector<char> foo() {
     std::vector<char> x;
     x.append_range("must allocate");
@@ -95,7 +90,6 @@ constexpr void bar() {
 constexpr void bar() {
     constexpr auto x = foo().size(); // 没问题！
 }
-
 ```
 
 C++20开始，为什么 `constexpr` 的行为这么怪异成为了一个频繁讨论的话题。
@@ -103,7 +97,6 @@ C++20开始，为什么 `constexpr` 的行为这么怪异成为了一个频繁�
 在编译期调用 `::new` 会发生什么？答案其实不复杂，编译器会如同分配发生在自己程序中一样，分配一样大小的内存。因此，这块内存在**运行编译器的设备**中，而不是在用户的电脑中。那么，以上列出的一些行为就可以得到解释：
 
 ```cpp
-
 consteval/constexpr std::vector<char> foo() {
     std::vector<char> x;
     x.append_range("must allocate");
@@ -111,13 +104,11 @@ consteval/constexpr std::vector<char> foo() {
 }
 
 constexpr auto y = foo(); // 无法编译！因为foo的返回值储存在运行编译器的设备中
-
 ```
 
 编译器程序中分配的内存应该由编译器程序自己释放，而不是由结果程序释放。因此，当编译完成后，常量求值时分配的任何内存都会*失效*。
 
 ```cpp
-
 consteval/constexpr std::vector<char> foo() {
     std::vector<char> x;
     x.append_range("must allocate");
@@ -130,7 +121,6 @@ static_assert(foo().size() == 14); // 可以编译！因为编译器检查静态
 constexpr auto z = foo().size();   // 编译器将结果储存在编译后的程序文件中
                                    // 同时由于用于初始化constexpr变量z，
                                    // foo().size() 是明显常量求值表达式
-
 ```
 
 ### constexpr和consteval的传染性
@@ -140,7 +130,6 @@ C++20引入了 `consteval` 函数，`consteval` 函数的结果一定被常量�
 而 `constexpr` 函数是可用于常量表达式：标准要求 `constexpr` 函数在不作为*明显常量求值表达式*的一部分时，可以*变为运行期求值*。因此，`constexpr` 函数中对 `consteval` 函数的调用必须作为*明显常量求值表达式*使用：
 
 ```cpp
-
 consteval std::vector<char> foo() {
     std::vector<char> x;
     x.append_range("must allocate");
@@ -151,7 +140,6 @@ constexpr void bar() {
     auto x = foo(); // 无法编译！因为constexpr函数bar的子表达式foo()
                     // 只用于常量表达式，不能在运行期求值
 }
-
 ```
 
 因此，可以说 `constexpr` 函数和 `consteval` 函数具有一定的*传染性*。

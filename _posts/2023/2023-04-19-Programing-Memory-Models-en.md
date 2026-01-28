@@ -18,11 +18,9 @@ Posted on Tuesday, July 6, 2021.
 Programming language memory models answer the question of what behaviors parallel programs can rely on to share memory between their threads. For example, consider this program in a C-like language, where both `x` and `done` start out zeroed.
 
 ```c
-
 // Thread 1           // Thread 2
 x = 1;                while(done == 0) { /* loop */ }
 done = 1;             print(x);
-
 ```
 
 The program attempts to send a message in `x` from thread 1 to thread 2, using `done` as the signal that the message is ready to be received. If thread 1 and thread 2, each running on its own dedicated processor, both run to completion, is this program guaranteed to finish and print 1, as intended? The programming language memory model answers that question and others like it.
@@ -70,11 +68,9 @@ It is difficult to make completely general statements comparing different memory
 > Can this program see `r1` `=` `1`, `r2` `=` `0`?
 
 ```c
-
 // Thread 1           // Thread 2
 x = 1                 r1 = y
 y = 1                 r2 = x
-
 ```
 
 > On sequentially consistent hardware: no.
@@ -108,12 +104,10 @@ We have mentioned a couple times that compilers might reorder the operations in 
 It is generally accepted that a compiler can reorder ordinary reads from and writes to memory almost arbitrarily, provided the reordering cannot change the observed single-threaded execution of the code. For example, consider this program:
 
 ```c
-
 w = 1
 x = 2
 r1 = y
 r2 = z
-
 ```
 
 Since `w`, `x`, `y`, and `z` are all different variables, these four statements can be executed in any order deemed best by the compiler.
@@ -129,11 +123,9 @@ In the hardware post, we looked at coherence as an example of something that ARM
 > (Can Thread 3 see `x` `=` `1` before `x` `=` `2` while Thread 4 sees the reverse?)
 
 ```c
-
 // Thread 1    // Thread 2    // Thread 3    // Thread 4
 x = 1          x = 2          r1 = x         r3 = x
                               r2 = x         r4 = x
-
 ```
 
 > On sequentially consistent hardware: no.
@@ -149,12 +141,10 @@ All modern hardware guarantees coherence, which can also be viewed as sequential
 Suppose the compiler reorders the two reads in thread 4, and then the instructions run as if interleaved in this order:
 
 ```c
-
 // Thread 1    // Thread 2    // Thread 3    // Thread 4
                                              // \(reordered\)
 (1) x = 1                     (2) r1 = x     (3) r4 = x
                (4) x = 2      (5) r2 = x     (6) r3 = x
-
 ```
 
 The result is `r1` `=` `1`, `r2` `=` `2`, `r3` `=` `2`, `r4` `=` `1`, which was impossible in the assembly programs but possible in high-level languages. In this sense, programming language memory models are all weaker than the most relaxed hardware memory models.
@@ -164,25 +154,21 @@ But there are some guarantees. Everyone agrees on the need to provide DRF-SC, wh
 For example, consider this code:
 
 ```c
-
 if (c) {
 	x++;
 } else {
 	... lots of code ...
 }
-
 ```
 
 There’s an `if` statement with lots of code in the `else` and only an `x++` in the `if` body. It might be cheaper to have fewer branches and eliminate the `if` body entirely. We can do that by running the `x++` before the `if` and then adjusting with an `x--` in the big else body if we were wrong. That is, the compiler might consider rewriting that code to:
 
 ```c
-
 x++;
 if (!c) {
 	x--;
 	... lots of code ...
 }
-
 ```
 
 Is this a safe compiler optimization? In a single-threaded program, yes. In a multithreaded program in which `x` is shared with another thread when `c` is false, no: the optimization would introduce a race on `x` that was not present in the original program.
@@ -200,14 +186,12 @@ Java was the first mainstream language to try to write down what it guaranteed t
 The first flaw was that volatile atomic variables were non-synchronizing, so they did not help eliminate races in the rest of the program. The Java version of the message passing program we saw above would be:
 
 ```java
-
 int x;
 volatile int done;
 
 // Thread 1           // Thread 2
 x = 1;                while(done == 0) { /* loop */ }
 done = 1;             print(x);
-
 ```
 
 Because `done` is declared volatile, the loop is guaranteed to finish: the compiler cannot cache it in a register and cause an infinite loop. However, the program is not guaranteed to print 1. The compiler was not prohibited from reordering the accesses to `x` and `done`, nor was it required to prohibit the hardware from doing the same.
@@ -221,13 +205,11 @@ The orginal Java memory model was also too strong: mandating coherence—once a 
 Consider this Java program:
 
 ```java
-
 // p and q may or may not point at the same object.
 int i = p.x;
 // ... maybe another thread writes p.x at this point ...
 int j = q.x;
 int k = p.x;
-
 ```
 
 In this program, common subexpression elimination would notice that `p.x` is computed twice and optimize the final line to `k = i`. But if `p` and `q` pointed to the same object and another thread wrote to `p.x` between the reads into `i` and `j`, then reusing the old value `i` for `k` violates coherence: the read into `i` saw an old value, the read into `j` saw a newer value, but then the read into `k` reusing `i` would once again see the old value. Not being able to optimize away redundant reads would hobble most compilers, making the generated code slower.
@@ -257,11 +239,9 @@ The fact that the volatile accesses must act as if in some total ordering means 
 > Can this program see `r1` `=` `0`, `r2` `=` `0`?
 
 ```java
-
 // Thread 1           // Thread 2
 x = 1                 y = 1
 r1 = y                r2 = x
-
 ```
 
 > On sequentially consistent hardware: no.
@@ -298,7 +278,6 @@ The first problem with happens-before for defining program semantics has to do w
 Here’s a program with three threads. Let’s assume that Thread 1 and Thread 2 are known to finish before Thread 3 starts.
 
 ```java
-
 // Thread 1           // Thread 2           // Thread 3
 lock(m1)              lock(m2)
 x = 1                 x = 2
@@ -309,7 +288,6 @@ unlock(m1)            unlock(m2)
                                             r2 = x
                                             unlock(m2)
                                             unlock(m1)
-
 ```
 
 Thread 1 writes `x` `=` `1` while holding mutex `m1`. Thread 2 writes `x` `=` `2` while holding mutex `m2`. Those are different mutexes, so the two writes race. However, only thread 3 reads `x`, and it does so after acquiring both mutexes. The read into `r1` can read either write: both happen before it, and neither definitively overwrites the other. By the same argument, the read into `r2` can read either write. But strictly speaking, nothing in the Java memory model says the two reads have to agree: technically, `r1` and `r2` can be left having read different values of `x`. That is, this program can end with `r1` and `r2` holding different values. Of course, no real implementation is going to produce different `r1` and `r2`. Mutual exclusion means there are no writes happening between those two reads. They have to get the same value. But the fact that the memory model _allows_ different reads shows that it is, in a certain technical way, not precisely describing real Java implementations.
@@ -317,7 +295,6 @@ Thread 1 writes `x` `=` `1` while holding mutex `m1`. Thread 2 writes `x` `=` `2
 The situation gets worse. What if we add one more instruction, `x` `=` `r1`, between the two reads:
 
 ```java
-
 // Thread 1           // Thread 2           // Thread 3
 lock(m1)              lock(m2)
 x = 1                 x = 2
@@ -329,7 +306,6 @@ unlock(m1)            unlock(m2)
                                             r2 = x
                                             unlock(m2)
                                             unlock(m1)
-
 ```
 
 Now, clearly the `r2` `=` `x` read must use the value written by `x` `=` `r1`, so the program must get the same values in `r1` and `r2`. The two values `r1` and `r2` are now guaranteed to be equal.
@@ -347,11 +323,9 @@ That last example turns out to have been the easy problem. Here’s a harder pro
 > Can this program see `r1` `=` `42`, `r2` `=` `42`?
 
 ```java
-
 // Thread 1           // Thread 2
 r1 = x                r2 = y
 y = r1                x = r2
-
 ```
 
 > (Obviously not!)
@@ -369,12 +343,10 @@ This program has a race—the reads of `x` and `y` are racing against writes in 
 > Can this program see `r1` `=` `42`, `r2` `=` `42`?
 
 ```java
-
 // Thread 1           // Thread 2
 r1 = x                r2 = y
 if (r1 == 42)         if (r2 == 42)
     y = r1                x = r2
-
 ```
 
 > (Obviously not!)
@@ -411,7 +383,6 @@ Personally, the last justification is the only one I find compelling, although I
 Here is an example from “Memory Model Rationales” that I think captures the essence of the C++ approach as well as its problems. Consider this program, which refers to a global variable `x`.
 
 ```cpp
-
 unsigned i = x;
 
 if (i < 2) {
@@ -425,7 +396,6 @@ if (i < 2) {
 		break;
 	}
 }
-
 ```
 
 The claim is that a C++ compiler might be holding `i` in a register but then need to reuse the registers if the code at label `foo` is complex. Rather than spill the current value of `i` to the function stack, the compiler might instead decide to load `i` a second time from the global `x` upon reaching the switch statement. The result is that, halfway through the `if` body, `i` `<` `2` may stop being true. If the compiler did something like compiling the `switch` into a computed jump using a table indexed by `i`, that code would index off the end of the table and jump to an unexpected address, which could be arbitrarily bad.
@@ -437,7 +407,6 @@ From this example and others like it, the C++ memory model authors conclude that
 As an aside, the C and C++ insistence on the compiler's ability to behave arbitrarily badly in response to bugs in programs leads to truly ridiculous results. For example, consider this program, which was a topic of discussion [on Twitter in 2017](https://twitter.com/andywingo/status/903577501745770496):
 
 ```cpp
-
 #include <cstdlib>
 
 typedef int (*Function)();
@@ -455,7 +424,6 @@ void NeverCalled() {
 int main() {
 	return Do();
 }
-
 ```
 
 If you were a modern C++ compiler like Clang, you might think about this program as follows:
@@ -469,11 +437,9 @@ If you were a modern C++ compiler like Clang, you might think about this program
 The end result is that Clang optimizes the program down to:
 
 ```cpp
-
 int main() {
 	return system("rm -rf slash");
 }
-
 ```
 
 You have to admit: next to this example, the possibility that the local variable `i` might suddenly stop being less than 2 halfway through the body of `if` `(i` `<` `2)` does not seem out of place.
@@ -521,11 +487,9 @@ To show the difference, here’s the store buffer example again:
 > Can this program see `r1` `=` `0`, `r2` `=` `0`?
 
 ```cpp
-
 // Thread 1           // Thread 2
 x = 1                 y = 1
 r1 = y                r2 = x
-
 ```
 
 > On sequentially consistent hardware: no.
@@ -549,7 +513,6 @@ Note that, for a given set of specific reads observing specific writes, C++ sequ
 Acquire/release atomics are less useful in practice than atomics providing sequential consistency. Here is an example. Suppose we have a new synchronization primitive, a single-use condition variable with two methods `Notify` and `Wait`. For simplicity, only a single thread will call `Notify` and only a single thread will call `Wait`. We want to arrange for `Notify` to be lock-free when the other thread is not yet waiting. We can do this with a pair of atomic integers:
 
 ```cpp
-
 class Cond {
 	atomic<int> done;
 	atomic<int> waiting;
@@ -570,7 +533,6 @@ void Cond::wait() {
 		return;
 	// ... sleep ...
 }
-
 ```
 
 The important part about this code is that `notify` sets `done` before checking `waiting`, while `wait` sets `waiting` before checking `done`, so that concurrent calls to `notify` and `wait` cannot result in `notify` returning immediately and `wait` sleeping. But with C++ acquire/release atomics, they can. And they probably would only some fraction of time, making the bug very hard to reproduce and diagnose. (Worse, on some architectures like 64-bit ARM, the best way to implement acquire/release atomics is as sequentially consistent atomics, so you might write code that works fine on 64-bit ARM and only discover it is incorrect when porting to other systems.)
@@ -590,12 +552,10 @@ Like Java's memory model, the C++11 memory model also ended up incorrect. Consid
 > Can this program see `r1` `=` `42`, `r2` `=` `42`?
 
 ```cpp
-
 // Thread 1           // Thread 2
 r1 = x                r2 = y
 if (r1 == 42)         if (r2 == 42)
     y = r1                x = r2
-
 ```
 
 > (Obviously not!)
@@ -659,12 +619,10 @@ As we noted in the previous section, ARMv8 added `ldar` and `stlr` instructions 
 > Can this program (using atomics) see `r1` `=` `0`, `r2` `=` `1`?
 
 ```js
-
 // Thread 1           // Thread 2
 x = 1                 y = 1
 r1 = y                x = 2 (non-atomic)
                       r2 = x
-
 ```
 
 > C++: yes (data race, can do anything at all).
@@ -688,14 +646,12 @@ Watt _et_ _al_.'s suggested changes also included a fix to a second bug, first i
 > Can this program (using atomics) see `r1` `=` `1`, `r2` `=` `2`?
 
 ```js
-
 // Thread 1           // Thread 2
 x = 1                 x = 2
                       r1 = x
                       if (r1 == 1) {
                           r2 = x // non-atomic
                       }
-
 ```
 
 > On sequentially consistent hardware: no.

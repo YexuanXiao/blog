@@ -28,7 +28,6 @@ C++17的折叠表达式根据标识符的位置分为左折叠和右折叠，根
 最简单的折叠表达式的实例是求和函数：
 
 ```cpp
-
 template <typename ... Ts>
 auto sumL(Ts ... ts)
 {
@@ -40,7 +39,6 @@ auto sumR(Ts ... ts)
 {
     return (... + ts); // 左折叠
 }
-
 ```
 
 当调用 `sum(1, 2, 3, 4, 5)` 时，右折叠会沿右侧不断将参数包展开，变为 `1 + (2 + (3 + (4 + 5)))`（括号只是为了说明展开方向，真实结果不会添加括号），这其中经历了3次展开，第一次展开为 `1 + (2 + ts)`，然后继续进行第二次展开为 `1 + (2 + (3 + ts))`。左折叠的展开方向与之相反。
@@ -48,7 +46,6 @@ auto sumR(Ts ... ts)
 还可以有下面这个稍微复杂点的例子：
 
 ```cpp
-
 template <class... T>
 void variadicPrint(T... t)
 {
@@ -60,7 +57,6 @@ void variadicPrint(T... t)
 {
     (..., (std::cout << t << std::endl)); // 左右折叠都可
 }
-
 ```
 
 其中 `(std::cout << t)`（或者 `(std::cout << t << std::endl)`）是包含参数包的表达式，编译阶段使用逗号运算符连接展开的表达式，复制 `(std::cout << t)`，并将参数包t替换为实际参数。
@@ -70,7 +66,6 @@ void variadicPrint(T... t)
 由于模板是在编译期进行推导，所以其实不必通过函数的参数传递参数，允许直接将参数直接传递给模板：
 
 ```cpp
-
 template <auto... T>
 void variadicPrint()
 {
@@ -81,7 +76,6 @@ int main()
 {
     variadicPrint<1,2,3>();
 }
-
 ```
 
 不过这也存在着非常明显的缺陷：模板参数类型必须为常量，所以必须为constexpr类型的变量才可做为模板参数，这极大的限制了这个函数的用途，因为用户自定义类基本都不是constexpr的。
@@ -89,7 +83,6 @@ int main()
 C++17添加了 `std::string_view` 来构造一个不需要内存分配的“字符串”，以及C++20添加了 `std::string` 的constexpr构造，因此可以通过此方法通过模板参数输出一个字符串：
 
 ```cpp
-
 #include <iostream>
 #include <string_view>
 using namespace std::literals;
@@ -100,7 +93,6 @@ void variadicPrint() {
 constexpr auto a = "aaa"sv; // 注意，a必须是具有静态储存期的常量表达式
 int main() { variadicPrint<a>(); }
 
-
 ```
 
 #### 一元折叠技巧
@@ -110,7 +102,6 @@ int main() { variadicPrint<a>(); }
 使用运行期迭代：
 
 ```cpp
-
 template <class ...T>
 void variadicPrint(T... t)
 {
@@ -118,13 +109,11 @@ void variadicPrint(T... t)
     int i = 0;
     ((i < last ? (std::cout << t << ", ") : (std::cout << t <<std::endl), ++i), ...);
 }
-
 ```
 
 使用if constexpr：
 
 ```cpp
-
 template <typename T, typename... Ts>
 void variadicPrint(T head, Ts... tail)
 {
@@ -133,13 +122,11 @@ void variadicPrint(T head, Ts... tail)
         variadicPrint(tail...);
     std::cout << std::endl;
 }
-
 ```
 
 使用lambda递归：
 
 ```cpp
-
 template<typename Head, typename... T>
 void variadicPrint(const Head& head, const T&... args) {
     std::cout << first;
@@ -149,13 +136,11 @@ void variadicPrint(const Head& head, const T&... args) {
     };
     (std::cout << ... << wrapper(args));
 }
-
 ```
 
 使用lambda迭代：
 
 ```cpp
-
 template <class ...T>
 void variadicPrint()
 {
@@ -173,7 +158,6 @@ void variadicPrint()
     }
     (wrapper(t), ...);
 }
-
 ```
 
 constexpr if的写法其实是效率最高也最直观的，因此一般推荐使用该方法。
@@ -186,7 +170,6 @@ constexpr if的写法其实是效率最高也最直观的，因此一般推荐�
 虽然一元折叠已经足够好用，但是二元折叠仍然有其用武之地：
 
 ```cpp
-
 template<typename... Ts>
 int removeFrom(int num, Ts... args)
 {
@@ -196,7 +179,6 @@ int removeFrom(int num, Ts... args)
 }
 
 int result = removeFrom(1000, 5, 10, 15); //'result' is 1000 - 5 - 10 - 15 = 970
-
 ```
 
 <div class="ref-label">参考</div>

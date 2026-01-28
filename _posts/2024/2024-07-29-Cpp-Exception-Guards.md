@@ -29,7 +29,6 @@ category: blog
 lock\_guard的典型实现如下：
 
 ```cpp
-
 template<class T>
 class lock_guard
 {
@@ -45,13 +44,11 @@ public:
         t.unlock();
     }
 };
-
 ```
 
 `lock_guard` 的特点是无空状态，无条件上锁以及无条件解锁，实际上是第一个性质导致了后两个性质。在实践中，`lock_guard` 只适合最简单的情况，考虑以下 `lock_guard` 不适合的例子：
 
 ```cpp
-
 void run_task(mutex& m, task_queue& q)
 {
     lock_guard l{m};
@@ -66,7 +63,6 @@ void run_task(mutex& m, task_queue& q)
 
     task(); // 错误
 }
-
 ```
 
 `lock_guard l{m};` 能保证在 \#1抛出异常时，自动解锁；即使 \#1永不抛出异常，`l` 的存在也可以避免漏写解锁导致死锁的错误；在 \#1存在使用 `return;` 提前返回时，这种模式也能避免多次写出 `m.unlock()`，减少重复。
@@ -76,7 +72,6 @@ void run_task(mutex& m, task_queue& q)
 因此，需要将代码改写为：
 
 ```cpp
-
 void run_task(mutex& m, task_queue& q)
 {
     task t{};
@@ -95,7 +90,6 @@ void run_task(mutex& m, task_queue& q)
 
     task();
 }
-
 ```
 
 这对 `task` 是有要求的，如果 `task` 不支持默认构造，或者移动存在比较大的开销，则不适合。
@@ -103,7 +97,6 @@ void run_task(mutex& m, task_queue& q)
 另一种常见的使用 `lock_guard` 解决这个问题的方式是将线程不安全的队列转换为线程安全的：
 
 ```cpp
-
 class concurrent_task_queue: private task_queue;
 
 task concurrent_task_queue::pop_value()
@@ -126,7 +119,6 @@ void run_task(concurrent_task_queue& q) try
 } catch (decltype(bizwen::empty_queue)&)
 {
 }
-
 ```
 
 但实际上这也不能解决移动存在开销的问题，当然，正如之前的文章《资源管理》所述，最佳实践是让默认构造/移动尽可能做更少的事。
@@ -136,7 +128,6 @@ void run_task(concurrent_task_queue& q) try
 实现如下：
 
 ```cpp
-
 template<class T>
 class unique_lock
 {
@@ -177,7 +168,6 @@ void run_task(mutex& m, task_queue& q)
 
     task();
 }
-
 ```
 
 注意这个 `unique_lock` 实现只是一个为了完成功能的最简版本，稍后会完善它。
@@ -191,7 +181,6 @@ void run_task(mutex& m, task_queue& q)
 一个基本完善的 `unique_lock` 如下：
 
 ```cpp
-
 template<class T>
 class unique_lock
 {
@@ -234,13 +223,11 @@ public:
             t.unlock();
     }
 };
-
 ```
 
 作为一个守卫，这个实现已经完整并且合格了。但有时候，用户可能想要延迟绑定锁，而在当前实现中，类储存的是锁的引用，引用没有默认值，因此实现延迟绑定需要将锁的引用改为锁的指针：
 
 ```cpp
-
 template<class T>
 class unique_lock
 {
@@ -285,7 +272,6 @@ public:
     }
 };
 
-
 ```
 
 除了使用指针引用锁外，还有一个变化是增加了默认构造函数，毕竟延迟绑定锁的前提是支持构造时不绑定锁。
@@ -295,7 +281,6 @@ public:
 善于思考的读者可能已经发现了，`set_lock` 的三个重载实际上就等于构造函数对应的版本，因此，实际上不需要单独实现 `set_lock`，只需要实现移动赋值（由于 `unique_lock` 独占锁，并依此析构，所以不存在复制赋值）：
 
 ```cpp
-
 template<class T>
 class unique_lock
 {
@@ -325,7 +310,6 @@ public:
 
     ...
 };
-
 ```
 
 注意，锁的类的移动赋值必须先将 `*this` 解锁，这是为了防止 `*this` 被意外的延迟解锁从而阻塞或者死锁，但一般来说，调用该重载时，`*this` 应该处于不持有锁的状态。
@@ -343,7 +327,6 @@ public:
 现在考虑设计一个简化的 `shared_ptr`，它不追求和 `std::shared_ptr` 一致，但它拥有类似的功能，解决相同的问题，原型如下：
 
 ```cpp
-
 template<class T>
 class shared_ptr
 {
@@ -355,7 +338,6 @@ class shared_ptr
 
     heap_node_* p_{};
 };
-
 ```
 
 由于是简化模型，因此不考虑支持分配器，不考虑支持弱引用，不考虑线程安全的计数，不支持别名使用。
@@ -363,7 +345,6 @@ class shared_ptr
 现在设计它的构造函数：理应支持默认构造，移动构造；并且应该避免 `make_shared`，因此它需要支持从 `T&&`，`const T&` 构造，以及支持 `emplace` 构造避免多余的复制和移动，得到如下代码：
 
 ```cpp
-
 template<class T>
 class shared_ptr
 {
@@ -421,7 +402,6 @@ public:
         delete(p_);
     }
 };
-
 ```
 
 这段代码实际上是错误的，因为如果 \#2处调用 `T` 的构造函数抛出异常，之前分配的 `p_` 就会泄漏。
@@ -429,7 +409,6 @@ public:
 因此，通常的改进方式如下：
 
 ```cpp
-
 template<class U>
 void emplace_(U&& u)
 {
@@ -443,13 +422,11 @@ void emplace_(U&& u)
         throw;
     }
 }
-
 ```
 
 但目前来说，`catch(...)` 和 `throw;` 会阻止编译器生成最优的代码，为了解决这个问题，可以用以下代码替代：
 
 ```cpp
-
 template<class T>
 class allocate_guard
 {
@@ -480,7 +457,6 @@ void emplace_(U&& u)
     new (std::addressof(p_->buffer_)) T(std::forward<U&&>(u)); // #2
     g.release();
 }
-
 ```
 
 此时，在 \#2抛出异常后，`allocate_guard` 就会保护 `p_`，不发生泄漏，并且不使用 `catch(...)` 和 `throw;`。
@@ -492,7 +468,6 @@ void emplace_(U&& u)
 是的，`std::unique_ptr` 就是 `allocate_guard`：
 
 ```cpp
-
 template<class U>
 void emplace_(U&& u)
 {
@@ -502,7 +477,6 @@ void emplace_(U&& u)
     new (std::addressof(p_->buffer_)) T(std::forward<U&&>(u)); // #2
     g.release();
 }
-
 ```
 
 libc++ 的 `std::shared_ptr` 的构造函数就如此使用 `std::unique_ptr`。
@@ -510,7 +484,6 @@ libc++ 的 `std::shared_ptr` 的构造函数就如此使用 `std::unique_ptr`。
 基于此，可以扩展该 `allocate_guard`，使其变得更通用：
 
 ```cpp
-
 template<class T, class A>
 class allocate_guard
 {
@@ -539,7 +512,6 @@ class allocate_guard
         std::allocator_traits<A>::deallocate(a_, p_, 1);
     }
 };
-
 ```
 
 仔细思考的读者可能已经回忆到了，之前我的文章中讲过的 `vector_base` 与之非常类似，这不是巧合。

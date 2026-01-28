@@ -28,7 +28,6 @@ This is a simplified version of std::copy (ignoring the possibility of non-conti
 这是一个 `std::copy` 的简化版本（忽略非连续序列）
 
 ```cpp
-
 struct pod_tag {};
 struct non_pod_tag {};
 
@@ -59,7 +58,6 @@ void use(vector<int>& vi, vector<int>& vi2, vector<string>& vs, vector<string>& 
     copy(vi.begin(), vi.end(), vi2.begin()); // uses memmove
     copy(vs.begin(), vs.end(), vs2.begin()); // uses a loop calling copy constructors
 }
-
 ```
 
 This is a general and powerful technique for compile-time algorithm selection.
@@ -73,7 +71,6 @@ When concepts become widely available such alternatives can be distinguished dir
 当概念可以被普遍使用时，这样的选则可以直接区分：
 
 ```cpp
-
 template<class Iter>
     requires Pod<Value_type<iter>>
 Out copy_helper(In, first, In last, Out out)
@@ -86,5 +83,4 @@ Out copy_helper(In, first, In last, Out out)
 {
     // use loop calling copy constructors
 }
-
 ```

@@ -34,7 +34,6 @@ Linux上指向目录的软链接应当被视作目录，指向文件的软链接
 可以通过如下代码进行测试：
 
 ```cpp
-
 #include <filesystem>
 #include <iostream>
 
@@ -78,7 +77,6 @@ int main()
     Find_Files_r(fs::current_path());
     std::cin.get();
 }
-
 ```
 
 注意，Windows平台上如果一个软链接指向了错误的地点（例如指向文件或者其他神奇的东西），则通过此path无法构造directory\_entry，会抛出filesystem\_error异常而当软链接指向的地点为空时不触发异常。
@@ -86,7 +84,6 @@ int main()
 不安全：
 
 ```cpp
-
 #include <filesystem>
 #include <iostream>
 
@@ -130,13 +127,11 @@ int main()
     Find_Files_r(fs::current_path());
     std::cin.get();
 }
-
 ```
 
 安全：
 
 ```cpp
-
 #include <filesystem>
 #include <iostream>
 
@@ -190,7 +185,6 @@ int main()
     Find_Files_r(fs::current_path());
     std::cin.get();
 }
-
 ```
 
 由于Windows平台上，字符都使用wchar\_t而不是char，这将导致std::filesystem::path内部也使用wchar\_t，不过还好标准库考虑到了这一点，不管是何种方式实现的path，都可以通过成员函数进行轻松的编码转换：
@@ -212,7 +206,6 @@ int main()
 - generic\_u32string
 
 ```cpp
-
 #include <cstddef>
 #include <filesystem>
 #include <iomanip>
@@ -239,5 +232,4 @@ int main()
     print("u32string : ", p.generic_u32string());
     print("wstring   : ", p.generic_wstring  ());
 }
-
 ```

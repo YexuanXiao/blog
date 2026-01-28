@@ -13,7 +13,6 @@ C++提供了std::lock以提供一种解决死锁的方案：即对于两个资�
 参考：[C++并发编程实战 第二版](https://www.bookstack.cn/read/CPP-Concurrency-In-Action-2ed-2019/content-chapter3-3.2-chinese.md)。
 
 ```cpp
-
 #include <mutex>
 
 class some_big_object;
@@ -40,7 +39,6 @@ void swap(X &lhs, X &rhs)
     std::lock_guard<std::mutex> lock_b(rhs.m, std::adopt_lock); // 3
     swap(lhs.some_detail, rhs.some_detail);
 }
-
 ```
 
 由于C++的许多语句看上去是一条，但是实际上是多条，并且大多数逗号运算符左右执行顺序是不确定的，以及CPU执行不同指令需要用到的时间不一样，导致许多操作都不具有原子性。
@@ -52,7 +50,6 @@ void swap(X &lhs, X &rhs)
 C++17中添加了RAII风格的std::lock：std::scoped\_lock，简化了代码的书写：
 
 ```cpp
-
 void swap(X &lhs, X &rhs)
 {
     if (&lhs == &rhs)
@@ -60,7 +57,6 @@ void swap(X &lhs, X &rhs)
     std::scoped_lock(lhs.m, rhs.m); // 1
     swap(lhs.some_detail, rhs.some_detail);
 }
-
 ```
 
 std::scoped\_lock是std::lock和std::lock\_guard的结合体，可以同时传入两个std::mutex并在离开作用域时自动析构，防止死锁。

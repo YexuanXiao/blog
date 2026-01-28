@@ -26,11 +26,9 @@ Many hardware and compiler optimizations that were invisible (and therefore vali
 Here is a simple example program in a C-like language. In this program and in all programs we will consider, all variables are initially set to zero.
 
 ```c
-
 // Thread 1           // Thread 2
 x = 1;                while(done == 0) { /* loop */ }
 done = 1;             print(x);
-
 ```
 
 If thread 1 and thread 2, each running on its own dedicated processor, both run to completion, can this program print 0?
@@ -58,11 +56,9 @@ One might reasonably question whether sequential consistency _should_ be the ide
 Earlier I asked whether this program can print 0:
 
 ```c
-
 // Thread 1           // Thread 2
 x = 1;                while(done == 0) { /* loop */ }
 done = 1;             print(x);
-
 ```
 
 To make the program a bit easier to analyze, let's remove the loop and the print and ask about the possible results from reading the shared variables:
@@ -72,11 +68,9 @@ To make the program a bit easier to analyze, let's remove the loop and the print
 > Can this program see `r1` `=` `1`, `r2` `=` `0`?
 
 ```c
-
 // Thread 1           // Thread 2
 x = 1                 r1 = y
 y = 1                 r2 = x
-
 ```
 
 We assume every example starts with all shared variables set to zero. Because we're trying to establish what hardware is allowed to do, we assume that each thread is executing on its own dedicated processor and that there's no compiler to reorder what happens in the thread: the instructions in the listings are the instructions the processor executes. The name `r`_N_ denotes a thread-local register, not a shared variable, and we ask whether a particular setting of thread-local registers is possible at the end of an execution.
@@ -114,11 +108,9 @@ The write queue is a standard first-in, first-out queue: the memory writes are a
 > Can this program see `r1` `=` `1`, `r2` `=` `0`?
 
 ```c
-
 // Thread 1           // Thread 2
 x = 1                 r1 = y
 y = 1                 r2 = x
-
 ```
 
 > On sequentially consistent hardware: no.
@@ -134,11 +126,9 @@ The sequential consistency and TSO models agree in this case, but they disagree 
 > Can this program see `r1` `=` `0`, `r2` `=` `0`?
 
 ```c
-
 // Thread 1           // Thread 2
 x = 1                 y = 1
 r1 = y                r2 = x
-
 ```
 
 > On sequentially consistent hardware: no.
@@ -152,12 +142,10 @@ This example may seem artificial, but using two synchronization variables does h
 To fix algorithms that depend on stronger memory ordering, non-sequentially-consistent hardware supplies explicit instructions called memory barriers (or fences) that can be used to control the ordering. We can add a memory barrier to make sure that each thread flushes its previous write to memory before starting its read:
 
 ```c
-
 // Thread 1           // Thread 2
 x = 1                 y = 1
 barrier               barrier
 r1 = y                r2 = x
-
 ```
 
 With the addition of the barriers, `r1` `=` `0`, `r2` `=` `0` is again impossible, and Dekker's or Peterson's algorithm would then work correctly. There are many kinds of barriers; the details vary from system to system and are beyond the scope of this post. The point is only that barriers exist and give programmers or language implementers a way to force sequentially consistent behavior at critical moments in a program.
@@ -171,11 +159,9 @@ One final example, to drive home why the model is called total store order. In t
 > (Can Threads 3 and 4 see `x` and `y` change in different orders?)
 
 ```c
-
 // Thread 1    // Thread 2    // Thread 3    // Thread 4
 x = 1          y = 1          r1 = x         r3 = y
                               r2 = y         r4 = x
-
 ```
 
 > On sequentially consistent hardware: no.
@@ -215,12 +201,10 @@ In response to more and more people running into these difficulties over the dec
 > Can this program end with `r1` `=` `1`, `r2` `=` `0`, `x` `=` `1`?
 
 ```c
-
 // Thread 1    // Thread 2
 x = 1          y = 1
 r1 = x         x = 2
 r2 = y
-
 ```
 
 > On sequentially consistent hardware: no.
@@ -238,11 +222,9 @@ Revisions to the Intel and AMD specifications later in 2008 guaranteed a “no�
 > Can this program end with `r1` `=` `2`, `r2` `=` `1`?
 
 ```c
-
 // Thread 1    // Thread 2
 x = 1          x = 2
 r1 = x         r2 = x
-
 ```
 
 > On sequentially consistent hardware: no.
@@ -274,11 +256,9 @@ For the original message passing litmus test, the reordering of writes by a sing
 > Can this program see `r1` `=` `1`, `r2` `=` `0`?
 
 ```c
-
 // Thread 1           // Thread 2
 x = 1                 r1 = y
 y = 1                 r2 = x
-
 ```
 
 > On sequentially consistent hardware: no.
@@ -296,11 +276,9 @@ This result shows that the ARM/POWER memory model is weaker than TSO: it makes f
 > Can this program see `r1` `=` `0`, `r2` `=` `0`?
 
 ```c
-
 // Thread 1           // Thread 2
 x = 1                 y = 1
 r1 = y                r2 = x
-
 ```
 
 > On sequentially consistent hardware: no.
@@ -320,11 +298,9 @@ Here’s the litmus test that showed what it meant for x86 to have a total store
 > (Can Threads 3 and 4 see `x` and `y` change in different orders?)
 
 ```c
-
 // Thread 1    // Thread 2    // Thread 3    // Thread 4
 x = 1          y = 1          r1 = x         r3 = y
                               r2 = y         r4 = x
-
 ```
 
 > On sequentially consistent hardware: no.
@@ -344,11 +320,9 @@ As another example, ARM/POWER systems have visible buffering or reordering of me
 > (Can each thread's read happen _after_ the other thread's write?)
 
 ```c
-
 // Thread 1    // Thread 2
 r1 = x         r2 = y
 y = 1          x = 1
-
 ```
 
 > On sequentially consistent hardware: no.
@@ -372,11 +346,9 @@ Here’s a litmus test for something that can’t happen even on ARM and POWER:
 > (Can Thread 3 see `x` `=` `1` before `x` `=` `2` while Thread 4 sees the reverse?)
 
 ```c
-
 // Thread 1    // Thread 2    // Thread 3    // Thread 4
 x = 1          x = 2          r1 = x         r3 = x
                               r2 = x         r4 = x
-
 ```
 
 > On sequentially consistent hardware: no.

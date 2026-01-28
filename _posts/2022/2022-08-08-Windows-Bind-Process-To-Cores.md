@@ -9,7 +9,6 @@ category: blog
 <!-- more -->
 
 ```cpp
-
 #include <windows.h>
 #include <tlhelp32.h>
 #include <tchar.h>
@@ -133,5 +132,4 @@ int main(int argc, char** argv)
 	::system("pause");
 	return 0;
 }
-
 ```

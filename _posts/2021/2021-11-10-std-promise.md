@@ -18,7 +18,6 @@ std::promise可以保存某一类型T的值，该值通常使用std::future储�
 - future可以异步返回共享状态的值，或者在必要的情况下阻塞调用者并等待共享状态标志变为ready，然后才能获取共享状态的值。
 
 ```cpp
-
 #include <iostream>
 #include <future>
 
@@ -38,7 +37,6 @@ int main()
     t.join();
     return 0;
 }
-
 ```
 
 future本质上是我们发起的一个并发操作，而promise本质上则是并发操作的回调。我们可以通过future对象等待该操作和获取操作的结果，而promise对象则负责写入返回值并通知我们 [^2] 。
@@ -56,7 +54,6 @@ future本质上是我们发起的一个并发操作，而promise本质上则是�
 - set\_exception\_at\_thread\_exit设置结果为指示异常，同时仅在线程退出时分发提醒
 
 ```cpp
-
 #include <vector>
 #include <thread>
 #include <future>
@@ -87,7 +84,6 @@ int main()
     std::cout << "result=" << accumulate_future.get() << std::endl;
     work_thread.join();  // wait for thread completion
 }
-
 ```
 
 由于[std::future](https://zh.cppreference.com/w/cpp/thread/future)所引用的共享状态不与另一异步返回对象共享，所以std::promise也具有同样的性质，所以std::promise一般使用**移动构造**的方式来传递（原代码中使用了引用，但是这并不值得展示）。
@@ -95,7 +91,6 @@ int main()
 [C++并发编程实战 第二版4.2.3使用promises](https://www.bookstack.cn/read/CPP-Concurrency-In-Action-2ed-2019/content-chapter4-4.2-chinese.md)中提供了一个简化的使用场景：
 
 ```cpp
-
 void process_connections(connection_set& connections)
 {
     while (!done(connections))
@@ -122,7 +117,6 @@ void process_connections(connection_set& connections)
         }
     }
 }
-
 ```
 
 假设connections是一个网络连接池，自旋锁不断通过循环检查是否整个连接池都已经结束连接，并每次遍历整个连接池。
@@ -136,7 +130,6 @@ void process_connections(connection_set& connections)
 以下是向promise传递一个异常的示例 [^1] ：
 
 ```cpp
-
 #include <iostream>       // std::ios
 #include <thread>         // std::thread
 #include <future>         // std::promise, std::future
@@ -177,7 +170,6 @@ int main()
     th2.join();
     return 0;
 }
-
 ```
 
 其中get\_int负责接收一个整数的输入，如果输入不正确则设置一个异常，print\_int用于捕获promise的输入，如果promise储存了一个异常，则输出异常信息。
@@ -187,7 +179,6 @@ int main()
 [^3]: [std::promise\<R\>::set_exception]\(https://zh.cppreference.com/w/cpp/thread/promise/set_exception)
 
 ```cpp
-
 #include <thread>
 #include <iostream>
 #include <future>
@@ -219,6 +210,5 @@ int main()
     }
     t.join();
 }
-
 ```
 

@@ -15,7 +15,6 @@ category: blog
 用法如下：
 
 ```cpp
-
 sync_task switch_to_thread_pool()
 {
 	std::cout << "2. " << std::this_thread::get_id() << '\n';
@@ -29,7 +28,6 @@ fire_and_forget main_coro()
 	co_await switch_to_thread_pool();
 	std::cout << "4. " << std::this_thread::get_id() << '\n';
 }
-
 ```
 
 以上代码将会使得1和2输出相同的线程ID，3和4输出相同的线程ID。该最简协程实际上就能完成协程的最大作用，避免回调地狱：调用者（主协程）*不阻塞*等待任务的完成，而是被主动*恢复*。
@@ -49,7 +47,6 @@ fire_and_forget main_coro()
 以下是该同步任务的最简实现：
 
 ```cpp
-
 template<typename T=void>
 struct sync_task;
 
@@ -118,7 +115,6 @@ struct sync_task<>
 		return sync_awaiter{ handle };
 	}
 };
-
 ```
 
 实现协程同步的第一个秘密在于 `final_suspend` 返回的 `final_awaiter` 中。
@@ -130,7 +126,6 @@ struct sync_task<>
 考虑以下代码：
 
 ```cpp
-
 sync_task switch_to_thread_pool()
 {
 	co_await resume_background();
@@ -143,7 +138,6 @@ fire_and_forget main_coro()
 	co_await switch_to_thread_pool();
 	...
 }
-
 ```
 
 上述代码实际上不存在栈溢出问题，因为将协程句柄发送到线程池后，每次调用协程句柄，栈总是从事件循环中开始增长，从而无论等待多少次，栈的增长长度都是固定的。
@@ -151,7 +145,6 @@ fire_and_forget main_coro()
 而以下代码则不同：
 
 ```cpp
-
 sync_task switch_to_thread_pool() noexcept
 {
 	co_return;
@@ -164,18 +157,15 @@ fire_and_forget main_coro()
 	co_await switch_to_thread_pool();
 	...
 }
-
 ```
 
 由于 `switch_to_thread_pool` 不再将自己发送到线程池，因此当使用非对称转移时：
 
 ```cpp
-
 void await_suspend() noexcept
 {
 	promise.next();
 }
-
 ```
 
 每次恢复下一个任务都将会在之前的栈上进行增长，如果等待的次数过多就会导致栈溢出。
@@ -189,7 +179,6 @@ void await_suspend() noexcept
 现在，可以很容易的扩展无值的任务为有值的：
 
 ```cpp
-
 template<typename T>
 struct sync_task
 {
@@ -267,7 +256,6 @@ struct sync_task
 		return sync_awaiter{ handle };
 	}
 };
-
 ```
 
 ## 异步任务
@@ -285,7 +273,6 @@ struct sync_task
 为了减少噪音，以下例子省略了两个细节，同步协程以及抛出异常：
 
 ```cpp
-
 template<typename T = void>
 class task;
 
@@ -349,7 +336,6 @@ public:
 			handle_.destroy();
 	}
 };
-
 ```
 
 在第四章中介绍过，当 `await_suspend` 被执行并且返回 `true` 时，协程被暂停，此时上述协程的计数刚被减小为 `0`，不需要销毁协程。随后，当 `task` 的析构获得 `0` 时，协程被主动销毁。而当 `await_suspend` 被执行并且返回 `false` 时，说明 `task` 的析构函数已经被别执行过，因此协程将恢复执行。当协程未在最终暂停点暂停时，协程将自动销毁。这两部分共同完成了协程的生存期管理。
@@ -357,7 +343,6 @@ public:
 此时，可以为协程添加同步，异常处理以及取消功能：
 
 ```cpp
-
 class canceled_coroutine{};
 class cancelable_promise_base
 {
@@ -477,7 +462,6 @@ public:
 		return final_awaiter{ *this };
 	}
 };
-
 ```
 
 关键点有以下几个：
@@ -490,7 +474,6 @@ public:
 通过设计一个在被取消协程中进行调用的取消令牌，可以实现主动观察协程是否取消：
 
 ```cpp
-
 template <typename T>
 	requires std::derived_from<T, cancelable_promise_base>
 auto to_cancelable(std::coroutine_handle<T> h) noexcept
@@ -535,13 +518,11 @@ auto get_cancellation_token() noexcept
 {
 	return cancellation_awaiter{};
 }
-
 ```
 
 使用方式就和C++/WinRT中的一样：
 
 ```cpp
-
 task<> ExplicitCancelationAsync()
 {
 	using namespace bizwen;
@@ -554,13 +535,11 @@ task<> ExplicitCancelationAsync()
 		co_await 1s;
 	}
 }
-
 ```
 
 当然，不光能在协程体内主动检测取消，还可以在Awaiter中自动取消，例如上例使用的以及之前实现过的 `timer_awaiter`，可以通过对其添加重载的方式使得 `await_suspend` 中可以检测协程是否暂停：
 
 ```cpp
-
 struct timer_awaiter : public std::suspend_always
 {
 	std::chrono::milliseconds d_;
@@ -581,7 +560,6 @@ struct timer_awaiter : public std::suspend_always
 		pool.run_after(handle, d_);
 	}
 };
-
 ```
 
 如果当前协程的Promise类型继承自 `cancelable_promise_base`，那么就可以对其进行检测。
@@ -589,7 +567,6 @@ struct timer_awaiter : public std::suspend_always
 可以使用辅助类模板 `enable_cancelation` 作为CRTP基类使得继承它的Awaiter有检测取消的能力，实现简化代码：
 
 ```cpp
-
 template <typename U>
 struct enable_cancellation : public std::suspend_always
 {
@@ -602,13 +579,11 @@ struct enable_cancellation : public std::suspend_always
 		return static_cast<const U&>(*this).await_suspend(std::coroutine_handle<>{handle});
 	}
 };
-
 ```
 
 到现在，就可以实现完整的Task：
 
 ```cpp
-
 template <typename T = void>
 class task
 {
@@ -859,7 +834,6 @@ public:
 		handle_.promise().rethrow_exception();
 	}
 };
-
 ```
 
 `task` 的绝大部分内容在之前都讲过，唯一不同的是这次为完整的 `task` 添加了同步等待函数：通过创建一个临时的任务然后同步的使其等待当前任务完成，从而发出通知。
@@ -867,7 +841,6 @@ public:
 通过异步的 `task` 可以实现以下功能：
 
 ```cpp
-
 #include <fast_io.h>
 
 // https://learn.microsoft.com/zh-cn/windows/uwp/cpp-and-winrt-apis/concurrency-2
@@ -913,7 +886,6 @@ int main()
 	MainCoroutineAsync().sync_get();
 	sleep_sort(0, 9, 3, 4, 6, 1, 2, 8, 5, 7).sync_get();
 }
-
 ```
 
 完整代码（第一章所述）见[coroutine.cpp](https://gist.github.com/YexuanXiao/abad460805c66eb66db883693d8b2f4d)。

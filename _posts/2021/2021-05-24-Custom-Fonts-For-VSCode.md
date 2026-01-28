@@ -15,7 +15,6 @@ category: blog
 3. 在最外层大括号中加入如下内容（注意在json中，列表的最后一项没有逗号），重启VSCode即可：
 
 ```json
-
 "editor.fontFamily": "Operator Mono",
 "editor.fontLigatures": true, // 这个控制是否启用字体连字
 "editor.tokenColorCustomizations": {
@@ -61,5 +60,4 @@ category: blog
 "terminal.integrated.fontFamily": "monospace",
 "editor.fontWeight": 400,
 "workbench.colorTheme": "Bluloco Light",
-
 ```

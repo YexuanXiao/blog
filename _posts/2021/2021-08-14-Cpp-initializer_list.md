@@ -13,7 +13,6 @@ initializer\_list是C++11开始通过标准模板库（STL）提供的一个类�
 libstdc++ 中initializer\_list实现如下：
 
 ```cpp
-
 namespace std {
   template<class E>
     class initializer_list {
@@ -43,7 +42,6 @@ namespace std {
       constexpr const_iterator end() const noexcept { return begin() + size(); }
     };
 }
-
 ```
 
 代码非常简单：
@@ -64,7 +62,6 @@ namespace std {
 那么自定义的类也可以使用initializer\_list：
 
 ```cpp
-
 class FooVector
 {
     std::vector<int> content_;
@@ -84,7 +81,6 @@ int main(){
     FooVector foo2{ 1, 2, 3, 4, 5 };
     FooVector foo3({ 1, 2, 3, 4, 5 });
 }
-
 ```
 
 由于initializer\_list**有自己的迭代器（或者重载全局迭代器）**，并且指针作为迭代器能递增，能解引用，能判断不等，所以其**支持范围for循环**。

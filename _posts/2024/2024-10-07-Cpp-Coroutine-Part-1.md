@@ -31,7 +31,6 @@ C++的协程是精简且强大的，因此可以说是千人千面，笔者的�
 因此，目标是如下类：
 
 ```cpp
-
 class thread_pool
 {
 public:
@@ -44,13 +43,11 @@ public:
 	void run_after(std::coroutine_handle<> callback, std::chrono::milliseconds duration);
 	void run_once(std::coroutine_handle<> callback, std::size_t priority);
 };
-
 ```
 
 同时，为了使用该线程池，仿照C++/WinRT提供以下API：
 
 ```cpp
-
 auto /* awaiter */ resume_background();
 
 context capture_apartment();
@@ -61,7 +58,6 @@ template <class Rep, class Period>
 auto /* awaiter */ operator co_await(std::chrono::duration<Rep, Period> d);
 
 auto /* awaiter */ get_cancellation_token();
-
 ```
 
 `resume_background` 返回一个Awaiter，调用 `co_await resume_background()` 会将任务发送给后台线程（即线程池）。
@@ -75,7 +71,6 @@ auto /* awaiter */ get_cancellation_token();
 还提供了这些任务类：
 
 ```cpp
-
 template <typename T>
 class task;
 
@@ -87,7 +82,6 @@ class task_with_progress;
 
 template <typename U>
 class task_with_progress<void, U>;
-
 ```
 
 这些API来自C++/WinRT，读者可以在[使用C++/WinRT执行并发和异步操作](https://learn.microsoft.com/zh-cn/windows/uwp/cpp-and-winrt-apis/concurrency)和[通过C++/WinRT实现高级并发和异步](https://learn.microsoft.com/zh-cn/windows/uwp/cpp-and-winrt-apis/concurrency-2)找到，但注意我对它们进行了一些修改。

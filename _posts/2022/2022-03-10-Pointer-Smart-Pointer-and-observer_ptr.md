@@ -66,7 +66,6 @@ Bjarne Stroustrup
 考虑：
 
 ```cpp
-
 void f2(int*);
 
 void g()
@@ -86,7 +85,6 @@ void g()
     delete q;       // OK (as ever)
     delete q.get(); // error (someone got confused)
 }
-
 ```
 
 我们将不得不决定函数是采取 **observer_ptr** s还是原始指针。此外，我们的使用风格，包括new的使用，必须考虑到 **observer_ptr** s只能满足一个非常有限的需求。

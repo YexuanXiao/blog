@@ -13,7 +13,6 @@ category: blog
 首先参考如下代码：
 
 ```cpp
-
 #include <string>
 #include <iostream>
 #include <algorithm>
@@ -28,7 +27,6 @@ int main() {
             else return 0; }));
     std::cout << str2.c_str() << std::endl;
 }
-
 ```
 
 std::remove\_if的作用是返回满足条件的容器的成员的迭代器，这个可变lambda通过捕获一个i使得这个lambda只能返回一次1(true)。
@@ -42,7 +40,6 @@ std::remove\_if的作用是返回满足条件的容器的成员的迭代器，�
 首先来看std::remove\_if的实现：
 
 ```cpp
-
 template<class ForwardIt, class UnaryPredicate>
 ForwardIt remove_if(ForwardIt first, ForwardIt last, UnaryPredicate p)
 {
@@ -53,7 +50,6 @@ ForwardIt remove_if(ForwardIt first, ForwardIt last, UnaryPredicate p)
                 *first++ = std::move(*i);
     return first;
 }
-
 ```
 
 会发现，被传入remove\_if的lambda在算法内又被传递给了find\_if这个算法。
@@ -71,7 +67,6 @@ ForwardIt remove_if(ForwardIt first, ForwardIt last, UnaryPredicate p)
 问题：
 
 ```cpp
-
 #include <algorithm>
 
 void foo(int* f,int* l)
@@ -89,13 +84,11 @@ void foo2(int* f,int* l)
         return a>b;
     });
 }
-
 ```
 
 foo和foo2虽然代码一模一样，但是编译器仍然会生成两份lambda，所以将lambda抽象出来进行复用：
 
 ```cpp
-
 #include <algorithm>
 
 auto const a = [](auto a, auto b)
@@ -110,7 +103,6 @@ void foo2(int* f, int* l)
 {
     std::sort(f, l, a);
 }
-
 ```
 
 此时，lambda的二进制膨胀问题得到了初步的解决。
@@ -119,7 +111,6 @@ void foo2(int* f, int* l)
 ### const可对lambda进行额外保证（guarantee）
 
 ```cpp
-
 #include <string>
 #include <algorithm>
 
@@ -131,7 +122,6 @@ int main() {
     a('a');
     b('b');
 }
-
 ```
 这是一个非常简短的代码，可以直接看出，常量b = 常量a，即a和b在逻辑上完全等价。
 

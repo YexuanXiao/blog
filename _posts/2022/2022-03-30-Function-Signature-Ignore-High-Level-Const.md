@@ -13,7 +13,6 @@ category: blog
 这个规则只影响顶层cv限定的情况，不影响引用或者指针：
 
 ```cpp
-
 class foo {
 	int f1{};
 };
@@ -36,7 +35,6 @@ int main() {
 	foo f = a(h, e);
 	foo g = a(d, e);
 }
-
 ```
 
 注意，在a的函数调用过程中一定发生了对对象的复制，此时规则才成立。
@@ -44,7 +42,6 @@ int main() {
 对于非顶层 `const`，则不遵循此规则，因为非顶层 `const` 的调用过程并没有复制对象：
 
 ```cpp
-
 class foo {
 	int f1{};
 };
@@ -66,7 +63,6 @@ int main() {
 	foo f = a(const_cast<const foo*>(&d), &e);
 	foo g = a(&d, &e);
 }
-
 ```
 
 由于上述两个 `a` 的重载都没有涉及顶层 `const`，所以并不是重定义。
@@ -74,8 +70,6 @@ int main() {
 涉及顶层 `const` 的写法如下：
 
 ```cpp
-
 foo a(const foo* a, const foo* b);
 foo a(const foo* a, const foo* const b); // 与上一行是同一函数声明
-
 ```

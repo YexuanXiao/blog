@@ -46,7 +46,6 @@ consteval
 一个错误的例子是用模板混合指针实现延迟初始化的单例：
 
 ```cpp
-
 template<typename T>
 class Singleton {
     static T* instance;
@@ -69,7 +68,6 @@ int main()
     Singleton<Single1> *singleptr2 = Single1::getInstace(); // #4
     assert(singleptr2 == singleptr1); // false
 }
-
 ```
 
 编译器在编译上面一段代码的时候，首先遇到Singleton这个类模板，这时候由于Singleton是个待决类型（没有实例化），所以整个Singleton类内的东西都先不做任何处理。

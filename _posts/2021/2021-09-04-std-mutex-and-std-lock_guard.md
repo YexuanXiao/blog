@@ -15,7 +15,6 @@ category: blog
 书中提供了线程安全的stack模板如下：
 
 ```cpp
-
 #include <exception>
 #include <memory>
 #include <mutex>
@@ -73,7 +72,6 @@ public:
         return data.empty();
     }
 };
-
 ```
 
 其中有几点需要注意：

@@ -17,7 +17,6 @@ C++11开始正式加入了多线程库及原子操作，原子操作是无锁并
 #### 31.10 Flag type and operations \[atomics.flag\]
 
 ```cpp
-
 namespace std
 {
     struct atomic_flag
@@ -40,7 +39,6 @@ namespace std
         void notify_all() noexcept;
     };
 }
-
 ```
 
 1. The atomic\_flag type provides the classic test-and-set functionality. It has two states, set and clear.
@@ -159,7 +157,6 @@ namespace std
 #### 31.10标志类型和操作 \[atomics.flag\]
 
 ```cpp
-
 namespace std
 {
     struct atomic_flag
@@ -182,7 +179,6 @@ namespace std
         void notify_all() noexcept;
     };
 }
-
 ```
 
 1. atomic\_flag类型提供传统的test-and-set功能。它有两个状态，设置（set）和清除（clear）。
@@ -318,7 +314,6 @@ C++11后，C++20之前，std::atomic\_flag只有3类成员函数，由于std::at
 C++并发编程实战第二版中提出了一种使用std::atomic\_flag的自旋锁类型：
 
 ```cpp
-
 class spinlock_mutex
 {
     std::atomic_flag flag{};
@@ -332,7 +327,6 @@ public:
         flag.clear(std::memory_order_release);
     }
 };
-
 ```
 
 这个非常基础的自旋锁可以配合std::lock\_guard来使用：
@@ -347,7 +341,6 @@ public:
 遗憾的是，C++并发编程实战写于2018年并在2019年2月出版，而C++20恰好对std::atomic\_flag做了改进：加入了wait，notify\_one，notify\_all函数，增强了std::atomic\_flag的功能。
 
 ```cpp
-
 class wait_mutex
 {
     std::atomic_flag flag{};
@@ -364,7 +357,6 @@ public:
         flag.notify_one();
     }
 };
-
 ```
 
 改进版的代码中添加了一个wait语句来让while循环等待，在解锁时发送停止等待的通知。

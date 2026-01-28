@@ -81,7 +81,6 @@ C++标准没有对undefined behavior的具体行为进行任何的限定，同�
 这个例子来源于gcc源代码中的一个bug。考虑如下代码：
 
 ```cpp
-
 void foo();
 
 void bar(int *ptr) {
@@ -91,13 +90,11 @@ void bar(int *ptr) {
   }
 }
 
-
 ```
 
 显然， `if` 检查与向 `ptr` 指向的整数赋值两个操作的顺序被弄反了。当不开启优化编译时，编译器生成如下代码：
 
 ```asm
-
 _Z3barPi: # @_Z3barPi
   pushq %rbp
   movq %rsp, %rbp
@@ -112,17 +109,14 @@ _Z3barPi: # @_Z3barPi
   addq $16, %rsp
   popq %rbp
   retq
-
 ```
 
 可以看到编译器生成的代码与源代码是对应的；但一旦开启优化（ `-O1` ），编译器将生成如下代码：
 
 ```asm
-
 _Z3barPi: # @_Z3barPi
   movl $0, (%rdi)
   retq
-
 ```
 
 可以看到，整个 `if` 块已经被完全移除。这是因为，编译器看到程序中对 `ptr` 进行了解引用操作，由此判定 `ptr` 不可能为空指针，否则将产生UB；利用这个知识，编译器得以完全移除后面的 `if` 块。
@@ -132,7 +126,6 @@ _Z3barPi: # @_Z3barPi
 考虑如下例子：
 
 ```cpp
-
 int foo(int *ptr, size_t size) {
   auto realloc_ptr = reinterpret_cast<int *>(realloc(ptr, size * 2));
   
@@ -141,7 +134,6 @@ int foo(int *ptr, size_t size) {
 
   return *ptr;
 }
-
 ```
 
 请思考，在开启编译优化时，编译器会不会将 `return *ptr` 直接优化为 `return 10` 。
@@ -151,7 +143,6 @@ int foo(int *ptr, size_t size) {
 来看编译器生成的代码：
 
 ```asm
-
 _Z3fooPim: # @_Z3fooPim
   pushq %rbx
   movq %rdi, %rbx
@@ -162,13 +153,11 @@ _Z3fooPim: # @_Z3fooPim
   movl $10, %eax   ; Here!
   popq %rbx
   retq
-
 ```
 
 可以看到，编译器很自信地将 `return *ptr` 优化为了 `return 10` 。究其原因，是因为当 `realloc` 在不能在原址处重新分配一个指定大小的内存区域时， `realloc` 会在别处重新分配一块内存区域，并 `free` 原先的内存块。此时， `ptr` 将变为一个dangling pointer；对 `ptr` 的解引用将成为一个UB。为了理解编译器为什么能够分析出来这一点并完成优化，我们不妨再看看编译器生成的IR：
 
 ```ir
-
 define dso_local i32 @_Z3fooPim(i32* nocapture %0, i64 %1) local_unnamed_addr #0!dbg !225 {
   call void @llvm.dbg.value(metadata i32* %0, metadata !230, metadata !DIExpression()), !dbg !233
   call void @llvm.dbg.value(metadata i64 %1, metadata !231, metadata !DIExpression()), !dbg !233
@@ -183,7 +172,6 @@ define dso_local i32 @_Z3fooPim(i32* nocapture %0, i64 %1) local_unnamed_addr #0
 }
 
 declare dso_local noalias i8* @realloc(i8* nocapture, i64) local_unnamed_addr #1
-
 ```
 
 我们重点关注 `realloc` 函数的声明。注意 `realloc` 函数的返回值类型声明为 `noalias i8*` ，其中的 `noalias` 前缀指明了 `realloc` 函数返回的指针不可能与其他任何的指针alias。因此，编译器在后续的过程中可以大胆推断 `realloc_ptr` 与 `ptr` 不可能alias，从而完成我们看到的优化。
@@ -193,7 +181,6 @@ declare dso_local noalias i8* @realloc(i8* nocapture, i64) local_unnamed_addr #1
 考虑如下代码：
 
 ```cpp
-
 void foo();
 
 void bar_signed() {
@@ -215,7 +202,6 @@ void bar_unsigned() {
 编译器在开启优化的情况下将生成如下的代码：
 
 ```asm
-
 _Z10bar_signedv: # @_Z10bar_signedv
   pushq %rax
 .LBB0_1: # =>This Inner Loop Header: Depth=1
@@ -231,7 +217,6 @@ _Z12bar_unsignedv: # @_Z12bar_unsignedv
   jne .LBB1_1
   popq %rbx
   retq
-
 ```
 
 可以看到，编译器直接将 `bar_signed` 中的 `for` 循环优化为了死循环，然而却没有相应地优化 `bar_unsigned` 中的循环。这是因为有符号整数的溢出是UB，而无符号溢出是well-defined behavior。由于有符号整数的溢出是UB，因此编译器假定有符号版本的 `i` 永不溢出，进而推断出循环条件恒成立；由于无符号整数的溢出是well-defined behavior，因此编译器知道无符号版本的 `i` 将最终发生上溢并导致循环条件不再成立。
@@ -241,13 +226,11 @@ _Z12bar_unsignedv: # @_Z12bar_unsignedv
 考虑如下代码：
 
 ```cpp
-
 int64_t foo(int32_t *lhs, int64_t *rhs) {
   *lhs = 10;
   *rhs = 20;
   return *lhs + *rhs;
 }
-
 ```
 
 与之前某一节的问题一样，请思考编译器能否将 `return *lhs + *rhs` 直接优化为 `return 30` 。我们可能会认为， `lhs` 与 `rhs` 可能会alias；此时的返回值将是40而不是30。
@@ -255,13 +238,11 @@ int64_t foo(int32_t *lhs, int64_t *rhs) {
 编译器生成的代码如下：
 
 ```asm
-
 _Z3fooPiPl: # @_Z3fooPiPl
   movl $10, (%rdi)
   movq $20, (%rsi)
   movl $30, %eax
   retq
-
 ```
 
 编译器非常自信地直接将返回值优化为常量30。这是因为C++的strict aliasing rule：简单地来讲，对于两个指针类型 `T1 *` 与 `T2 *` ，如果 `T1` 与 `T2` 在去除cv-qualification后是不兼容的类型并且 `T1` 与 `T2` 都不是 `char` 、 `signed char` 或 `unsigned char` 类型，那么这两个指针类型的实例禁止发生alias，否则将产生UB。在这里，编译器看到 `lhs` 的类型是 `int32_t *` ， `rhs` 的类型是 `int64_t *` ，而 `int32_t` 与 `int64_t` 这两个类型并不兼容，因此判定 `lhs` 与 `rhs` 不可能alias，进而完成优化。
@@ -271,7 +252,6 @@ _Z3fooPiPl: # @_Z3fooPiPl
 考虑如下代码：
 
 ```cpp
-
 int foo(bool flag) {
   int a;
   if (flag) {
@@ -279,7 +259,6 @@ int foo(bool flag) {
   }
   return a;
 }
-
 ```
 
 当 `flag` 为 `false` 时，局部变量 `a` 在 `return` 时将没有得到初始化，产生一个UB。
@@ -287,11 +266,9 @@ int foo(bool flag) {
 编译器生成的代码如下：
 
 ```asm
-
 _Z3foob: # @_Z3foob
   movl $10, %eax
   retq
-
 ```
 
 由于当 `flag` 为 `false` 时会导致UB，因此编译器直接假定 `flag` 为 `true` ，进而将代码优化为上述形式。
@@ -301,24 +278,20 @@ _Z3foob: # @_Z3foob
 考虑如下代码：
 
 ```cpp
-
 int foo(bool flag) {
   if (flag) {
     return foo(flag);
   }
   return 10;
 }
-
 ```
 
 当 `flag` 为 `true` 时，代码将进入死递归，产生一个UB。编译器会生成如下代码：
 
 ```asm
-
 _Z3foob: # @_Z3foob
   movl $10, %eax
   retq
-
 ```
 
 类似地，既然 `flag` 为 `true` 时会产生死递归，那么编译器直接假定 `flag` 恒为 `false` ，进而优化产生上述代码。
@@ -328,7 +301,6 @@ _Z3foob: # @_Z3foob
 下面的代码在C++社区内是一个非常著名的meme，用于展示C++编译器“可以”证伪费马大定理（请读者自觉不信谣不传谣）：
 
 ```cpp
-
 bool TryDisproveFermatTheorem() {
   constexpr int MAXN = 1e9;
   
@@ -368,7 +340,6 @@ bool TryDisproveFermatTheorem() {
 考虑如下代码：
 
 ```cpp
-
 void foo();
 
 int bar() {
@@ -376,7 +347,6 @@ int bar() {
     foo();
   }
 }
-
 ```
 
 我们可能会认为，由于 `bar` 函数中的 `for` 循环不是死循环，因此 `bar` 函数最终会返回，但是其返回值是一个不确定的值。
@@ -384,7 +354,6 @@ int bar() {
 编译器在开启优化的情况下，会生成如下的代码：
 
 ```asm
-
 _Z3barv: # @_Z3barv
   pushq %rbx
   xorl %ebx, %ebx
@@ -392,7 +361,6 @@ _Z3barv: # @_Z3barv
   callq _Z3foov
   addl $1, %ebx
   jmp .LBB0_1
-
 ```
 
 出乎意料地，编译器直接将 `bar` 中的循环优化为了一个死循环。编译器的理由是，如果 `bar` 中的 `for` 循环退出，那么控制流将到达 `bar` 函数的末尾，而bar函数的返回值类型不为 `void` ，因此这是一个UB。编译器假定UB不可能在程序的任何一条路径中出现，因此反推出 `bar` 中的 `for` 循环不可能退出，进而将 `bar` 中的 `for` 循环优化为死循环。

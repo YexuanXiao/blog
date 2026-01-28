@@ -29,27 +29,23 @@ category: blog
 之前的文章[C++异常 - 类和异常](/blog/2022/04/07/C++-Exception-Class-and-RAII/)提到了异常导致内存泄漏的一个案例：
 
 ```cpp
-
 void foo(){
     int* a = new int{}; // 此对象在诱因发生时出现内存泄漏
     int* b = new int{}; // 内存泄漏诱因
     delete a;           // 若b的内存分配失败，则此语句不会被执行
     delete b;
 }
-
 ```
 
 而使用 `std::unique_ptr` 则不会发生内存泄漏：
 
 ```cpp
-
 #include <memory>
 
 void foo(){
     std::unique_ptr<int> a(new int(5));
     std::unique_ptr<int> b(new int(6));
 }
-
 ```
 
 此时若b的构造抛出异常，则a能够被析构，也就没有内存泄漏。
@@ -57,7 +53,6 @@ void foo(){
 `std::unique_ptr` 还能自定义删除器（默认使用 `operator delete`）：
 
 ```cpp
-
 void foo(){
     std::unique_ptr<int, void(*)(int*)> int_ptr(new int(1), [](int* p) {
         delete p;
@@ -71,7 +66,6 @@ void foo(){
         delete p;
     });
 }
-
 ```
 
 `void(int*)` 是一个函数类型，`void(*)(int*)` 是函数指针。
@@ -85,19 +79,16 @@ void foo(){
 `std::unique_ptr` 不能复制，只能移动：
 
 ```cpp
-
 void foo(){
     std::unique_ptr<int> ptr1(new int(5));
     // std::unique_ptr<int> ptr2 = ptr1; 复制构造和复制赋值被删除
     std::unique_ptr<int> ptr2 = std::move(ptr1); // 可以移动构造和移动赋值
 }
-
 ```
 
 可以以值或者右值引用的 `std::unique_ptr` 为参数，它们的作用是相同的：
 
 ```cpp
-
 std::unique_ptr<int> pass_unique(std::unique_ptr<int> p){
     std::cout << *p << std::endl;
     return p;
@@ -113,7 +104,6 @@ void foo(){
     auto p1 = pass_unique(std::move(p));
     auto p2 = pass_unique1(std::move(p1)); // 注意，不能两次移动p
 }
-
 ```
 
 `std::unique_ptr` 也和容器兼容，可以将 `std::unique_ptr` 放入容器。
@@ -140,33 +130,27 @@ void foo(){
 `std::shared_ptr` 的构造和 `std::unique_ptr` 类似：
 
 ```cpp
-
 int foo(){
     std::shared_ptr<int> p(new int(10));
 }
-
 ```
 
 还可以自定义删除器：
 
 ```cpp
-
 void foo(){
     std::shared_ptr<int, void(*)(int*)> int_ptr(new int(1), [](int* p) {
         delete p;
     });
 }
-
 ```
 
 但是由于 `std::shared_ptr` 内部的计数器和其他成员也在自由储存区中分配，所以如果自己去使用 `new` 申请内存，会有第二次动态内存分配，效率降低，最佳实践是使用 `std::make_shared`：
 
 ```cpp
-
 void foo(){
     auto p = std::make_shared<int>(10);
 }
-
 ```
 
 `std::make_shared` 会先申请出足够的内存，再进行布置t new，这样就可以只有一次动态内存分配。
@@ -188,9 +172,7 @@ void foo(){
 下面愚蠢的代码存在内存泄漏隐患：
 
 ```cpp
-
 foo(std::unique_ptr<X>(new X), std::unique_ptr<Y>(new Y));
-
 ```
 
 这是一个函数调用表达式，问题在于，C++ 17之前没有规定函数调用表达式中，以何种顺序计算调用过程中需要用到的值，所以 `new X` 和 `new Y` 可能发生在构造 `unique_ptr<X>` 之前，因为此时没有 `unique_ptr<X>` 被构造，所以第二个 `new` 表达式若抛出异常，则第一个 `new` 表达式发生内存泄漏。
@@ -198,9 +180,7 @@ foo(std::unique_ptr<X>(new X), std::unique_ptr<Y>(new Y));
 改进的方法是使用 `std::make_unique`：
 
 ```cpp
-
 foo(std::make_unique<X>(), std::make_unique<Y>());
-
 ```
 
 由于 `std::make_unique` 是一个函数调用，所以C++确保一定先构造出一个 `unique_ptr<X>`，再构造出另一个 `unique_ptr<X>`。
@@ -216,11 +196,9 @@ foo(std::make_unique<X>(), std::make_unique<Y>());
 第三点参考以下代码：
 
 ```cpp
-
 std::unique_ptr<int> a(new int); // 提到了2次int
 auto b = std::make_unique<int>(); // 只提到了一次int
 auto c{ std::make_unique<int>() }; // 激进地
-
 ```
 
 对于 `int` 这种短的名称，似乎写两次还要更短，但这只是障眼法：如果一个类型名比较长，那么书写两次就是额外的负担，而且造成了维护的不便。由于 `auto` 的存在，使用 `std::make_unique` 就很轻松了。
@@ -230,9 +208,7 @@ auto c{ std::make_unique<int>() }; // 激进地
 `std::make_shared` 最起码也具有 `std::make_unique` 的所有优点，对于以下函数调用：
 
 ```cpp
-
 foo(std::shared_ptr<X>(new X), otherfunc());
-
 ```
 
 如果 `otherfunc()` 抛出了异常，就有可能发生内存泄漏。
@@ -247,12 +223,10 @@ foo(std::shared_ptr<X>(new X), otherfunc());
 如果由于任何一个复杂的原因导致无法使用 `std::make_shared`，那么 `std::shared_ptr` 还支持通过 `std::unique_ptr` 构造：
 
 ```cpp
-
 void foo() {
 	auto a = std::make_unique<int>(1);
 	std::shared_ptr<int> b(std::move(a));
 }
-
 ```
 
 这样就可以避免任何显式的 `new`，保证异常安全。

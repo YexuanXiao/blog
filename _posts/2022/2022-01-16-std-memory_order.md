@@ -9,11 +9,9 @@ category: blog
 <!-- more -->
 
 ```cpp
-
 enum class memory_order : /*unspecified*/ {
     relaxed, consume, acquire, release, acq_rel, seq_cst
 };
-
 ```
 
 #### 宽松顺序relaxed
@@ -23,7 +21,6 @@ enum class memory_order : /*unspecified*/ {
 例如：
 
 ```cpp
-
 x = y = 0;
 // 线程1 ：
 r1 = y.load(std::memory_order_relaxed); // A
@@ -31,7 +28,6 @@ x.store(r1, std::memory_order_relaxed); // B
 // 线程2 ：
 r2 = x.load(std::memory_order_relaxed); // C 
 y.store(42, std::memory_order_relaxed); // D
-
 ```
 
 由于是宽松顺序，所以允许D -\> A -\> B -\> C。
@@ -47,7 +43,6 @@ y.store(42, std::memory_order_relaxed); // D
 互斥锁（例如 `std::mutex` 或原子自旋锁）是释放获得同步的例子：线程A释放锁而线程B获得它时，发生于线程A环境的临界区（释放之前）中的所有事件，必须对于执行同一临界区的线程B （获得之后）可见。
 
 ```cpp
-
 #include <thread>
 #include <atomic>
 #include <cassert>
@@ -76,7 +71,6 @@ int main()
     std::jthread t1(producer);
     std::jthread t2(consumer);  
 }
-
 ```
 
 #### 释放消费顺序release consume
@@ -94,7 +88,6 @@ seq\_cst的原子操作不仅以与释放/获得顺序相同的方式排序内�
 此示例演示序列一直顺序为必要的场合。任何其他顺序都可能触发 `assert`，因为可能令线程 `c` 和 `d` 观测到原子对象 `x` 和 `y` 以相反顺序更改。
 
 ```cpp
-
 #include <thread>
 #include <atomic>
 #include <cassert>
@@ -140,7 +133,6 @@ int main()
     a.join(); b.join(); c.join(); d.join();
     assert(z.load() != 0);  // 决不发生
 }
-
 ```
 
 <div class="ref-label">参考</div>

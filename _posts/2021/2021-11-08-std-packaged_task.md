@@ -11,7 +11,6 @@ std::packaged\_task是C++11将任务进行包装的一种容器，类似于std::
 参考cppreference的[std::packaged_task](https://zh.cppreference.com/w/cpp/thread/packaged_task)示例 ：
 
 ```cpp
-
 #include <iostream>
 #include <cmath>
 #include <thread>
@@ -60,7 +59,6 @@ int main()
     task_bind();
     task_thread();
 }
-
 ```
 
 正如示例代码展示的那样，std::packaged\_task会将任务包装为可调用对象，类似于std::bind，并且任务的结果被装入std::future，在适当的时候可以通过std::future::get来获得最终结果。

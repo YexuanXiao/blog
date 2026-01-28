@@ -31,13 +31,11 @@ category: blog
 `pre` 和 `post` 写在函数的参数列表的括号后面，比如：
 
 ```cpp
-
 int foo(int x) pre(x >= 0) post(r : r < 0)
 {
     x--;
     return x;
 }
-
 ```
 
 `pre` 在执行函数体前调用，`post` 在函数返回后调用。如果条件求值的结果是 `false`，那么就会调用契约违反处理函数。`pre` 和 `post` 可以出现多次，按编写顺序进行检查。
@@ -53,13 +51,11 @@ int foo(int x) pre(x >= 0) post(r : r < 0)
 对于成员初始化列表，要写在契约后面：
 
 ```cpp
-
 struct x
 {
     int y = 1;
     x() pre( this->y == 1) : y( 2 ) {}
 };
-
 ```
 
 函数多次声明时契约必须匹配。
@@ -87,7 +83,6 @@ C++标准的意思就是让你在 `pre` 和 `post` 的条件中去调用具有�
 标准库新加了 `<contracts>` 头文件，概要如下：
 
 ```cpp
-
 namespace std::contracts
 {
 // 契约来源 
@@ -128,7 +123,6 @@ class contract_violation
 };
 void invoke_default_contract_violation_handler(const contract_violation &);
 }
-
 ```
 
 `comment` 函数返回实现定义的字符串，可以是字符串形式的契约条件，`evaluation_exception` 可以获得被契约捕获的异常，`is_terminating` 等于判断契约模式是不是enforce。实际上当模式为ignore和quick-enforce时都不会调用契约违反处理函数。剩下的函数的功能自己意会。

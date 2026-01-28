@@ -25,7 +25,6 @@ category: blog
 观察如下的 `AppleProperty` 类，用于表示苹果的属性：
 
 ```cpp
-
 enum class Color
 {
 	Red = 0, Yellow, Green
@@ -41,7 +40,6 @@ struct AppleProperty {
 	Mouthfeel mouthfeel = Mouthfeel::Hard;
 	price_type price = 0;
 };
-
 ```
 
 使用枚举来表示苹果的颜色和口感，因为苹果的颜色和口感是有穷可列的（如果有反对意见，请姑且这么认为），同时定义了一个 `price_type` 用来表达价格。虽然这个 `price_type` 看着很多余，且用 `int` 是非常自然的表达价格的一种方式，但是这可以提高可维护性：`int` 能用来表示价格，但并不意味着 `int` 就是价格，使用别名能让人牢记 `price` 的类型是 `price_type`，而不是 `int`，这是**将类型抽象化**。
@@ -55,14 +53,12 @@ struct AppleProperty {
 接下来考虑如下的 `String` 类：
 
 ```cpp
-
 class String {
 	using char_type = char;
 	size_t size;
 	size_t capacity;
 	char_type* str;
 };
-
 ```
 
 `String` 类就是一个句柄（handle）类，因为其成员有一个指针，该指针指向某个不属于 `String` 类自身的外部资源（字符串缓冲区）。
@@ -80,13 +76,11 @@ class String {
 有了 `String`，就有了补完苹果类的最后一块木板：
 
 ```cpp
-
 struct Apple {
 	using string_type = std::string;
 	AppleProperty prop;
 	string_type name;
 };
-
 ```
 
 现在观察上面的 `AppleProperty` 类和 `String` 类，分别对应值类和句柄类：
@@ -114,7 +108,6 @@ struct Apple {
 换句话说，只含有句柄类和值类的类，即复合类，其表现也如同值类：**可以使用编译器生成的构造，赋值，交换和移动**。
 
 ```cpp
-
 enum class Color
 {
 	Red = 0, Yellow, Green
@@ -153,7 +146,6 @@ int main() {
 	Apple a;
 	Apple b = a; // 控制台会输出String copy
 }
-
 ```
 
 ### 资源管理
@@ -165,7 +157,6 @@ int main() {
 考虑如下情况：
 
 ```cpp
-
 template<class T, class U>
 class Mixin {
 	T* t = 0;
@@ -176,7 +167,6 @@ public:
 		u = new U(rhs);
     }
 };
-
 ```
 
 如果你认真看过之前的文章，那么就很清楚其问题所在：连续的两次 `new` 存在内存泄漏的可能。
@@ -184,14 +174,12 @@ public:
 但是，如果将构造函数进行改写：
 
 ```cpp
-
 template<class T, class U>
 Mixin<T,U>::Mixin(T&& lhs, U&& rhs) {
 	char* buffer = new char[sizeof(T) + sizeof(U)];
 	t = new(buffer) T(lhs);
 	u = new(buffer + sizeof(T)) U(rhs);
 }
-
 ```
 
 虽然将实际的内存分配减小到一次了，但是由于 `U` 和 `T` 的构造过程中本身可能抛异常，若 `T` 已经构造好了，`U` 抛出异常，则还是无法自动析构 `T`（`new` 出来的对象不会被自动析构）。
@@ -203,7 +191,6 @@ Mixin<T,U>::Mixin(T&& lhs, U&& rhs) {
 那么最简单的方法就是让成员不是裸指针，而是 `std::unique_ptr`（或者 `std::shared_ptr`）：
 
 ```cpp
-
 template<class T, class U>
 class Mixin {
 	std::unique_ptr<T> t;
@@ -217,7 +204,6 @@ Mixin<T,U>::Mixin(T&& lhs, U&& rhs) {
 	t = std::make_unique<T>(lhs);
 	u = std::make_unique<U>(rhs);
 }
-
 ```
 
 由于 `std::unique_ptr` 是一个句柄类模板，所以 `std::unique_ptr<T>` 表现为值类，构造的时候和值一样构造，使得 `Mixin` 从句柄类变为了值类，那么整个构造过程就是异常安全的。
@@ -229,7 +215,6 @@ Mixin<T,U>::Mixin(T&& lhs, U&& rhs) {
 考虑如下代码：
 
 ```cpp
-
 class HandleA {
 	int* intptr = 0;
 public:
@@ -246,7 +231,6 @@ int main() {
 	HandleA a(1), b(2);
 	a = b;                    // #1复制赋值
 }
-
 ```
 
 \#1处用到了复制赋值，但由于并不存在自定义的复制赋值，所以编译器会粗暴的执行 `a.intptr = b.intptr`，那么a就存在内存泄漏和double free（对 `b.intptr` 的值 `delete` 两次），程序会因此崩溃。
@@ -254,7 +238,6 @@ int main() {
 所以一般有两种方案：
 
 ```cpp
-
 HandleA& HandleA::operator=(const HandleA& rhs) {
 	delete this->intptr;
 	this->intptr = new int(*(rhs.intptr));
@@ -265,7 +248,6 @@ HandleA& HandleA::operator=(const HandleA& rhs) {
 HandleA& HandleA::operator=(const HandleA& rhs) {
 	*(this->intptr) = *(rhs.intptr);
 }
-
 ```
 
 前一种适用于不定长数组的情况，后一种适用于定长数据的情况，总之这是一种简化模型。
@@ -273,18 +255,15 @@ HandleA& HandleA::operator=(const HandleA& rhs) {
 第二种看上去很美好对不对？但是这实际上是错的，错的很彻底，因为有一个什么也不干的默认构造函数：
 
 ```cpp
-
 int main() {
     Handle a, b(1);
     a = b;
 }
-
 ```
 
 此时 `a.intptr == 0` 为真，对于 第一种实现而言，由于 `delete 0` 是合法的，所以没问题。但是对第二种情况而言，由于函数根本就没检查 `this->intptr` 是否为 `0`，就粗暴的进行解引用，对 `0` 解引用是UB（未定义行为），会直接导致程序崩溃。所以如果采用第二种，必须要检查对象是否处于合法状态：
 
 ```cpp
-
 HandleA& HandleA::operator=(const HandleA& rhs) {
     if (this->intptr) {
 	    *(this->intptr) = *(rhs.intptr);
@@ -292,7 +271,6 @@ HandleA& HandleA::operator=(const HandleA& rhs) {
         this->intptr = new int(*(rhs.intptr));
     }
 }
-
 ```
 
 那么有人就要说了，**为什么不能让默认构造多干点事？先说结论：Handle类的默认构造就应该什么也不干**。
@@ -318,12 +296,10 @@ HandleA& HandleA::operator=(const HandleA& rhs) {
 首先考虑移动构造：
 
 ```cpp
-
 HandleA::HandleA(HandleA&& rhs) noexcept {
 	this->intptr = rhs.intptr;
 	rhs.intptr = 0;              // 这里必须清零
 }
-
 ```
 
 这个想法很简单，把需要舍弃的 `rhs` 的参数复制给当前对象，然后把 `rhs` 置 `0`。
@@ -331,12 +307,10 @@ HandleA::HandleA(HandleA&& rhs) noexcept {
 但是有没有想过 `rhs` 的未来是什么？使用代码和展开后的伪代码模拟整个过程：
 
 ```cpp
-
 int main() {
     HandleA a(1);
     HandleA b{std::move(a)}; // 进行移动构造，a就是rhs
 }
-
 ```
 
 其展开后的伪代码如下：
@@ -367,12 +341,10 @@ int main() {
 实际上我更愿意写这样的移动构造：
 
 ```cpp
-
 HandleA::HandleA(HandleA&& rhs) noexcept {
 	this->intptr = 0;
 	std::swap(this->intptr,rhs.intptr);
 }
-
 ```
 
 这种写法代表着，先构造一个不持有任何资源的 `a`，然后再交换 `a` 和 `b`。这么写是构造出一个统一的思想，这种思想就是：**移动不是单向的，而是双向的，换句话说移动是交换，不是赋值。**
@@ -382,11 +354,9 @@ HandleA::HandleA(HandleA&& rhs) noexcept {
 理解了移动构造，再理解移动赋值就非常简单：
 
 ```cpp
-
 HandleA& HandleA::operator=(HandleA&& rhs) noexcept {
 	std::swap(this->intptr, rhs.intptr);
 }
-
 ```
 
 **移动赋值居然是交换所有成员！**这就和我上面写到移动构造完成了语义上的统一：移动构造先构造一个空对象，再交换成员；移动赋值直接交换所有成员。
@@ -400,7 +370,6 @@ HandleA& HandleA::operator=(HandleA&& rhs) noexcept {
 以下是 `std::swap` 对于左值引用的经典实现：
 
 ```cpp
-
 namespace std {
     template<class T>
     void swap(T& lhs, T& rhs){
@@ -409,7 +378,6 @@ namespace std {
         rhs = std::move(temp);
     }
 }
-
 ```
 
 `std::swap` 通过移动构造和移动赋值实现了两个对象的交换，没有任何一点多余之处！

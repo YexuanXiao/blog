@@ -17,13 +17,11 @@ C++17带来了许多重要语法改进，其中对于广大C++使用者而言最
 ### 绑定数组元素
 
 ```cpp
-
 int a[2] = { 1,2 };
 // std::array<int,2> a = { 1,2 };
  
 auto [x,y] = a; // 创建e[2]，复制a到e，然后x指代e[0]，y指代e[1]
 auto& [xr, yr] = a; // xr指代a[0]，yr指代a[1]
-
 ```
 
 结构化绑定能够直接分解数组，将数组元素暴露出来，同时支持C风格数组和std::array，不过不是很常用。
@@ -31,7 +29,6 @@ auto& [xr, yr] = a; // xr指代a[0]，yr指代a[1]
 ### 绑定数据成员
 
 ```cpp
-
 struct S {
     mutable int x1 : 2;
     volatile double y1;
@@ -43,7 +40,6 @@ const auto [x, y] = f(); // x是标识2位位域的int左值
 
 S s;
 auto& [x2, y2] = s;
-
 ```
 
 结构化绑定支持对返回值的绑定也支持直接对对象进行绑定。
@@ -55,7 +51,6 @@ auto& [x2, y2] = s;
 结构化绑定第一大有用点在于绑定类的数据成员，而第二大有用点就在于绑定std::tuple的元素。
 
 ```cpp
-
 float x{};
 char  y{};
 int   z{};
@@ -65,7 +60,6 @@ const auto& [a,b,c] = tpl;
 // a指名指代x的结构化绑定；decltype(a) 为float&
 // b指名指代y的结构化绑定；decltype(b) 为char&&
 // c指名指代tpl的第3元素的结构化绑定；decltype(c) 为const int
-
 ```
 
 注意，此时tuple中的元素第二个元素是右值，所以结构化绑定时必须使用const & 才能将右值（右值引用）绑定到左值上。
@@ -73,14 +67,12 @@ const auto& [a,b,c] = tpl;
 一般情况就简单很多：
 
 ```cpp
-
 float x{};
 char  y{};
 int   z{};
 
 std::tuple<float&, char&, int> tpl(x, y, z);
 auto [a, b, c] = tpl; // 其实c是一个右值引用，表现为普通变量
-
 ```
 
 这时a，b也都为引用，但是不必是const。
@@ -90,7 +82,6 @@ auto [a, b, c] = tpl; // 其实c是一个右值引用，表现为普通变量
 如果你不使用结构化绑定，那你就必须使用如下的丑陋代码：
 
 ```cpp
-
 float x{};
 char  y{};
 int   z{};
@@ -98,7 +89,6 @@ int   z{};
 std::tuple<float&, char&, int> tpl(x, y, z);
 
 auto a = std::get<0>(tpl); // 通过std::get<>取出tuple中的元素
-
 ```
 
 ### 绑定std::pair的元素
@@ -106,32 +96,27 @@ auto a = std::get<0>(tpl); // 通过std::get<>取出tuple中的元素
 由于std::pair和std::tuple，std::array一样都在编译时确定元素数量和类型，所以结构化绑定理所当然的支持std::pair。并且由于std::pair被大量应用于诸如std::map这类容器中，所以使用结构化绑定能够大大缓解std::pair使用上的不便：
 
 ```cpp
-
 float x{};
 char  y{};
 std::pair<int, double> p2(x, y);
 
 auto && [x1, y1] = p2;
 auto [x2, y2] = std::make_pair(x, y);
-
 ```
 
 同时，结构化绑定也支持右值引用（注意，右值引用是左值，实际上相当于一个普通变量）。
 
 ```cpp
-
 std::map<int, int> mapa;
 if (auto&& [iter, inserted] = mapa.insert({ 1, 2 }); inserted)
     std::cout << "inserted successfully" << std::endl;
 for (auto&& [key, value] : map)
     std::cout << "[" << key << ", " << value << "]" << std::endl;
-
 ```
 
 ### 万能引用
 
 ```cpp
-
 float x{};
 char  y{};
 int   z{};
@@ -140,7 +125,6 @@ std::tuple<float&, char&&, int> tpl(x, std::move(y), z);
 
 auto& [a1, b1, c1] = tpl;
 auto&& [a, b, c] = tpl;
-
 ```
 
 最后一句其实等价于上一句，这实际上是由于数据被绑定到的tuple类型的tpl是一个左值，`auto&&` 实际上是万能引用，而万能引用是兼容左值引用的。**引用说明是对于目标元组而言的**。
@@ -148,7 +132,6 @@ auto&& [a, b, c] = tpl;
 对于下面的代码，就必须使用万能引用，而不能使用左值引用：
 
 ```cpp
-
 float x{};
 char  y{};
 int   z{};
@@ -157,7 +140,6 @@ std::tuple<float&, char&&, int> tpl(x, std::move(y), z);
 
 auto&& [a, b, c] = std::move(tpl); // 使用左值引用会提示 非常量引用的初始值必须为左值
 const auto& [a1, b1, c1] = std::move(tpl); // 因此可以使用常量引用
-
 ```
 
 此处使用常量引用（顶层const）则代表引用不可修改（而不是引用的对象不可修改，由于是顶层const，所以可以储存x和z的值）。

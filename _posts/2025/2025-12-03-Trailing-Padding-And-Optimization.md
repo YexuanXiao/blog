@@ -12,7 +12,6 @@ category: blog
 今天有人问我为什么有填充字节，可平凡复制的对象的复制不能被优化成 `memcpy`，并给出了如下代码：
 
 ```cpp
-
 #include <type_traits>
 #include <cstddef>
 
@@ -29,7 +28,6 @@ void copy(A * __restrict__ dst, A *__restrict__ from, std::size_t n) {
         dst[i] = from[i];
     }
 }
-
 ```
 
 他发现把注释取消后，编译器就可以将 `copy` 优化为 `memcpy`。
@@ -37,12 +35,10 @@ void copy(A * __restrict__ dst, A *__restrict__ from, std::size_t n) {
 然而他问题没分析对，实际上将 `A::a` 移动到最后面，编译器也能优化 `copy` 函数为 `memcpy`。
 
 ```cpp
-
 struct A {
     char y{};
     short a{};
 };
-
 ```
 
 为什么会有这种现象？原因是，尾部填充字节可以被派生类的子对象重用，因此尾部填充字节不允许被以任何形式修改。这方面Itanium ABI和MSVC ABI应该都有规定。

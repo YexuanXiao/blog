@@ -11,7 +11,6 @@ C++17开始，编译器添加了constexpr if用于模板的编译期判断，以
 在之前的文章[C++可变参数模板](/blog/2021/08/11/Cpp-Variadic-Template/) ，有这样的一个函数模板：
 
 ```cpp
-
 void variadicPrint()
 {
     std::cout << std::endl;
@@ -23,7 +22,6 @@ void variadicPrint(T Head, Ts... Tail)
     std::cout << Head;
     variadicPrint(Tail...);
 }
-
 ```
 
 由于可变参数的参数数量可变，所以不得不通过重载可变参数函数模板来实现递归的退出。
@@ -35,7 +33,6 @@ void variadicPrint(T Head, Ts... Tail)
 而C++17引入了constexpr if可以将这两个模板合并为一个：
 
 ```cpp
-
 template <typename T, typename... Ts>
 void variadicPrint(T head, Ts... tail)
 {
@@ -43,7 +40,6 @@ void variadicPrint(T head, Ts... tail)
     if constexpr (sizeof...(tail) > 0)
         variadicPrint(tail...);
 }
-
 ```
 
 实际上这就是让编译器只在tail \> 0的时候才递归的展开自身。
@@ -53,7 +49,6 @@ C++17开始，当一个常量表达式中允许对其捕获或引入的每个数
 简单来说就是lambda可用于constexpr的环境中，并且在constexpr环境中使用的lambda默认constexpr。
 
 ```cpp
-
 
 constexpr int Increment(int n)
 {
@@ -84,7 +79,6 @@ int main()
 
     std::cout << answer() << std::endl;
 }
-
 ```
 
 <div class="ref-label">参考</div>

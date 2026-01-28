@@ -15,7 +15,6 @@ std::accumulate是C++ numeric头文件中提供的求和算法，其中一个最
 根据书中的内容，并发版accumulate如下：
 
 ```cpp
-
 #include <vector>
 #include <thread>
 #include <functional>
@@ -69,7 +68,6 @@ int main()
     int sum = parallel_accumulate(a.begin(), a.end(), 20);
     std::cout << sum << std::endl;
 }
-
 ```
 
 我在原作者代码基础上将伪函数改写为lambda，for\_each改为range-for并做了其他一些调整，整体与原代码保持一致。

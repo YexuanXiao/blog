@@ -16,7 +16,6 @@ category: blog
 取模和取余运算过程是相似的，废话不多说，直接上代码：
 
 ```cpp
-
 #include <iostream>
 #include <cmath>
 int main ()
@@ -35,18 +34,15 @@ int main ()
     h = -1 - (g * d);
     std::cout << h << std::endl;
 }
-
 ```
 
 输出结果如下：
 
 ```powershell
-
 -1
 255
 255
 -1
-
 ```
 
 分析：第一个输出是直接使用 % 取余，得到 -1；第二个是测试C++隐含的转换，得到255；第三个是分步取模，第四个是分步取余。

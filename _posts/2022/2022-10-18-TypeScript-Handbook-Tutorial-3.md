@@ -13,7 +13,6 @@ ECMAScript 6和TypeScript的Class本质上是带属性的函数的模板，这�
 TypeScript的Class声明在开启strictPropertyInitialization后强制使用初始化器或者提供构造函数，以防出现未初始化的变量：
 
 ```ts
-
 class Point {
     x: number = 0
     y: number = 0
@@ -23,7 +22,6 @@ class OKGreeter {
     // Not initialized, but no error
     name!: string
 }
-
 ```
 
 理所当然的，在有初始化器的情况下类型标注是可选的。如果既没有类型标注也没有初始化器，则类型也理所当然的是 `any`。
@@ -33,7 +31,6 @@ class OKGreeter {
 与C++不同的是，构造函数必须使用 `this` 来对属性进行赋值，这其实也是理所当然的，因为Class在实现上等价于函数：
 
 ```ts
-
 class GoodGreeter {
     name: string
     constructor() {
@@ -45,7 +42,6 @@ function GoodGreeter() {
     this.name = 'hello'
     return this
 }
-
 ```
 
 当然，TypeScript的语法中Class不是函数，这两种写法不等价，这种表示只是为了说明原因。
@@ -53,7 +49,6 @@ function GoodGreeter() {
 和C++的 `const` 类似，TypeScript可以把属性标记为只读，但构造函数不受此限制：
 
 ```ts
-
 class Greeter {
     readonly name: string
     constructor(otherName: string = '') {
@@ -68,7 +63,6 @@ class Greeter {
     }
     */
 }
-
 ```
 
 和普通函数一样，构造函数也可也有默认值，也可以有可选参数，初始化的方式和C++一样多样，并且构造函数和普通函数一样支持重载。
@@ -80,7 +74,6 @@ class Greeter {
 TypeScript还支持getter和setter：
 
 ```ts
-
 class C {
     private _length = 0
     get length() {
@@ -90,7 +83,6 @@ class C {
         this._length = value
     }
 }
-
 ```
 
 getter和setter可以伪装成一个只读/只写的属性，内部操纵真正的属性，从而使得成员为 `private` 的时候能够进行单向访问控制。
@@ -104,20 +96,17 @@ TypeScript 4.3开始setter和普通函数一样参数支持联合类型（实际
 Classes和 `object` 类型类似，支持索引签名：
 
 ```ts
-
 class MyClass {
     [s: string]: boolean | ((s: string) => boolean)
     check(s: string) {
         return this[s] as boolean
     }
 }
-
 ```
 
 #### 继承
 
 ```ts
-
 interface Pingable {
     ping(): void
 }
@@ -126,7 +115,6 @@ class Sonar implements Pingable {
         console.log('ping!')
     }
 }
-
 ```
 
 TypeScript中派生类可以实现（implements）多个接口或者类型别名，使用逗号分隔。
@@ -138,7 +126,6 @@ TypeScript中派生类可以实现（implements）多个接口或者类型别名
 和C++的继承类似的是 `extends`，当然，TypeScript没有虚函数，所以整套“继承”系统实际上是通过“实现”来约束属性，通过“扩展”来复用代码。
 
 ```ts
-
 class Animal {
     move() {
         console.log('Moving along!')
@@ -152,7 +139,6 @@ class Dog extends Animal {
         }
     }
 }
-
 ```
 
 理所当然的，“扩展”后的派生类也支持覆盖基类的函数，同时，和Java类型，使用 `super` 关键词来指代基类实现调用基类被覆盖的函数。
@@ -160,7 +146,6 @@ class Dog extends Animal {
 和C++类似的是，派生类重写的函数必须兼容被覆盖的函数：
 
 ```ts
-
 class Base {
     greet() {
         console.log('Hello, world!')
@@ -179,7 +164,6 @@ class Derived extends Base {
     // not assignable to the same property
     // Type '(name: string) => void' is not assignable to type '() => void'.
 }
-
 ```
 
 TypeScript的成员初始化方式和C++类似，先使用基类初始化器，再使用构造函数，再使用派生类初始化器和派生类构造函数。
@@ -203,7 +187,6 @@ TypeScript支持成员可见性，使用类似C++的 `protected`，`private` 和
 不仅仅通过属性声明来声明属性，还可以通过构造函数声明属性：
 
 ```ts
-
 class FileSystemObject {
     constructor(public path: string, private networked: boolean) {}
 }
@@ -212,7 +195,6 @@ class FileRep extends FileSystemObject {
     constructor(path: string, public content: string) {
     }
 }
-
 ```
 
 在构造函数的参数上添加可见性修饰符，或者只读说明符则可将该参数声明为属性，构造函数内会自动生成 `this.para = para`。
@@ -236,7 +218,6 @@ TypeScript从ECMAScript 2022中间接的继承了Java的静态块用于初始化
 由于JavaScript为动态类型，因此代码的行为会随着类型的改变而改变：
 
 ```ts
-
 class MyClass {
     name = 'MyClass'
     getName() {
@@ -251,7 +232,6 @@ const obj = {
  
 // Prints 'obj', not 'MyClass'
 console.log(obj.getName())
-
 ```
 
 虽然这种写法在TypeScript不常见而且很难发生，但是需要注意的是，`obj` 可能是用户创建的，并且所有TypeScript代码都会转换为JavaScript执行。
@@ -259,27 +239,23 @@ console.log(obj.getName())
 为了解决这个问题，有两种解决方案：
 
 ```ts
-
 class MyClass {
     name = 'MyClass'
     getName = () => {
         return this.name
     }
 }
-
 ```
 
 使用箭头函数可以消除错误，但是会占用更多的内存，并且不能再使用 `super` 来调用基类的函数。
 
 ```ts
-
 class MyClass {
     name = 'MyClass'
     getName(this: MyClass) {
         return this.name
     }
 }
-
 ```
 
 另一种则是类似C++中的显式对象形参，添加额外的 `this` 参数来进静态检查：在TypeScript环境中不允许对 `this` 类型进行转换。因此错误的使用会被检查出来。
@@ -289,14 +265,12 @@ class MyClass {
 在类内，`this` 还可以作为类型标注：
 
 ```ts
-
 class Box {
     content: string = ''
     sameAs(other: this) {
         return other.content === this.content
     }
 }
-
 ```
 
 注意，这时候 `this` 类似于C++中的模板显式对象形参，这意味着一个派生自 `Box` 的类的引用不能使用 `sameAs`。
@@ -306,7 +280,6 @@ class Box {
 可以使用is来构造类型谓词：
 
 ```ts
-
 class FileSystemObject {
     isFile(): this is FileRep {
         return this instanceof FileRep
@@ -319,13 +292,11 @@ class FileSystemObject {
     }
     constructor(public path: string, private networked: boolean) {}
 }
-
 ```
 
 一个常见的应用是判断可选属性：
 
 ```ts
-
 class Box<T> {
     value?: T
     hasValue(): this is { value: T } {
@@ -341,7 +312,6 @@ if (box.hasValue()) {
     box.value
     // (property) value: unknown
 }
-
 ```
 
 #### 抽象成员和方法
@@ -349,7 +319,6 @@ if (box.hasValue()) {
 和C++的抽象类类似，TypeScript使用 `abstract` 关键词来声明一个抽象类：
 
 ```ts
-
 abstract class Base {
     abstract getName(): string
     printName() {
@@ -359,7 +328,6 @@ abstract class Base {
 
 const b = new Base()
 // Cannot create an instance of an abstract class.
-
 ```
 
 不同的是，必须先把类定义为抽象，才能声明抽象方法。
@@ -369,7 +337,6 @@ const b = new Base()
 Part2中提到过约束泛型类的构造，还有另一种方式：
 
 ```ts
-
 function create<Type>(c: { new (): Type }): Type {
     return new c()
 }
@@ -377,19 +344,16 @@ function create<Type>(c: { new (): Type }): Type {
 function create<Type>(c: new () => Type ): Type {
     return new c()
 }
-
 ```
 
 实际上也可以约束普通函数：
 
 ```ts
-
 function greet(ctor: new () => Base) {
     const instance = new ctor()
     instance.printName()
 }
 greet(Derived)
-
 ```
 
 其中 `Derived` 继承 `Base`。

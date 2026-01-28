@@ -99,14 +99,12 @@ C++沉思录中介绍了如下的一种数学表达式：
 同时，这三种节点不可继续拆分。那么先设计一个能表示所有种类节点的基类：
 
 ```cpp
-
 class Expr_node {
     friend std::ostream& operator<< (std::ostream&, const Expr_node&);
 protected:
     virtual std::ostream& print(std::ostream&) const = 0;
     virtual ~Expr_node(){}
 };
-
 ```
 
 首先这个类需要一个虚析构函数，这样才能保证子类对象能够正确被析构。
@@ -116,7 +114,6 @@ protected:
 不过，析构函数也可以定义为纯虚函数，即声明为 `= 0;` 的同时在类外通过作用域运算符定义函数体：
 
 ```cpp
-
 class Expr_node {
     friend std::ostream& operator<< (std::ostream& o, const Expr_node& e){
         return e.print(o);
@@ -127,7 +124,6 @@ protected:
 };
 
 Expr_node::~Expr_node(){}
-
 ```
 
 实际上所有纯虚函数都可以使用相同方法添加定义，并且除了纯虚析构函数以外的有定义纯虚函数只能通过作用域运算符显式调用。
@@ -137,7 +133,6 @@ Expr_node::~Expr_node(){}
 然后分别实现整数节点，一元表达式节点和二元表达式节点：
 
 ```cpp
-
 class Int_node : public Expr_node {
     int n;
     std::ostream& print(std::ostream& o) const {
@@ -167,17 +162,14 @@ class Binary_node : public Expr_node {
 public:
     Binary_node(const std::string& a, const Expr_node* b, const Expr_node* c) : op(a), left(b), right(c) {}
 };
-
 ```
 
 现在这个类已经初具雏形了，但是此时有一个严重的问题摆在面前：一元表达式和二元表达式的创建期望获得指针，但是并没有使用任何内存回收，这将导致内存泄漏：
 
 ```cpp
-
 Binary_node *e = new Binary_node("*", new Unary_node("-", new Int_node(5)), new Binary_node("+", new Int_node(3), new Int_node(4)));
 
 std::cout << *e << std::endl; // 打印((-5)*(3+4))
-
 ```
 
 并且不得不公开派生类的构造函数。
@@ -187,7 +179,6 @@ std::cout << *e << std::endl; // 打印((-5)*(3+4))
 真正的解决方法是额外设计一个用于管理节点的表达式类，这个类是所有节点类的友元类（由于友元关系不能继承），用于表示边：
 
 ```cpp
-
 class Expr {
     friend std::ostream& operator<<(std::ostream&, const Expr&);
     Expr_node *node;
@@ -205,7 +196,6 @@ public:
     ~Expr();
     Expr& operator=(const expr& rhs);
 };
-
 ```
 
 ![屏幕截图2022-01-26 172837](//static.nykz.org/blog/images/2022-01-21/屏幕截图_2022-01-26_172837.avif "candark")
@@ -223,7 +213,6 @@ public:
 完整代码及注释如下：
 
 ```cpp
-
 #include <iostream>
 #include <string>
 
@@ -335,7 +324,6 @@ int main() {
     std::cout << t << std::endl;
     return 0;
 }
-
 ```
 
 由于Expr类和Expr\_node类互相依赖，则需要注意以下几点，否则无法编译：
@@ -364,7 +352,6 @@ C++ Primer提出了一种文本查询类，该类被设计为可以使用C++自�
 ![image](//static.nykz.org/blog/images/2022-01-21/image_3.avif "candark")
 
 ```cpp
-
 #include <vector>
 #include <set>
 #include <map>
@@ -576,7 +563,6 @@ int main() {
 	cout << result << endl;
 	return 0;
 }
-
 ```
 
 ### 使用模板代替继承来对类型进行限制

@@ -15,7 +15,6 @@ C++17中，关于模板的一个功能修改是增加了模板参数类型推导
 [^1]: 参考C++ Templates 2.9
 
 ```cpp
-
 template <typename T>
 class MyContainer
 {
@@ -26,7 +25,6 @@ public:
 
 MyContainer(const char*) -> MyContainer<std::string>;
 // 此推导指引目的是为了特化构造函数，此时可以省略template<typename T>，因为没有T被使用
-
 ```
 
 由于C++17开始支持自动模板类型推导，所以某些情况下模板参数可以不用显式声明。而对于C风格字符串，则值为参数会推导出 `const char*`，引用为参数会推导出 `char[N + 1]`，`N` 为字符串长度，而大部分情况下我们既不需要 `const char*`，也不需要 `char[N + 1]`，而是 `std::string`。此时则可用推导指引辅助编译器进行推导，对类型进行特化。
@@ -36,13 +34,11 @@ MyContainer(const char*) -> MyContainer<std::string>;
 [^2]: 参考C++ Templates 4.4.4
 
 ```cpp
-
 namespace std {
     template<typename T, typename... Ts> array(T, Ts...)
         -> array<enable_if_t<is_same_v<T, Ts> && ...>, T>,
             (1 + sizeof...(Ts))>; // 此推导指引目的是对每个参数的类型进行提取
 }
-
 ```
 
 上面的推导指引是C++17 STL的一部分，用于辅助 `std::array` 进行严格的类型匹配，确保不会存在歧义。
@@ -52,10 +48,8 @@ namespace std {
 [^3]: 参考[Stack overflow](https://stackoverflow.com/questions/40951697/what-are-template-deduction-guides-and-when-should-we-use-them)
 
 ```cpp
-
 template<typename Iterator> vector(Iterator b, Iterator e) -> 
     vector<typename std::iterator_traits<Iterator>::value_type>;
-
 ```
 
 此处指引旨在帮助 `vector` 使用老式迭代器进行元素构造时，能够选择正确的重载。
@@ -65,7 +59,6 @@ template<typename Iterator> vector(Iterator b, Iterator e) ->
 [^4]: 参考C++ Templates 15.12.1
 
 ```cpp
-
 template<typename T>
 struct foo
 {
@@ -83,6 +76,5 @@ int main()
     A a5 = {42} // with guide
     A a6{42} // with guide
 }
-
 ```
 

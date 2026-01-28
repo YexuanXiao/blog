@@ -40,7 +40,6 @@ category: blog
 知道了字节序的基本概念后，就是如何判断字节序，以C++为例：
 
 ```cpp
-
 #include <iostream>
 
 inline bool checkEndian()
@@ -49,7 +48,6 @@ inline bool checkEndian()
 	return *((char *)&a);// 小端字节序为true
 	//return *((char *)&a + sizeof(int) - 1);// 大端字节序为true
 }
-
 ```
 
 思路很简单，unsigned int不管在什么平台上一定大于等于2byte，给变量赋初值小于2<sup>8</sup> 的初值，用强制类型转换定位到低位或者高位地址再判断该字节是否有数值。
@@ -57,7 +55,6 @@ inline bool checkEndian()
 由此也可以得到一个转换函数调整任意大小的数据：
 
 ```cpp
-
 void roundBytes(unsigned char *data, size_t length)
 {
 	unsigned char *begin = (unsigned char *)data;
@@ -68,7 +65,6 @@ void roundBytes(unsigned char *data, size_t length)
 		*begin = temp;
 	}
 }
-
 ```
 
 思路也很简单，将数据强制转换为unsigned char\* 再前后颠倒就可以。
@@ -80,7 +76,6 @@ void roundBytes(unsigned char *data, size_t length)
 C++20为了解决字节序问题，设置了一组枚举[`std::endian`](https://zh.cppreference.com/w/cpp/types/endian)用于判断当前平台的字节序：
 
 ```cpp
-
 // <bit>
 enum class endian
 {
@@ -88,13 +83,11 @@ enum class endian
     big    = /*implementation-defined*/,
     native = /*implementation-defined*/
 };
-
 ```
 
 使用的时候只需要判断native是否等于big或者little即可：
 
 ```cpp
-
 #include <bit>
 #include <iostream>
  
@@ -105,13 +98,11 @@ int main() {
         std::cout << "little-endian" << std::endl;
     else std::cout << "mixed-endian" << std::endl;
 }
-
 ```
 
 C++23添加了函数[`std::byteswap`](https://zh.cppreference.com/w/cpp/numeric/byteswap)用于翻转字节序 ：
 
 ```cpp
-
 #include <bit>
 #include <cstdint>
 #include <concepts>
@@ -147,7 +138,6 @@ int main()
     dump(z);
     dump(std::byteswap(z));
 }
-
 ```
 
 byteswap是一个函数模板，参数是一个整数类型。
@@ -159,25 +149,21 @@ byteswap是一个函数模板，参数是一个整数类型。
 由于寄存器大小通常大于1byte，所以CPU读取和处理数据都不是以字节为单位，通常是4字节（一个int的大小）为单位。所以，如果有这样的一个结构体：
 
 ```cpp
-
 struct A
 {
     char b;
     int c; // 假设int具有32位
 };
-
 ```
 
 如果b和c紧密排列，那么由于b和c的前三个字节共享前4字节，这将导致读取c的时候CPU要访问2次，造成效率的降低。所以编译器通常会进行如下优化：
 
 ```cpp
-
 struct A
 {
     char b, :24; // 使用一个24比特的匿名bit-field模拟编译器行为进行内存对齐
     int c;
 };
-
 ```
 
 b后有3字节内存用于占位。如果另一个程序没有进行诸如此类的优化，盲目进行数据交换会引发严重的错误和安全漏洞。

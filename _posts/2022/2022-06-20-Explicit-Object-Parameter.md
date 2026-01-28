@@ -11,7 +11,6 @@ category: blog
 C++23起，非静态成员函数的声明可以通过在第一个形参前附关键词 `this` 来指定该形参为显式对象形参：
 
 ```cpp
-
 struct X
 {
     void foo(this X const& self, int i); // 同void foo(int i) const &;
@@ -19,7 +18,6 @@ struct X
  
     void bar(this X self, int i); // 按值传递对象：复制 *this
 };
-
 ```
 
 引用限定的版本和附带 `this` 的版本不能同时存在（实际上就是一个函数），同时附带 `this` 的版本的内部不再具有 `this` 指针，需要使用参数名访问当前对象。
@@ -27,7 +25,6 @@ struct X
 对于成员函数模板，显式对象形参的类型和值类别可以被推导，因此该语言特性也被称为“推导 `this`”：
 
 ```cpp
-
 struct X
 {
     template<typename Self>
@@ -42,7 +39,6 @@ void ex(X& x, D& d)
     std::move(x).foo(2); // Self = X
     d.foo(3);            // Self = D&
 }
-
 ```
 
 这使得成员函数的带 `const` 限定和不带 `const` 限定版本只需要一次声明，编译器可根据推导结果选择合适的类外部的函数实现。
@@ -50,7 +46,6 @@ void ex(X& x, D& d)
 此外，显式对象形参会推导成派生类型，因此可以简化CRTP：
 
 ```cpp
-
 // 一个CRTP特性
 struct add_postfix_increment
 {
@@ -67,13 +62,11 @@ struct some_type : add_postfix_increment
 {
     some_type& operator++() { ... }
 };
-
 ```
 
 指向有显式对象形参的成员函数的指针是通常的函数指针，而不是到成员的指针：
 
 ```cpp
-
 struct Y
 {
     int f(int, int) const&;
@@ -89,7 +82,6 @@ auto pg = &Y::g;
 pg(y, 3, 4);              // OK
 (y.*pg)(3, 4);            // 错误：pg不是指向成员函数的指针
 std::invoke(pg, y, 3, 4); // OK
-
 ```
 
 有显式对象形参的成员函数不能是静态成员函数或虚函数，也不能带有cv或引用限定符。

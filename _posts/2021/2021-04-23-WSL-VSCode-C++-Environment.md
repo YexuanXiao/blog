@@ -91,7 +91,6 @@ VSCode配置步骤：
 launch.json
 
 ```json
-
 {
     // 使用IntelliSense了解相关属性。 
     // 悬停以查看现有属性的描述。
@@ -121,13 +120,11 @@ launch.json
         }
     ]
 }
-
 ```
 
 tasks.json
 
 ```json
-
 {
 	"version": "2.0.0",
 	"tasks": [
@@ -152,7 +149,6 @@ tasks.json
 		}
 	]
 }
-
 ```
 
 有时候会遇到VSCode提示更新includePath，这时候需要在wsl里执行 `gcc-11 -v -E -x c++ -`
@@ -166,7 +162,6 @@ tasks.json
 c\_cpp\_properties.json
 
 ```json
-
 {
     "configurations": [
         {
@@ -190,5 +185,4 @@ c\_cpp\_properties.json
     ],
     "version": 4
 }
-
 ```

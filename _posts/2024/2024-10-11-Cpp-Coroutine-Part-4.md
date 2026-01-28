@@ -33,14 +33,12 @@ category: blog
 除此之外，还有 `address` 和 `from_address` 两个函数，前者用于将协程句柄转换为 `void*`，后者用于还原为协程句柄。这两个函数用于和C风格接口进行交互，例如可以编写：
 
 ```cpp
-
 void resume_corotine(void* coro) noexcept
 {
 	std::coroutine_handle<>::from_address(coro)();
 }
 
 void create_thread(void(*callback)(void*), void* data) noexcept;
-
 ```
 
 `create_thread` 为许多C风格异步接口的一般形式，使用 `address` 函数就可以将协程句柄直接转换为 `data`，以 `create_thread(resume_corotine, handle.address());` 的形式适配C风格的接口。
@@ -58,14 +56,12 @@ void create_thread(void(*callback)(void*), void* data) noexcept;
 Awaiter是 `co_await` 运算符的操作数，被称作等待对象，一个等待对象至少有3个公开的成员函数：`await_ready`、`await_suspend` 和 `await_resume`：
 
 ```cpp
-
 struct awaiter
 {
 	bool await_ready();
 	K await_suspend(std::coroutine_handle<T>);
 	D await_resume();
 };
-
 ```
 
 `K` 必须为 `void`、`bool` 或者 `std::coroutine_handle<T>`；`D` 则通常为 `void` 以及 `U`。
@@ -83,12 +79,10 @@ Awaiter在协程中被作为 `co_await` 的操作数，而 `D` 是 `co_await` �
 例如，使用前文实现过的线程池的 `run_in` 函数：
 
 ```cpp
-
 void await_suspend(std::coroutine_handle<> h) const
 {
 	pool.run_in(h);
 }
-
 ```
 
 调用完该 `await_suspend` 函数后，协程句柄被发送到线程池，然后该函数立即返回，使得协程停留在*暂停*状态。当线程池调度到该协程句柄，就会恢复协程的执行。
@@ -96,19 +90,16 @@ void await_suspend(std::coroutine_handle<> h) const
 一旦协程被恢复，就会立即执行 `x` 的 `await_resume` 函数，对于上例，也就是在线程池调用协程句柄的 `operator()`（也就是对协程句柄调用 `resume`）后，实际上会执行的函数。在 `await_resume` 执行完后，按顺序执行该协程的下一句：
 
 ```cpp
-
 task coro()
 {
 	co_await x; // 先调用await_ready，再调用await_suspend，再调用resume
 	y;		  // await_resume返回后执行下一句
 }
-
 ```
 
 现在就可以实现第一章内容讲过的，也是C++/WinRT中存在的 `resume_background` 函数：
 
 ```cpp
-
 auto resume_background()
 {
 	struct background_awaiter
@@ -127,19 +118,16 @@ auto resume_background()
 	};
 	return background_awaiter{};
 }
-
 ```
 
 此时， `x` 即是 `resume_background()`：
 
 ```cpp
-
 task coro()
 {
 	co_await resume_background();
 	y;
 }
-
 ```
 
 `resume_background` 的作用仅仅是将协程发送到线程池中执行，因此 `await_ready` 永远返回 `false`（否则 `await_suspend` 会被跳过），并且 `await_resume` 是个空函数。
@@ -147,7 +135,6 @@ task coro()
 标准库提供了两个基础的等待类型：`std::suspend_always` 和 `std::suspend_never`，前者的 `await_ready` 永远返回 `false`，而后者的 `await_ready` 永远返回 `true`，从而 `co_await` 前者会永远处于*暂停*状态（除非外部恢复它），后者不暂停协程，等于什么也不做：
 
 ```cpp
-
 struct suspend_always
 {
 	bool await_ready() const noexcept
@@ -175,7 +162,6 @@ struct suspend_never
 	{
 	}
 };
-
 ```
 
 除了 `void`，`await_suspend` 还可以返回 `bool` 和 `std::coroutine_handle<T>`：
@@ -195,7 +181,6 @@ struct suspend_never
 现在还可以实现上下文捕获以及用于恢复的Awaiter：
 
 ```cpp
-
 auto capture_apartment()
 {
 	return thread_pool::capture_context();
@@ -215,7 +200,6 @@ struct apartment_awaiter
 	{
 	}
 };
-
 ```
 
 C++/WinRT原版的 `winrt::apartment_context` 会在默认构造时捕获上下文，但我个人不希望默认构造做多余的事，因此我选择使用和 `resume_background` 一样的接口风格，即调用一个辅助函数产生合适的 `Awaiter`。
@@ -223,7 +207,6 @@ C++/WinRT原版的 `winrt::apartment_context` 会在默认构造时捕获上下�
 以及，还可以实现延迟执行任务的Awaiter：
 
 ```cpp
-
 struct timer_awaiter
 {
 	std::chrono::milliseconds d;
@@ -239,7 +222,6 @@ struct timer_awaiter
 	{
 	}
 };
-
 ```
 
 使用毫秒的原因是在大部分非实时系统上，系统调度任务的精度就是毫秒级的，因此就算使用更高精度也没有意义。
@@ -279,7 +261,6 @@ struct timer_awaiter
 因此，`apartment_awaiter` 和 `timer_awaiter` 可以成为内部类：
 
 ```cpp
-
 auto operator co_await(thread_pool::context c) noexcept
 {
 	struct apartment_awaiter { /* ... */ };
@@ -292,7 +273,6 @@ auto operator co_await(std::chrono::duration<Rep, Period> d) noexcept
 	struct timer_awaiter { /* ... */ };
 	return timer_awaiter{ std::chrono::duration_cast<std::chrono::milliseconds>(d) };
 }
-
 ```
 
 ## Promise
@@ -306,7 +286,6 @@ Promise用于储存用户提供的协程状态以及协程返回值。
 `promise_type` 必须有 `get_return_object`、`initial_suspend`、`final_suspend` 和 `unhandled_exception` 四个成员函数。如果任务（Task）是无值的，也就是 `co_return` 不需要返回值时，Promise有 `return_void` 函数，如果有值，那么Promise有 `return_value` 函数。如果协程不返回，那么不需要这两个函数。不满足以上要求的Promise不正确。
 
 ```cpp
-
 struct promise_type
 {
 	auto get_return_object();
@@ -315,7 +294,6 @@ struct promise_type
 	void return_void();
 	void unhandled_exception() noexcept;
 };
-
 ```
 
 当一个协程被创造（函数被调用）时，首先会检查是否能将函数的所有参数传递给 `promise_type` 的构造函数，如果能，那么依此构造 `promise_type`，该设计是为了让 `promise_type` 有自己储存并且操纵和感知协程参数的能力，如果不能这样构造，那么默认构造 `promise_type`。
@@ -327,7 +305,6 @@ struct promise_type
 上文讲过，返回 `suspend_always` 会使得协程被真正的暂停，此时如果外部不能获得协程句柄以手动恢复协程，那么该协程会发生内存泄漏，因此通常Task需要储存当前协程的句柄以提供恢复和销毁协程的能力。
 
 ```cpp
-
 struct task
 {
 	std::coroutine_handle<> handle;
@@ -357,7 +334,6 @@ void call_coro()
 						// 对于自己销毁自己的协程，将在执行完成自动销毁
 	t.handle.destroy(); // 或者，如果协程不能销毁自己，那么需要手动销毁
 }
-
 ```
 
 无论 `initial_suspend` 返回什么，在返回后，协程会返回给调用者，也就是继续执行 `call_coro`。
@@ -369,12 +345,10 @@ void call_coro()
 在 `unhandled_exception` 函数中，可以使用标准库提供的 `std::current_exception` 来获得抛出的异常：
 
 ```cpp
-
 void unhandled_exception() noexcept
 {
 	auto e  = std::current_exception();
 }
-
 ```
 
 `std::current_exception` 返回的是 `std::exception_ptr`，它以值的方式被传递和储存。同步该协程时，可以使用 `std::rethrow_exception` 来重新抛出该异常。
@@ -386,7 +360,6 @@ void unhandled_exception() noexcept
 如果Task不需要被同步或者被另一个协程异步的等待，那么就不需要储存该异常，此时得到了 `fire_and_forget`（发后不理）：
 
 ```cpp
-
 struct fire_and_forget
 {
 	struct promise_type
@@ -419,7 +392,6 @@ struct fire_and_forget
 		return std::suspend_never{};
 	}
 };
-
 ```
 
 发后不理的协程永不暂停，不返回值，所以是 `return_void`，也不允许有人等待它完成，因此所有提供Awaiter的地方都是 `suspend_never`。
@@ -479,7 +451,6 @@ struct fire_and_forget
 以下是一个异步协程的伪代码：
 
 ```cpp
-
 task async_task()
 {
 	co_await resume_background();
@@ -494,11 +465,9 @@ fire_and_forget main_coro()
 	co_await t;
 	// 止
 }
-
 ```
 
 以下是起止点间可能发生的执行流程：
-
 ```
 
 主协程（初始运行在主线程）         异步执行线程
@@ -522,7 +491,6 @@ co_await t;                      ...
                                  co_await promise.final_suspend();
                                  // 恢复主协程执行
                                  // 止
-
 ```
 
 一般来说，协程的生存期可能存在两种情况：积极启动的协程的生存期独立于调用者的生存期或者小于等于调用者的生存期，而惰性启动的协程的生存期内嵌于调用者的生存期。启动情况的不同使得协程具有不同的性质。

@@ -35,7 +35,6 @@ UWP使用 `AppWindow` 和 `CoreWindow` 管理标题栏，对于深度定制来�
 首先设置如下的XAML。
 
 ```xaml
-
 <Grid
     Name="AppTitleBar"
     Height="48"
@@ -61,7 +60,6 @@ UWP使用 `AppWindow` 和 `CoreWindow` 管理标题栏，对于深度定制来�
             Text="{x:Bind AppTitleText}" />
     </StackPanel>
 </Grid>
-
 ```
 
 然后对 `Window` 对象调用 `SetTitleBar`，参数为 `AppTitleBar` 对象，最后设置 `Window` 对象的属性 `ExtendsContentIntoTitleBar` 为 `true` 即可。
@@ -69,7 +67,6 @@ UWP使用 `AppWindow` 和 `CoreWindow` 管理标题栏，对于深度定制来�
 使用第三种方案的话也要添加如上的Xaml，然后在App.xaml.cpp中添加如下代码：
 
 ```cpp
-
 #include <Microsoft.UI.Xaml.Window.h>
 
 void App::OnLaunched(LaunchActivatedEventArgs const&) {
@@ -129,7 +126,6 @@ double GetScaleAdjustment(winrt::Microsoft::UI::Xaml::Window const& window) {
     auto scaleFactorPercent{ (dpiX * 100 + (96 >> 1)) / 96 };
     return scaleFactorPercent / 100.;
 }
-
 ```
 
 重点是 `SetDragRegionForCustomTitleBar` 里要算出标题栏的可拖动区域。

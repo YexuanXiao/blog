@@ -13,7 +13,6 @@ category: blog
 基础代码非常简单：
 
 ```cpp
-
 // use user's temp folder name as part of mutex name
 // extra name
 auto constexpr extra{ L"PlayerWinMutex\0"sv };
@@ -31,7 +30,6 @@ if (!::CreateMutexExW(nullptr, &name[0], CREATE_MUTEX_INITIAL_OWNER, NULL)) {
     // such as print log, notify user or synchroniz with other instance
     ::ExitProcess(1u);
 }
-
 ```
 
 注意，由于互斥锁是独占的，因此 `CreateMutexExW` 一定会因为无法创建同名互斥锁而返回0，不需要使用 `GetLastError` 进行额外的判断。
@@ -39,7 +37,6 @@ if (!::CreateMutexExW(nullptr, &name[0], CREATE_MUTEX_INITIAL_OWNER, NULL)) {
 对于GUI程序，新实例可以选择将旧实例唤醒并置于顶层，我采用如下设计：将上面的互斥代码放置于程序创建窗口之前，并且在发现已经存在实例的分支中加入如下代码：
 
 ```cpp
-
 // enumerate all direct child windows of desktop
 for (auto pre{ ::FindWindowExW(nullptr, nullptr, nullptr, nullptr) };
     // return null if at the end
@@ -58,17 +55,14 @@ for (auto pre{ ::FindWindowExW(nullptr, nullptr, nullptr, nullptr) };
         ::ExitProcess(1u);
     }
 }
-
 ```
 
 在创建窗口时添加如下代码：
 
 ```cpp
-
 HWND handle; // current window's handle
 
 ::SetPropW(handle, L"PlayerWinRT", handle);
-
 ```
 
 原理是通过给窗口设置一个辨识应用的属性名（字符串），注意微软的文档有误，`SetPropW` 的第三个参数（属性值的HANDLE）为必填，如果该值为0会导致 `GetPropW` 返回0（等同于属性不存在），这里使用当前窗口的句柄作为属性的值，并无实际意义。

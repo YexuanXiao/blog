@@ -23,7 +23,6 @@ category: blog
 [^1]: 本节源自《C++程序设计语言》。
 
 ```cpp
-
 template<typename T, class A = std::allocator<T>>
 struct vector_base {
     A alloc;
@@ -42,7 +41,6 @@ struct vector_base {
     vector_base(vector_base&&);
     vector_base& operator=(const vector_base&&);
 };
-
 ```
 
 `vector_base` 并不处理 `T` 的对象，而是 `T` 的内存，因此构造和析构都是由 `vector` 负责。
@@ -50,7 +48,6 @@ struct vector_base {
 `vector_base` 唯一的目的就是作为 `vector` 实现的一部分。复制 `vector_base` 没有什么意义，但是可以移动 `vector_base`：
 
 ```cpp
-
 template<typename T, class A>
 vector_base<T, A>::vector_base(vector_base&& a)
     :alloc(a.alloc), elem(a.elem), space(a.space), last(a.space)
@@ -67,7 +64,6 @@ vector_base<T, A>::& vector_base<T, A>::operator=(vector_base&& a)
     std::swap(this->last, a.last);
     return *this;
 }
-
 ```
 
 虽然上面已经是 `vector_base` 完整的定义了，但是显然对于 `vector_base` 的实现还是有点摸不到头脑，因为实现内存分配的实际上不是 `vector_base`，而是 `std::allocator`（定义于 \<memory\>）：
@@ -79,7 +75,6 @@ C++20的 `std::allocator` 有如下定义（简化） [^2]：
 [^2]: 参考Microsoft STL。
 
 ```cpp
-
 template<typename T>
 struct allocator {
     using value_type      = T;
@@ -101,7 +96,6 @@ struct allocator {
         ::operator new(sizeof(size_type) * count);
     }
 };
-
 ```
 
 不难发现，`deallocate` 实际上就是 `operator delete`，`allocate` 就是 `operator new`。
@@ -109,11 +103,9 @@ struct allocator {
 回到 `vector_base`：
 
 ```cpp
-
 vector_base(const A& a, typename A::size_type n)
     :alloc(a), elem(alloc.allocate(n)), space(elem + n), last(elem + n) {}
 ~vector_base() { alloc.deallocate(elem, last - elem); }
-
 ```
 
 `vector_base` 的构造过程首先接收一个 `allocator`，然后通过 `allocator` 构造其他成员。注意，`vector_base` 本身不负责任何对象的构造，其中 `allocate` 有可能抛出内存分配失败的异常。
@@ -121,7 +113,6 @@ vector_base(const A& a, typename A::size_type n)
 在 `vector_base` 的基础上，我们可以重新定义 `vector`：
 
 ```cpp
-
 template<typename T, class A = std::allocator<T>>
 class vector {
     vector_base<T, A> vb;
@@ -148,7 +139,6 @@ void vector<T, A>::destory_elements()
         p->~T(); // 显式调用析构函数
     vb.space = vb.elem;
 }
-
 ```
 
 `vector` 的析构函数为每个元素显式调用了析构函数，而不是用 `delete`，这有两个原因：
@@ -161,14 +151,12 @@ void vector<T, A>::destory_elements()
 构造函数被定义为如下形式：
 
 ```cpp
-
 template<typename T, class A>
 vector<T, A>::vector(size_type n, const T& val, const A& a)
     :vb(a, n)
 {
     std::uninitialized_fill(vb.elem, vb.elem + n, val);
 }
-
 ```
 
 注意，`vector_base` 是 `vector` 的**成员**，同时 `vector_base` 自身是个异常安全的Handle类，那么 `vector` 的内存分配过程就是异常安全的。
@@ -180,7 +168,6 @@ vector<T, A>::vector(size_type n, const T& val, const A& a)
 [^3]: 参考[cppreference: std::uninitialized\_fill](https://zh.cppreference.com/w/cpp/memory/uninitialized_fill)。
 
 ```cpp
-
 template<class ForwardIt, class T>
 void uninitialized_fill(ForwardIt first, ForwardIt last, const T& value)
 {
@@ -198,7 +185,6 @@ void uninitialized_fill(ForwardIt first, ForwardIt last, const T& value)
         throw;
     }
 }
-
 ```
 
 实际上就是一个能在发生异常时析构已构造元素的布置new。
@@ -206,18 +192,15 @@ void uninitialized_fill(ForwardIt first, ForwardIt last, const T& value)
 复制构造函数使用 `std::uninitialized_copy`：
 
 ```cpp
-
 template<typename T, class A>
 vector<T, A>::vector(const vector<T, A>& a)
     :vb(a.alloc, a.size())
 {
     std::uninitialized_copy(a.begin(),a.end(),vb.elem);
 }
-
 ```
 
 ```cpp
-
 template<class InputIt, class NoThrowForwardIt>
 NoThrowForwardIt uninitialized_copy(InputIt first, InputIt last, NoThrowForwardIt d_first)
 {
@@ -236,13 +219,11 @@ NoThrowForwardIt uninitialized_copy(InputIt first, InputIt last, NoThrowForwardI
         throw;
     }
 }
-
 ```
 
 移动构造和移动赋值就简单许多：
 
 ```cpp
-
 template<typename T, class A>
 vector<T, A>::vector(vector&& a)
     :vb(std::move(a.vb)) noexcept {}
@@ -252,7 +233,6 @@ vector<T, A>::& vector<T, A>::operator=(vector&& a) noexcept
 {
     std::swap(this->vb, a.vb);
 }
-
 ```
 
 虽然使用 `swap` 会多出一次对象构造和移动，但是首先这两个多余操作可能被优化掉，其次即使没有被优化，这种开销相比复制操作本身也是微不足道的。
@@ -264,7 +244,6 @@ vector<T, A>::& vector<T, A>::operator=(vector&& a) noexcept
 当目标 `vector` 的容量足够放入新的 `vector`，则无需分配新空间，此时复制赋值可以使用如下改进：
 
 ```cpp
-
 template<typename T, class A>
 vector<T, A>& vector<T,A>::operator=(const vector& a)
 {
@@ -290,7 +269,6 @@ vector<T, A>& vector<T,A>::operator=(const vector& a)
     vb.sapce = vb.elem + asz;
     return *this;
 }
-
 ```
 
 但需要注意，无条件丢弃当前储存的复制赋值是强异常安全的，它保证复制失败时，左侧对象不被改变，而这个优化后的版本不能保证这一点。

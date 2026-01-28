@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v1.8'
+const CACHE_VERSION = 'v1.9'
 const CACHE_NAME = `sw-cache-${CACHE_VERSION}`
 
 function checkExt(path) {

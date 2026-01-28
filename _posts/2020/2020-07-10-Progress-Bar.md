@@ -12,7 +12,6 @@ category: blog
 <!-- more -->
 
 ```css
-
 #progress {
 	position: fixed;
 	left: 0px;
@@ -22,11 +21,9 @@ category: blog
 	transition: 100ms;
 	z-index: 200;
 }
-
 ```
 
 ```javascript
-
 (() => {
     const postText = document.body.querySelector('article');// 选择文章部分
     const topProcess = document.createElement('div');// 创建进度条元素
@@ -41,5 +38,4 @@ category: blog
         topProcess.style.width = (processValue > 100) ? `${100}%` : `${processValue}%`// 设置百分比
     })
 })();
-
 ```

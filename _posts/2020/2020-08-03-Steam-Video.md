@@ -21,7 +21,6 @@ https://cdn.jsdelivr.net/npm/dplayer@1.26.0/dist/DPlayer.min.js
 设置一个id为dplayer的元素，并初始化播放器，即可播放m3u8(ts)。
 
 ```javascript
-
 const dp = new DPlayer({
     container: document.getElementById('dplayer'),
     video: {
@@ -35,15 +34,12 @@ const dp = new DPlayer({
     },
 });
 console.log(dp.plugins.hls); 
-
 ```
 
 使用ffmpeg可以方便的将视频分割成ts流：
 
 ```powershell
-
 ffmpeg -i input.file -start_number snumber -f hls -hls_list_size 0 -threads tnumber -hls_time seconds index.m3u8
-
 ```
 
 - snumber: 起始编号

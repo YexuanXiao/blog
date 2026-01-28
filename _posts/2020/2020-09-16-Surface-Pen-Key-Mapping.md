@@ -52,9 +52,7 @@ Surface Book 3最重要的功能之一是笔和触摸。我买的Surface Pen是�
 那么就可以使用
 
 ```vbscript
-
 CreateObject("Wscript.Shell").Sendkeys "埑"
-
 ```
 
 隐式发送操作字符编码，并将此文件（用记事本）保存为ANSI (GBK) 格式。

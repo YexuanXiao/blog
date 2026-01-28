@@ -11,7 +11,6 @@ category: blog
 对于一个派生类，有两种方式可以继承基类，第一种是直接指定基类中成员变量的类型，第二种是使用模板声明一个通用数据类型，再继承基类。
 
 ```cpp
-
 template <class T1>
 class Base
 {
@@ -33,7 +32,6 @@ public:
 		id = i;
 	}
 };
-
 ```
 
 当然，如果基类有构造函数，那么也可以使用初始化列表调用基类的构造函数，参考之前的文章[C++构造函数初始化列表和聚合类初始化](/blog/2021/03/24/Cpp-Init-List/)。
@@ -41,7 +39,6 @@ public:
 由于类模板使用了通用数据类型，所以在类外定义成员函数也和普通类有所区别，需要加上模板参数列表（用“\<\>”表示）：
 
 ```cpp
-
 template <class T1, class T2>
 class Person
 {
@@ -64,13 +61,11 @@ void Person<T1,T2>::show_Name(T1 a, T2 b)
 {
 	std::cout << name << endl;
 }
-
 ```
 
 友元函数是一种特殊的函数，它是普通全局函数但是同时它却有访问类的私有成员的能力。在模板类内声明友元函数和在普通类内是一样的，但是想要在类的外部声明友元函数，此时就复杂了很多。
 
 ```cpp
-
 template <class T1, class T2>
 class Person
 {
@@ -93,11 +88,9 @@ int main()
 	Person r(std::string("Tom"), 1);
 	show_Id(r);
 }
-
 ```
 
 ```cpp
-
 template <class T1, class T2>
 class Person;
 
@@ -137,5 +130,4 @@ int main()
 	show_Id(r);
 	show_Id1(r);
 }
-
 ```

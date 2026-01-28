@@ -9,7 +9,6 @@ WinUI 3软件开发中最无语的一件事就是限制窗口大小居然需要�
 <!-- more -->
 
 ```cpp
-
 #include <Microsoft.UI.Xaml.Window.h>
 
 HWND GetHandleFromWindow(winrt::Microsoft::UI::Xaml::Window const& window) {
@@ -31,7 +30,6 @@ void InitializeWindowMinSize(winrt::Microsoft::UI::Xaml::Window const& window) {
         ::SetWindowLongPtrW(GetHandleFromWindow(window), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&WindowProc)),
         std::memory_order_release);
 }
-
 ```
 
 原理实际上非常简单，但网上对于真正可用的代码却都是缄默不语，所幸找到了PowerToys相关的项目中的**历史提交**里的Workaround [Settings UI](https://github.com/WinUICommunity/SettingsUI/blob/eaa1dd28c73aea7366cceeca485342e6edf389d6/src/SettingsUI/Tools/Helpers/WindowHelper/WindowHelper.ReSizeWindow.cs)。

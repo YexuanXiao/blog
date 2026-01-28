@@ -19,13 +19,11 @@ C++17引入了 `std::string_view` 用于表示字符串常量，彻底取代了�
 经典的 `std::basic_string_view` 有四个构造函数和一个赋值运算符重载：
 
 ```cpp
-
 std::basic_string_view() noexcept;
 std::basic_string_view(const basic_string_view& other) noexcept = default;
 std::basic_string_view(const char_type* s);
 std::basic_string_view(const char_type* s, size_type count);
 std::basic_string_view& operator=( const basic_string_view& view ) noexcept = default;
-
 ```
 
 其中默认构造是为了与容器兼容，第二个是从现有 `std::basic_string_view` 构造，第三个构造是O(n) 时间复杂度的C风格字符串构造，第四个构造是O(1) 时间复杂度的C风格字符串构造，其中第二个参数是手动指定的长度。

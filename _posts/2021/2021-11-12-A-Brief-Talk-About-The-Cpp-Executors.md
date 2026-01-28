@@ -19,11 +19,9 @@ C++一直缺乏可用的并发编程的基础设施，而从C++11以来新引入
 让时间回到C++11标准的近代。C++11标准正式引入了统一的多线程设施，如`<thread>`，`<atomic>`, `<mutex>` 和 `<conditional_variable>` 等low-level的building blocks；也引入了发起异步函数调用的接口 `std::async`。可 `std::async` 并不async。借用cppreference上的示例来说明：
 
 ```cpp
-
 std::async([]{ f(); }); /*a temp std::future<void> is constructed*/
 /* blocked by the destructor of std::future<void> */
 std::async([]{ g(); });
-
 ```
 
 以一般理性而言，执行函数g的任务可能在函数f执行的时候，发起调度。但是如上所列代码使用 `std::async` 的方式，发起执行函数g的任务调度，一定发生在执行函数f的任务返回之后 [^1] 。原因是：
@@ -68,9 +66,7 @@ std::async([]{ g(); });
 问题2，3和4，笔者都归因于类型擦除。类型擦除的实现，使得我们把所有的问题都抛给了程序的运行时，而完全扔掉了C++强大的编译期能力。我们在使用Future/Promise的时候，已经标明了我们只关心Task的返回值:
 
 ```cpp
-
 std::future<int> f = /* ..... */;
-
 ```
 
 `std::future<int>` 表达了任意可以返回int类型的操作，因此它不得不丢掉任务图中的类型信息。如Continuation的函数对象类型，前置与后置任务的类型，任务图中的节点是否有同步点，Executor Context的类型等等。而泛滥的使用类型擦除的结果就是抽象不足。而抽象不足则往往会引起语法有效语义无效的实现（例如OOP中的空实现），严重的性能问题还有表达能力的缺失。例如Continuations的类型擦除会丢失inline的优化机会，Shared State的类型擦除会导致问题2与问题4的发生。
@@ -90,7 +86,6 @@ The Unified C++ Executors的首要任务，就是将Future/Promise改造得更�
 笔者在这里就不介绍Sender/Receiver的技术细节了，例如The Receiver Contract和各种啰嗦的Concepts与接口设计等。笔者尽量以示例和图表来阐述Executors的设计思想。我们先来看一个例子:
 
 ```cpp
-
 using namespace std::execution;
 sender auto s = 
     just(1) |
@@ -98,15 +93,12 @@ sender auto s =
     then([](int value){ return 2.0 * value; });
 
 auto const result = std::this_thread::sync_wait(s);
-
 ```
 
 那么s的类型可能形如:
 
 ```cpp
-
 then_sender<transfer_sender<just_sender<1>, thread_pool_scheduler_type>, lambda_type>
-
 ```
 
 它的对象结构如下图：
@@ -116,12 +108,10 @@ then_sender<transfer_sender<just_sender<1>, thread_pool_scheduler_type>, lambda_
 再给出一个用folly的Futures库表达的，不那么严谨的等价示例:
 
 ```cpp
-
 auto f = folly::makeFuture<int>(1)
     .via(thread_pool_executor)
     .thenValue([](int value){ return 2.0 * value });
 auto const result = f.get();
-
 ```
 
 很显然，f的类型已经擦除为了 `future<double>`，其对象结构如下图：
@@ -145,7 +135,6 @@ Sender是泛型的Future，Receiver是泛型的Promsie，但Sender/Receiver模�
 2.1节中的代码使用了链式的pipe operator，如果我们用原始的算法来实现，就如下代码所示：
 
 ```cpp
-
 using namespace std::execution;
 sender auto s = 
     then(
@@ -155,7 +144,6 @@ sender auto s =
         [](int value){ return 2.0 * value; });
 
 auto const result = this_thread::sync_wait(s);
-
 ```
 
 其中 `just` 不以任何Sender对象作为输入，而返回一个新的Sender，它是Sender的工厂（Factories）。同样Scheduler也是工厂，因为 `scheduler.schedule()` 通常也会返回一个Sender对象。`transfer` 和 `then` 则以Sender对象，或带有其他对象作为输入，并输出Sender. 这类的算法是Sender的适配器（Adaptor）。最后， `std::this_thread::sync_wait` 则以Sender作为输入，而并不返回一个新的Sender，它是Sender对象的消费者（Consumer）。其中，消费者算法一般都不支持pipe operator，原因是担心对用户造成消费者算法还能继续有后继的误导。
@@ -167,7 +155,6 @@ Executors中的算法，一定属于这三类中的一个。当用户需要根�
 如果我们要发起一个Sender对象表达的操作，就需要将Sender与一个Recevier对象连接在一起。`std::execution::connect(sender, receiver)` 则会返回一个Concepts为 `operator_state` 的对象，并通过调用`std::execution::start(operation_state)` 发起操作执行。例如， `std::this_thread::sync_wait` 的实现，可能如下代码所示：
 
 ```cpp
-
 struct sync_wait_t
 {
     template <sender S>
@@ -185,7 +172,6 @@ struct sync_wait_t
         return promise.get_value(); // return value
     }
 };
-
 ```
 
 代码中可以看到 `std::this_thread::sync_wait` 中调用连接Sender和Receiver，并发起返回的Operation State的代码。除此之外，还在当前线程上同步地等待发起操作的完成。
@@ -220,10 +206,8 @@ P2300R1的发布，意味着Executors的迭代稳定了下来，未来将不会�
 在我们的合理封装下，就能够把协程也统一起来:
 
 ```cpp
-
 auto const result = this_thread::sync_wait(s);
 auto const result = this_fiber::sync_wait(s);
-
 ```
 
 ### 3.2异构计算

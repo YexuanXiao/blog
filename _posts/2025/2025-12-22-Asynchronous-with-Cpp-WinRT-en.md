@@ -20,19 +20,16 @@ Throughout this article, "C++/WinRT coroutine" specifically refers to functions 
 If a C++/WinRT coroutine's body is synchronous (e.g., contains only a `co_return` statement with no other `co_await` statements), then calling it will not cause a thread switch.
 
 ```cpp
-
 // Awaiting this coroutine with co_await will not switch threads.
 IAsyncAction foo()
 {
     co_return;
 }
-
 ```
 
 This eager-start design originates from WinRT itself. It allows an external caller to cancel an async task instead of waiting (synchronously) for it to finish.
 
 ```cpp
-
 auto task = AsyncTask();
 // ... other sync or async code ...
 if (canceled) {
@@ -40,7 +37,6 @@ if (canceled) {
 } else {
     co_await task;
 }
-
 ```
 
 You can also store the `task` for later use.
@@ -100,7 +96,6 @@ In C++/WinRT async programming, you primarily need to focus on two things: **Saf
 For example, to update a UI counter every second, you must switch back to the UI thread *after* the `co_await` before modifying the UI content:
 
 ```cpp
-
 auto&& canceled = co_await winrt::get_cancellation_token();
 co_await wil::resume_foreground(text.DispatcherQueue());
 for (unsigned x = 0u; !canceled(); ++x) {
@@ -110,7 +105,6 @@ for (unsigned x = 0u; !canceled(); ++x) {
     // switch back to UI thread
 	co_await wil::resume_foreground(text.DispatcherQueue());
 }
-
 ```
 
 When working with event handlers, the thread that raises the event is the thread on which the handler executes. Generally, you should ensure all events are raised from a single thread. If not, you must guarantee all read and write operations are properly synchronized.

@@ -12,7 +12,6 @@ category: blog
 对于Visual Studio，可以编写以下PowerShell函数来实现快速启动：
 
 ```powershell
-
 function VS-Env {
     [CmdletBinding()]
     param(
@@ -22,13 +21,11 @@ function VS-Env {
     )
     & "C:\Program Files\Microsoft Visual Studio\18\Insiders\Common7\Tools\Launch-VsDevShell.ps1" -Host amd64 -SkipAutomaticLocation -Arch $Arch
 }
-
 ```
 
 对于GCC和Clang，用类似的方法添加Path：
 
 ```powershell
-
 function Clang-Env {
     [CmdletBinding()]
     param(
@@ -61,17 +58,14 @@ function GCC-Env {
     
     $env:PATH = "$Bin;$Lib;$env:PATH"
 }
-
 ```
 
 如果你使用Windows终端，那么可以设置PowerShell的启动参数，通过下拉菜单快速切换：
 
 ```powershell
-
 PowerShell -NoExit -Command "& {VS-Env amd64}"
 PowerShell -NoExit -Command "& VS-Env amd64"
 & VS-Env amd64
-
 ```
 
 三者皆可。
@@ -79,7 +73,6 @@ PowerShell -NoExit -Command "& VS-Env amd64"
 VSCode的CMakeTools提供一个功能叫做用户本地工具包，使用该JSON配置不同编译器后，VSCode的状态栏就可以快速切换编译器。
 
 ```json
-
 [
   {
     "name": "Clang 21.0.0 STL Debug",
@@ -106,7 +99,6 @@ VSCode的CMakeTools提供一个功能叫做用户本地工具包，使用该JSON
     }
   }
 ]
-
 ```
 
 具体如何使用可以参考CMakeTools的文档。
@@ -116,7 +108,6 @@ VSCode的CMakeTools提供一个功能叫做用户本地工具包，使用该JSON
 最简例子如下：
 
 ```json
-
 {
     "version": 6,
     "cmakeMinimumRequired": {
@@ -141,7 +132,6 @@ VSCode的CMakeTools提供一个功能叫做用户本地工具包，使用该JSON
         }
     ]
 }
-
 ```
 
 使用 `cmake --preset default` 或者CMakeTools在VSCode状态栏提供的按钮就可以指定使用某个编译器配置和构建项目。

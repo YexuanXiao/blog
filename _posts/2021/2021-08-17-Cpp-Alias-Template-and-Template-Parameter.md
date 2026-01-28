@@ -15,21 +15,17 @@ C++的模板是现代C++开发必不可少的一部分。C++11引入了别名模
 语法：
 
 ```cpp
-
 template <class T>
 using Vec = std::vector<T>;
 
 Vec<int> coll;
-
 ```
 
 ```cpp
-
 template <class T>
 using Vect = std::vector<T, std::allocator<T>>;
 
 Vec<int> coll;
-
 ```
 
 表面来看，这只是简单的别名而已，但是别名模板有两个特点：
@@ -42,7 +38,6 @@ Vec<int> coll;
 在编写嵌套模板时，一般来说是这样：
 
 ```cpp
-
 template <typename T, typename Container>
 class Stack
 {
@@ -55,17 +50,14 @@ int main()
   Stack<double, std::vector<double>> dblStack;
   //Stack<double, std::vector<double> > dblStack; before C++11
 }
-
 ```
 
 同时，还可以给模板加上默认**模板参数**：
 
 ```cpp
-
 template <typename T, typename Container = std::vector>
 
 Stack<double> dblStack;
-
 ```
 
 这时候会发现，如果想要同时传递一个容器，并且声明容器中的元素类型，需要给模板传递两个参数，并且第一个参数实际上是“多余的”。
@@ -75,7 +67,6 @@ Stack<double> dblStack;
 C++11提供了一种新的方式：模板的模板参数（Template Template Parameters）：
 
 ```cpp
-
 template <typename T, template <typename> class Container>
 class Stack {
 public:
@@ -87,7 +78,6 @@ int main()
 {
   Stack<double, std::vector> dblStack;
 }
-
 ```
 
 这样确实可以省略重复的参数，但是你还是得写2个参数，并且这个代码是不能通过编译的，因为vector模板有2个参数，而此时编译器不能自动推断出来：
@@ -97,7 +87,6 @@ int main()
 而使用别名模板就可以成功解决自己的模板嵌套标准库模板，使标准库模板的第二个参数无法匹配第一个参数的类型的问题：
 
 ```cpp
-
 template <typename T>
 using Vect = std::vector<T, std::allocator<T>>;
 
@@ -112,13 +101,11 @@ int main()
 {
   Stack<int, Vect> vStack;
 }
-
 ```
 
 如果不想用别名模板，那就必须手动指定第二个参数：
 
 ```cpp
-
 template <typename T,
   template <typename Elem, typename Alloc = std::allocator<Elem>>
   class Container>
@@ -132,7 +119,6 @@ int main()
 {
   Stack<int, std::vector> vStack;
 }
-
 ```
 
 这样的后果是显而易见的，Stack模板会**强制要求容器模板支持第二个参数**。
@@ -140,7 +126,6 @@ int main()
 或者使用**可变参数模板**：
 
 ```cpp
-
 template <typename T,
   template <typename ...>
   class Container>
@@ -154,7 +139,6 @@ int main()
 {
   Stack<int, std::vector> vStack;
 }
-
 ```
 
 此时，别名模板也具有一定优势：可以指定自己的分配器，而**不影响原本的Stack模板**。

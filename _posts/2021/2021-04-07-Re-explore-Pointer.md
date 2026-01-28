@@ -43,19 +43,16 @@ C语言中，32位程序中的指针（地址）是一个32位的二进制数，
 示例：
 
 ```cpp
-
 #include <stdlib.h>
 
 int main (void) {
     int *b = (int *)malloc(sizeof(int));
 }
-
 ```
 
 当然也可以自定义一个返回地址的函数：
 
 ```cpp
-
 #include <malloc.h>
 
 void *add (size_t);
@@ -67,7 +64,6 @@ int main (void) {
 void *add (size_t n) {
     return malloc(n);
 }
-
 ```
 
 **size\_t是一个和平台相关的类型，在32位下可储存32位 二进制数，在64位 下可储存64位二进制数**。
@@ -85,7 +81,6 @@ add函数在使用上和malloc函数保持一致。
 先看一段简单的代码：
 
 ```cpp
-
 int change (int **,int *);
 
 int main (void) {
@@ -98,13 +93,11 @@ int main (void) {
 void change (int **c,int *d) {
     *c = d; // 把c中储存指针储存的地址改成d
 }
-
 ```
 
 正如change的声明所述，c是一个指向指针的指针，也就是二级指针，\*c是对c的解引用，也是一个指针。
 
 ```cpp
-
 void change (int **,int *);
 
 int main (void) {
@@ -116,7 +109,6 @@ int main (void) {
 void change (int **c,int *d) {
     *c = d; // 把c中储存指针储存的地址改成d
 }
-
 ```
 
 如果直接把b传给change，由于在main函数中b只经过声明，没有赋值（初始化），所以在执行change函数之前，b是一个野指针，野指针的内容无法控制，代表着实际调用是这样的 `change(没人知道是啥，&a)`，此时程序是错误的。
@@ -124,7 +116,6 @@ void change (int **c,int *d) {
 这种方式的迷惑之处在于当你使用了typedef时：
 
 ```cpp
-
 typedef int INT;
 typedef int* INT_p;
 
@@ -138,7 +129,6 @@ int main (void) {
 void change (INT_p *c,INT_p d) {
     *c = d;
 }
-
 ```
 
 你会发现，这样的代码十分难懂，最过分的事情还在下面：
@@ -163,7 +153,6 @@ void change (INT_p *c,INT_p d) {
 看下面的代码（GCC通过，VS 2019通过）：
 
 ```cpp
-
 #include <stdio.h>
 
 int test(int a);
@@ -176,7 +165,6 @@ int main(void){
 int test(int a){
     return a;
 }
-
 ```
 
 函数指针和函数声明的区别是把函数名加星号括起来。

@@ -166,7 +166,6 @@ ISO/IEC 14882 Programming languages C++在第六章，第十章对内存模型�
 bit-field是用于极限压缩内存使用而诞生的特性，其通过按字节定义数据大小来进行内存高效利用：
 
 ```cpp
-
 struct S {
     // 3位：b1的值
     // 2位：不使用
@@ -175,7 +174,6 @@ struct S {
     // 3位：不使用
     unsigned char b1 : 3, : 2, b2 : 6, b3 : 2; // 3+2+6+2 = 13大于8小于16所以占2字节
 };
-
 ```
 
 这个结构体中b1，b2，b3可以认为使用了同一块内存，因为C++内存是以字节来划分的，而这3个变量不能按字节划分出独立的内存序列区域。
@@ -183,11 +181,9 @@ struct S {
 在并发中，只有对不同的独立字节序列进行修改才能保证安全，而bit-field不保证这一点。
 
 ```cpp
-
 struct S {
     unsigned char b1 : 3, : 0, b2 : 6, b3 : 2;
 };
-
 ```
 
 改进版的代码是使用 `: 0` 来强迫后面的变量使用一块全新的字节序列作为储存空间，不去管之前的变量是否用完了之前储存空间所有的比特，仅具有对齐作用。
@@ -203,7 +199,6 @@ struct S {
 当指定一个int类型变量使用小于 `sizeof(int)` 个bit储存时，编译器会尽可能确保可以正确的表示一部分长度：
 
 ```cpp
-
 #include <iostream>
 #include <iomanip>
 
@@ -219,7 +214,6 @@ int main()
     std::cout << std::setw(8) << std::setfill('0') << std::hex;
     std::cout << *(reinterpret_cast<unsigned int*>(&s)) << std::endl;
 }
-
 ```
 
 这个示例中，由于指定了使用8bit储存int的b1，所以编译器将8bit的最高位设置为符号位，于是最小可以储存 -128，最高能储存127。

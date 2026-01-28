@@ -83,8 +83,6 @@ _**通俗的说，protected是继承后可以访问的private。**_
 如果遇到A是B，C的基类，B，C又是D的基类的情况，那么对于A中的成员来说，在D中就有2份。为了解决这个问题，引入虚继承的方式继承A类：
 
 ```cpp
-
 class B: virtual public A {};
 class C: virtual public A {};
-
 ```

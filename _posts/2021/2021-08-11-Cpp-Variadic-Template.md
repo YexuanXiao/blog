@@ -11,7 +11,6 @@ C语言中编译器通过标准IO库提供了printf和scanf两个函数，这两
 C++的可变参数模板实际上就是对参数进行递归展开，然后用模板特化作为递归出口。
 
 ```cpp
-
 void variadicPrint()
 {
     std::cout << std::endl;
@@ -28,7 +27,6 @@ int main()
 {
     variadicPrint(3.14, 2048L, "RecurseEnd");
 }
-
 ```
 
 这个函数模板每次递归都取最左侧参数然后进行打印输出。
@@ -38,7 +36,6 @@ int main()
 常见的例子是类型安全的printf：
 
 ```cpp
-
 template<>
 void tprintf(const char* format) // base function
 {
@@ -63,7 +60,6 @@ int main()
     tprintf("% world% %\n","Hello",'!',123);
     return 0;
 }
-
 ```
 
 输出结果为
@@ -79,7 +75,6 @@ Trgs被称为parameter pack。
 那么 `variadicPrint` 就可以改写为如下形式：
 
 ```cpp
-
 template<typename T, typename... Ts>
 void variadicPrint(T Head, Ts... Tail){
     std::cout << Head;
@@ -87,13 +82,11 @@ void variadicPrint(T Head, Ts... Tail){
         variadicPrint(Tail...);
     }
 }
-
 ```
 
 此外，不光函数可以使用可变参数模板，类也可以使用可变参数模板：
 
 ```cpp
-
 template<typename... Elements> class tuple;
 template<typename Head, typename... Tail>
 class tuple<Head, Tail...> : private tuple<Tail...>
@@ -107,7 +100,6 @@ class tuple<>
 {
     /* zero-tuple implementation */
 };
-
 ```
 
 使用的时候类似普通模板：`tuple<int, float, std::string> t(1, 3.14, "Tail")`

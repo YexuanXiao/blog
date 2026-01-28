@@ -21,24 +21,20 @@ Bjarne设计 `const` 的目的大致就是为了解决如上问题 [^1] 。
 此外，对于第二点修复，`const` 实际带来了更复杂的特性：
 
 ```cpp
-
 string operator+(const string& a, const string &b)
 {
     string res;
     /* */
     return res;
 }
-
 ```
 
 考虑如上的 `string` 拼接定义，由于参数为两个 `const string`，所以函数必须构造一个新的 `string` 用于容纳拼接后的字符串，这在一些情况下会导致性能低下：
 
 ```cpp
-
 string a, b, c;
 /* */
 string d = a + b + c;
-
 ```
 
 实际上该操作产生了至少一个额外的 `string` 对象：`(a + b)` （由于C++规定 `+` 是右结合），并且永远不能被优化。
@@ -46,13 +42,11 @@ string d = a + b + c;
 基于此，实际上可以写出另一种函数：
 
 ```cpp
-
 string& operator+(string& a, const string &b)
 {
     /* */
     return a;
 }
-
 ```
 
 这种函数会在左侧对象上应用拼接，返回值也是左侧对象的引用，因而每次拼接操作都会应用到最左侧对象，`a + b + c` 相当于展开为逗号运算：`a + b, a + c`。
@@ -62,9 +56,7 @@ string& operator+(string& a, const string &b)
 此时如果想要匹配 `const` 版本，需要使用 `const_cast`：
 
 ```cpp
-
 foo d = const_cast<const foo&>(a) + b + c;
-
 ```
 
 这里有个小细节：虽然只给 `a` 加上了 `const` 限定，但是却使用了两次 `const` 版本的 +，是因为右值无法绑定到左值引用。
@@ -72,12 +64,10 @@ foo d = const_cast<const foo&>(a) + b + c;
 还可以使用一个 `const` 辅助模板用于简化 `const_cast`：
 
 ```cpp
-
 template<typename T>
 auto use_const(T& t) { // 注意，标准库中有add_const模板，但不能用于此
 	return const_cast<const T&>(t);
 }
-
 ```
 
 其实读到这里读者就会发现，非 `const` 版本的 `operator+`，实际上和 `operator+=` 的实现非常类似，不过+=也不尽全是优点：`a += b += c` 这样的代码可能并不如 `a + b + c` 清晰，不过+=能解决重载匹配问题。
