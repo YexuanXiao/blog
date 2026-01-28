@@ -24,7 +24,7 @@ layout: default
 			</span>
 		</div>
 		<hr>
-		{{ content | replace: "	", "    " }}
+		{{ content | replace: "	", "    " | highlight }}
 	</article>
 	{% if page.update %}
 	<span class="is-flex is-justify-content-right is-size-7 pt-5 pr-5">

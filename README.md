@@ -16,24 +16,27 @@ M.P.O. Website & Simple Jekyll Theme
 
 ## Based on
 
-Abhishek Nagekar - [Soot-Spirits](https://github.com/abhn/Soot-Spirits) - MIT
++ Jekyll - [Jekyll](https://github.com/jekyll/jekyll) - MIT
++ Abhishek Nagekar - [Soot-Spirits](https://github.com/abhn/Soot-Spirits) - MIT
 
 ## 3rd-party Components
 
 + Jeremy Thomas - [bulma](https://github.com/jgthms/bulma) - MIT
 + Christian - [Simple-Jekyll-Search](https://github.com/christian-fei/Simple-Jekyll-Search) - MIT
-+ Jekyll - [jekyll-commonmark](https://github.com/jekyll/jekyll-commonmark) - MIT
++ Garen Torikian - [commonmarker](https://github.com/gjtorikian/commonmarker) - MIT
++ Rouge - [Rouge](https://github.com/rouge-ruby/rouge) - MIT
 
 Other files with 3rd-party licences can be found [here](/assets/README.md)
 
-### Optional 3rd-party Components (Code is not include directly)
+### Optional 3rd-party Components
+
+Code is not include directly.
 
 + Giscus - [Giscus](https://github.com/giscus/giscus) - MIT
 + DIYGod  - [APlayer](https://github.com/DIYgod/APlayer) - MIT
 + YexuanXiao - [Pio-ts](https://github.com/YexuanXiao/Pio-ts) - MIT
 + metowolf - [MetingJS](https://github.com/metowolf/MetingJS) - MIT
 + Dreamer-Paul - [Pio](https://github.com/Dreamer-Paul/Pio) - GPL-2.0
-+ mathjax.org - [MathJax](https://github.com/mathjax/MathJax) - Apache-2.0
 
 ## Licence
 
