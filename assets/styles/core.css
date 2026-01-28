@@ -50,6 +50,10 @@ article code {
 	border-radius: 6px
 }
 
+pre>code {
+    padding: 0
+}
+
 /* fix pagination styles */
 .is-hidden-tablet.pagination-previous,
 .is-hidden-tablet.pagination-next {

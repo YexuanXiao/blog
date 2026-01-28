@@ -9,6 +9,7 @@
 	padding: 1em 1.5em;
 	font-size: .85em;
 	overflow-y: hidden;
+	user-select: text;
 	border-radius: 4px
 }
 
