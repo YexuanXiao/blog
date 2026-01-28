@@ -9,8 +9,16 @@ plugins: [jekyll-paginate]
 markdown: CommonMark
 
 commonmark:
-  options: ["UNSAFE", "FOOTNOTES"]
-  extensions: ["strikethrough", "autolink", "table"]
+  extensions:
+    strikethrough: true
+    autolink: true
+    table: true
+    footnotes: true
+  options:
+    parse:
+      relaxed_autolinks: true
+    render:
+      unsafe: true
 
 defaults:
   -
