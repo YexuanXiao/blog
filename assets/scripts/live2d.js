@@ -2,7 +2,7 @@
     layout: null
 ---
 /* 2020-2026 YexuanXiao under the MIT License */
-import Pio from '//static.nykz.org/Single/Pio.js'
+import Pio from '//static.nykz.org/blog/deps/Pio.js'
 Pio.CreateContainerToBody({{ site.live2d.width }}, {{ site.live2d.height }})
 window.Noire = new Pio({
 	mode: 'fixed',
