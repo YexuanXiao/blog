@@ -1,5 +1,7 @@
-#frozen_string_literal: true
+# frozen_string_literal: true
+
 require 'rouge'
+require 'cgi'
 
 module Jekyll
   module CodeBlockFilter
@@ -8,7 +10,7 @@ module Jekyll
 
       input.gsub(/<pre(?:\s+lang="([^"]*)")?><code>([^<]*)<\/code><\/pre>/) do
         lang = $1.to_s
-        code = $2.gsub('&lt;', '<').gsub('&gt;', '>').gsub('&amp;', '&')
+        code = CGI.unescapeHTML($2)
         
         lexer = Rouge::Lexer.find_fancy(lang, code) || Rouge::Lexers::PlainText
         highlighted = Rouge::Formatters::HTMLLegacy
