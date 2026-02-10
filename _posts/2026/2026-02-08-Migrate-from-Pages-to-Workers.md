@@ -47,7 +47,6 @@ wrangler.json的例子如下：
 
 `assets.directory` 字段用于设置静态网站构建目录，一般来说是 `_site` 或者 `dist`。
 
-`assets.not_found_handling` 用于控制404页面，它可以被设置为 `single-page-application`、`404-page` 或者 `none`，如果设
-为 `none` 则使用Cloudflare提供的404页面，如果设置为 `404-page` 则会使用构建目录下的404.html。
+`assets.not_found_handling` 用于控制404页面，它可以被设置为 `single-page-application`、`404-page` 或者 `none`，如果设为 `none` 则使用Cloudflare提供的404页面，如果设置为 `404-page` 则会使用构建目录下的404.html。
 
 Wrangler配置文件的文档在 [Configuration](https://developers.cloudflare.com/workers/wrangler/configuration/)。

@@ -15,7 +15,7 @@ category: blog
 
 但问题在于，很多用户（包括我自己）并不使用Administrator账户，甚至根本不存在 `C:\Users\Administrator\` 用户文件夹。大部分人的第一反应应该和我一样，把Administrator改成自己的用户文件夹，但很遗憾这个文件夹应该是空的，至少我本地是空的。这个方法可能仅适用于使用Administrator账户的人。
 
-存在该问题也“情有可原”“情有可原”，因为系统壁纸本身属于多用户共享的内容。
+存在该问题也“情有可原”，因为系统壁纸本身属于多用户共享的内容。
 
 翻了十几个网页后我最终找到了正确的教程[How to Find and Save Custom Lock Screen Background Images in Windows 10](https://www.tenforums.com/tutorials/130598-find-save-custom-lock-screen-background-images-windows-10-a.html)，锁屏壁纸缓存的实际位置在：
 `C:\ProgramData\Microsoft\Windows\SystemData\<UserSID>\ReadOnly\LockScreen_<Letter>`
