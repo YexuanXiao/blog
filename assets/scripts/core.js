@@ -62,7 +62,7 @@ for (const sup of document.body.querySelectorAll('sup.footnote-ref')) {
 	message.style.display = 'none'
 	const messageBody = document.createElement('p')
 	messageBody.className = 'message-body'
-	const text = document.getElementById(`fn${id}`).innerText
+	const text = document.getElementById(`fn-${id}`).innerText
 	messageBody.innerText = text.slice(0, text.indexOf('↩')).trim()
 	message.appendChild(messageBody)
 	sup.parentNode.appendChild(message)

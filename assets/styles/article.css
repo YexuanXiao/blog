@@ -178,11 +178,10 @@
 }
 
 .post-text .footnotes {
-	margin-top: 2em;
 	font-size: .9em
 }
 
-.post-text .reversefootnote {
+.post-text .footnote-backref {
 	font-family: segoeweb
 }
 

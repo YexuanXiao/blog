@@ -6,16 +6,16 @@ module Jekyll
     class Markdown
       class CommonMark
         def initialize(config)
-          @config = config['commonmark'] || {}
+          @config = (config['commonmark'] || {}).transform_values { |v| v.transform_keys(&:to_sym) }
         end
 
         def convert(content)
           html = Commonmarker.to_html(
             content,
             options: {
-              parse: @config.dig('options', 'parse') || {},
-              render: @config.dig('options', 'render') || {},
-              extension: @config['extensions'] || {}
+              parse: @config['parse'] || {},
+              render: @config['render'] || {},
+              extension: @config['extension'] || {}
             },
             plugins: { syntax_highlighter: nil }
           )
