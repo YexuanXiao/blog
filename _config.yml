@@ -18,6 +18,7 @@ commonmark:
     autolink: true
     table: true
     footnotes: true
+    cjk_friendly_emphasis: true
 
 defaults:
   -

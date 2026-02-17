@@ -1,0 +1,253 @@
+TL;DR: **“Structured concurrency” refers to a way to structure async computations so that child operations are guaranteed to complete before their parents, just the way a function is guaranteed to complete before its caller.** This sounds simple and boring, but in C++ it’s anything but. Structured concurrency — most notably, C++20 coroutines — has profound implications for the correctness and the simplicity of async architecture. It brings the [Modern C++ style](https://docs.microsoft.com/en-us/cpp/cpp/welcome-back-to-cpp-modern-cpp?view=msvc-160) to our async programs by making async lifetimes correspond to ordinary C++ lexical scopes, eliminating the need for reference counting to manage object lifetime.
+
+## Structured Programming and C++
+
+Back in the 1950’s, the nascent computing industry discovered structured programming: that high-level programming languages with lexical scopes, control structures, and subroutines resulted in programs that were far easier to read, write, and maintain than programming at the assembly level with test-and-jump instructions and `goto`. The advance was such a quantum leap that nobody talks about structured programming anymore; it’s just “programming”.
+
+C++, more so than any other language, leverages structured programming to the hilt. The semantics of object lifetime mirror — and are tied to — the strict nesting of scopes; i.e., the *structure* of your code. Function activations nest, scopes nest, and object lifetimes nest. Objects’ lifetimes end with a scope’s closing curly brace, and objects are destroyed in the reverse order of their construction to preserve the strict nesting.
+
+The Modern C++ programming style is built on this structured foundation. Objects have *value semantics* — they behave like the ints — and resources are cleaned up in destructors deterministically, which guarantees structurally that resources aren’t used after their lifetimes have ended. This is *very* important.
+
+When we abandon this strict nesting of scopes and lifetimes — say, when we reference count an object on the heap, or when we use the singleton pattern — we are fighting against the strengths of the language rather than working with them.
+
+## The Trouble With Threads
+
+Writing correct programs in the presence of concurrency is far more difficult than in single-threaded code. There are lots of reasons for this. One reason is that threads, like singletons and dynamically allocated objects, scoff at your puny nested scopes. Although you can use the Modern C++ style *within* a thread, when logic and lifetimes are scattered across threads, the hierarchical structure of your program is lost. The tools we use to manage complexity in single-threaded code — in particular, nested lifetimes tied to nested scopes — simply don’t translate to async code.
+
+To see what I mean, let’s look at what happens when we take a simple synchronous function and make it asynchronous.
+
+```cpp
+void computeResult(State & s);
+
+int doThing() {
+  State s;
+  computeResult(s);
+  return s.result;
+}
+```
+
+`doThing()` is simple enough. It declares some local state, calls a helper, then returns some result. Now imagine that we want to make both functions async, maybe because they take too long. No problem, let’s use Boost futures, which support continuation chaining:
+
+```cpp
+boost::future<void> computeResult(State & s);
+
+boost::future<int> doThing() {
+  State s;
+  auto fut = computeResult(s);
+  return fut.then(
+    [&](auto&&) { return s.result; }); // OOPS
+}
+```
+
+If you’ve programmed with futures before, you’re probably screaming, *“Nooooo!”* The `.then()` on the last line queues up some work to run after `computeResult()` completes. `doThing()` then returns the resulting future. The trouble is, when `doThing()` returns, the lifetime of the `State` object ends, *and the continuation is still referencing it*. That is now a dangling reference, and will likely cause a crash.
+
+What has gone wrong? Futures let us compute with results that aren’t available yet, and the Boost flavor lets us chain continuations. But the continuation is a separate function with a separate scope. We often need to share data across those separate scopes. No more tidy nested scopes, no more nested lifetimes. We have to manage the lifetime of the state manually, something like this:
+
+```cpp
+boost::future<void>
+computeResult(shared_ptr<State> s); // addref
+                                    // the state
+
+boost::future<int> doThing() {
+  auto s = std::make_shared<State>();
+  auto fut = computeResult(s);
+  return fut.then(
+    [s](auto&&) { return s.result; }); // addref
+                                       // the state
+}
+```
+
+Since both async operations refer to the state, they both need to share responsibility to keep it alive.
+
+Another way to think about this is: *what is the lifetime of this asynchronous computation?* It starts when `doThing()` is called, but it doesn’t end until the continuation — the lambda passed to `future.then()` — returns. *There is no lexical scope that corresponds to that lifetime.* And that is the source of our woes.
+
+## Unstructured Concurrency
+
+The story gets more complicated yet when we consider executors. Executors are handles to executions contexts that let you schedule work onto, say, a thread or thread pool. Many codebases have some notion of an executor, and some let you schedule things with a delay or with some other policy. This lets us do cool things, like move a computation from an IO thread pool to a CPU thread pool, or retry an async operation with a delay. Handy, but like `goto` it is a very low-level control structure that tends to obfuscate rather than clarify.
+
+For instance, I recently came across an algorithm that uses executors and callbacks (called Listeners here) that retries the async allocation of some resource. Below is a greatly abridged version. It is described after the break.
+
+```cpp
+// This is a continuation that gets invoked when
+// the async operation completes:
+struct Manager::Listener : ListenerInterface {
+  shared_ptr<Manager> manager_;
+  executor executor_;
+  size_t retriesCount_;
+
+  void onSucceeded() override {
+    /* ...yay, allocation succeeded... */
+  }
+  void onFailed() override {
+    // When the allocation fails, post a retry
+    // to the executor with a delay
+    auto alloc = [manager = manager_]() {
+      manager->allocate();
+    };
+    // Run "alloc" at some point in the future:
+    executor_.execute_after(
+      alloc, 10ms * (1 << retriesCount_));
+  }
+};
+
+// Try asynchronously allocating some resource
+// with the above class as a continuation
+void Manager::allocate() {
+  // Have we already tried too many times?
+  if (retriesCount_ > kMaxRetries) {
+    /* ...notify any observers that we failed */
+    return;
+  }
+
+  // Try once more:
+  ++retriesCount_;
+  allocator_.doAllocate(
+    make_shared<Listener>(
+      shared_from_this(),
+      executor_,
+      retriesCount_));
+}
+```
+
+The `allocate()` member function first checks to see if the operation has already been retried too many times. If not it calls a helper `doAllocate()` function, passing in a callback to be notified on either success or failure. On failure, the handler posts deferred work to the executor, which will call `allocate()` back, thus retrying the allocation with a delay.
+
+This is a heavily stateful and rather circuitous async algorithm. The logic spans many functions and several objects, and the control and data flow is not obvious. Note the intricate ref-counting dance necessary to keep the objects alive. Posting the work to an executor makes it even harder. Executors in this code have no notion of continuations, so errors that happen during task execution have nowhere to go. The `allocate()` function can’t signal an error by throwing an exception if it wants any part of the program to be able to recover from the error. Error handling must be done manually and out-of-band. Ditto if we wanted to support cancellation.
+
+This is **unstructured concurrency**: we queue up async operations in an *ad hoc* fashion; we chain dependent work, use continuations or “strand” executors to enforce sequential consistency; and we use strong and weak reference counts to keep data alive until we are certain it’s no longer needed. There is no formal notion of task A being a child of task B, no way to enforce that child tasks complete before their parents, and no one place in the code that we can point to and say, “Here is the algorithm.”
+
+> **If you don’t mind the analogy, the hops through the executor are a bit like `goto` statements that are non-local in both time and space: “Jump to this point in the program, *X* milliseconds from now, on this particular thread.”**
+
+That non-local discontinuity makes it hard to reason about correctness and efficiency. Scale unstructured concurrency up to whole programs handling lots of concurrent real-time events, and the incidental complexity of manually handling out-of-band asynchronous control and data flow, controlling concurrent access to shared state, and managing object lifetime becomes overwhelming.
+
+## Structured Concurrency
+
+Recall that in the early days of computing, unstructured programming styles rapidly gave way to structured styles. With the addition of coroutines to C++, we are seeing a similar phase shift happening today to our asynchronous code. If we were to rewrite the above retry algorithm in terms of coroutines (using Lewis Baker’s popular [cppcoro](https://github.com/lewissbaker/cppcoro) library), it might look something like this:
+
+```cpp
+// Try asynchronously allocating some resource
+// with retry:
+cppcoro::task<> Manager::allocate() {
+  // Retry the allocation up to kMaxRetries
+  // times:
+  for (int retriesCount = 1;
+       retriesCount <= kMaxRetries;
+       ++retriesCount) {
+    try {
+      co_await allocator_.doAllocate();
+      co_return; // success!
+    } catch (...) {}
+
+    // Oops, it failed. Yield the thread for a
+    // bit and then retry:
+    co_await scheduler_.schedule_after(
+      10ms * (1 << retriesCount));
+  }
+
+  // Error, too many retries
+  throw std::runtime_error(
+    "Resource allocation retry count exceeded.");
+}
+```
+
+> Aside: This replaces the `executor_` with a `scheduler_` that implements cppcoro’s [DelayedScheduler](https://github.com/lewissbaker/cppcoro#delayedscheduler-concept) concept.
+
+Let’s list the ways in which this is an improvement:
+
+1. It’s all in one function! Good locality.
+2. The state (like `retriesCount`) can be maintained in local variables instead of as members of objects that need to be ref-counted.
+3. We can use ordinary C++ error handling techniques.
+4. We are guaranteed structurally that the async call to `allocator_.doAllocate()` completes before this function continues executing.
+
+Point (4) has profound implications. Consider the trivial example from the beginning of the article. The following re-implementation in terms of coroutines is perfectly safe:
+
+```cpp
+cppcoro::task<> computeResult(State & s);
+
+cppcoro::task<int> doThing() {
+  State s;
+  co_await computeResult(s);
+  co_return s.result;
+}
+```
+
+The above code is safe because we know that `computeResult` completes before `doThing` is resumed and thus before `s` is destructed.
+
+> **With structured concurrency, it is perfectly safe to pass local variables by reference to child tasks that are immediately awaited.**
+
+## Cancellation
+
+Taking a structured approach to concurrency, where the lifetime of concurrent operations is strictly nested within the lifetime of resources that it uses and is tied to program scopes, allows us to avoid needing to use garbage collection techniques like `shared_ptr` to manage lifetime. This can lead to code that is more efficient, requiring fewer heap-allocations and fewer atomic reference-counting operations, as well as code that is easier to reason about and is less bug-prone. However, one implication of this approach is that it means that we must always join and wait for child operations before the parent operation can complete. We can no longer just detach from those child operations and let the resources get cleaned up automatically when their ref-counts drop to zero. To avoid having to wait unnecessarily long times for child operations whose results are no longer needed, we need a mechanism to be able to cancel those child operations so that they complete quickly. Thus the structured concurrency model requires deep support for cancellation to avoid introducing unnecessary latency.
+
+Note that we rely on structured lifetime and structured concurrency every time we pass a local variable to a child coroutine by reference. We must ensure that the child coroutine has completed and is no longer using that object before the parent coroutine exits the scope of that local variable and destroys it.
+
+## Structured Concurrency > Coroutines
+
+When I talk about “structured concurrency,” I am not just talking about coroutines — although that is its most obvious manifestation. To see what I mean, let’s talk briefly about what coroutines *are* and what they *are not*. In particular, there is nothing inherently concurrent about C++ coroutines at all! They are really just a way to get the compiler to carve your function up into callbacks for you.
+
+Consider the simple coroutine above:
+
+```cpp
+cppcoro::task<> computeResult(State & s);
+
+cppcoro::task<int> doThing() {
+  State s;
+  co_await computeResult(s);
+  co_return s.result;
+}
+```
+
+What does `co_await` here mean? The trite answer is: it means whatever the author of `cppcoro::task<>` wants it to mean (within certain bounds). The fuller answer is that `co_await` suspends the current coroutine, bundles up the rest of the coroutine (here, the statement `co_return s.result;`) as a continuation, and passes it to the awaitable object (here, the `task<>` returned by `computeResult(s)`). That awaitable will typically store it somewhere so it can be invoked later, when the child task completes. That’s what `cppcoro::task<>` does, for instance.
+
+In other words, the `task<>` type and the coroutines language feature conspire together to layer “structured concurrency” on top of boring ol’ callbacks. That’s it. That’s the magic. It’s all just callbacks, but callbacks in a very particular pattern, and it is that pattern that makes this “structured.” The pattern ensures that child operations complete before parents, and that property is what brings the benefits.
+
+Once we recognize that structured concurrency is really just callbacks in a particular pattern, we realize that we can achieve structured concurrency *without coroutines*. Programming with callbacks is nothing new, of course, and the patterns can be codified into a library and made reusable. That’s what [libunifex](https://github.com/facebookexperimental/libunifex) does. If you follow C++ standardization, it is also what the sender/receiver abstraction from [the Executors proposal](http://wg21.link/P0443) does.
+
+Using libunifex as a basis for structured concurrency, we can write the example above as follows:
+
+```cpp
+unifex::any_sender_of<> computeResult(State & s);
+
+auto doThing() {
+  return unifex::let_with(
+    // Declare a "local variable" of type State:
+    [] { return State{}; },
+    // Use the local to construct an async task:
+    [](State & s) {
+      return unifex::transform(
+        computeResult(s),
+        [&] { return s.result; });
+    });
+}
+```
+
+Why would anybody write that when we have coroutines? You would certainly need a good reason, but I can think of a few. With coroutines, you have an allocation when a coroutine is first called, and an indirect function call each time it is resumed. The compiler can sometimes eliminate that overhead, but sometimes not. By using callbacks directly — but in a structured concurrency pattern — we can get many of the benefits of coroutines without the tradeoffs.
+
+That style of programming makes a different tradeoff, however: it is far harder to write and read than the equivalent coroutine. I think that >90% of all async code in the future should be coroutines simply for maintainability. For hot code, selectively replace coroutines with the lower-level equivalent, and let the benchmarks be your guide.
+
+## Concurrency
+
+I mention above that coroutines aren’t inherently concurrent; they’re just a way of writing callbacks. Coroutines are inherently sequential in nature and the laziness of `task<>` types — where a coroutine starts suspended and doesn’t start executing until it is awaited — means that we can’t use it to introduce concurrency in the program. Existing `future`-based code often assumes that the operation has already started eagerly, introducing *ad hoc* concurrency that you need to be careful to prune back. That forces you to re-implement concurrency patterns over and over in an *ad hoc* fashion.
+
+With structured concurrency, we codify concurrency patterns into reusable algorithms to introduce concurrency in a structured way. For instance, if we have a bunch of `task`s and would like to wait until they have all completed and return their results in a `tuple`, we pass them all to the `cppcoro::when_all` and `co_await` the result. (Libunifex also has a `when_all` algorithm.)
+
+At present, neither cppcoro nor libunifex has a `when_any` algorithm, so you can’t launch a bunch of concurrent operations and return when the *first* one completes. It’s a very important and interesting foundational algorithm, though. To maintain the guarantees of structured concurrency, when the first child task completes, `when_any` should request cancellation on all the other tasks *and then wait for them all to finish*. The utility of this algorithm depends upon all async operations in your program responding promptly to cancellation requests, which demonstrates just how important deep support for cancellation is in modern async programs.
+
+## Migration
+
+So far, I’ve discussed what structured concurrency is and why it matters. I haven’t discussed how we get there. If you are already using coroutines to write async C++, then congrats. You may keep enjoying the benefits of structured concurrency, perhaps with a deeper understanding and appreciation for *why* coroutines are so transformative.
+
+For codebases that lack structured concurrency, deep support for cancellation, or maybe even an abstraction for asynchrony, the job is hard. It may even start with *introducing* complexity in order to carve out an island in which the surrounding code provides the guarantees that structured concurrency patterns require. This includes, for instance, creating the *impression* of prompt cancellation of scheduled work, even when the underlying execution contexts don’t offer that directly. That added complexity can be isolated in a layer, and the islands of structured concurrency can be built on top. Then the simplifying work can begin, taking future- or callback-style code and converting them to coroutines, teasing out parent/child relationships, ownership, and lifetime.
+
+## Summary
+
+Adding `co_await` makes a synchronous function asynchronous, without disturbing the structure of the computation. The async operation being awaited necessarily completes before the calling function does, just like ordinary function calls. The revolution is: *nothing changes*. Scopes and lifetimes still nest as they always have, except now the scopes are discontinuous in time. With raw callbacks and futures, that structure is lost.
+
+Coroutines, and structured concurrency more generally, bring the advantages of the Modern C++ style — value semantics, algorithm-driven design, clear ownership semantics with deterministic finalization — into our async programming. It does that because it ties async lifetimes back to ordinary C++ lexical scopes. Coroutines carve our async functions up into callbacks at suspension points, callbacks that get called in a very specific pattern to maintain that strict nesting of scopes, lifetimes, and function activations.
+
+We sprinkle `co_await` in our code and we get to continue using all our familiar idioms: exceptions for error handling, state in local variables, destructors for releasing resources, arguments passed by value or by reference, and all the other hallmarks of good, safe, and idiomatic Modern C++.
+
+Thanks for reading.
+
+---
+
+*If you want to hear more about structured concurrency in C++, be sure to check out [Lewis Baker’s CppCon talk](https://www.youtube.com/watch?v=1Wy5sq3s2rg) from 2019 about it.*

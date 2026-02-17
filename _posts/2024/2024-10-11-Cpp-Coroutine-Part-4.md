@@ -1,7 +1,7 @@
 ---
 title: C++协程 - 协程理论
 date: "2024-10-11 16:37:00"
-tags: [C++, docs]
+tags: [C++, coroutines, docs]
 category: blog
 ---
 协程中最主要的两个概念是Awaiter和Promise，Awaiter用于协程切换，而Promise用于储存用户定义的协程状态信息以及结果。此外，协程还需要一个用于管理协程以及获得协程结果的Task。
