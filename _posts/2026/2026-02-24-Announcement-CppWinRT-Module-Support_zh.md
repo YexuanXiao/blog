@@ -33,7 +33,7 @@ C++/WinRT是一个纯头文件库，这带来了很多便利。这意味着任�
 
 最后，C++/WinRT在尝试支持模块时选择了错误的路径，即让所有头文件共用一个模块，这会导致糟糕的结果。这将使BMI（或.ifc）文件的大小达到260MB——是STL的29MB的9倍。可想而知，采用这种设计，编译速度将会变慢。
 
-### 解决方案
+## 解决方案
 
 因此，我实现了一种更复杂的方法：
 
@@ -144,6 +144,10 @@ target_sources(main
 target_include_directories(main PRIVATE "${CPPWINRT_OUT_DIR}")
 target_link_libraries(main PRIVATE runtimeobject synchronization)
 ```
+
+### XAML 支持
+
+当前，模块的XAML的支持尚不清楚，我目前比较疲惫因此该问题需要过一段时间再考虑。好消息是WinUI3仓库拥有XAML编译器的源码，并且准备开始接受外部贡献，这意味着未来有可能使用模块编写WinUI3。
 
 ## C++模块的最佳实践
 

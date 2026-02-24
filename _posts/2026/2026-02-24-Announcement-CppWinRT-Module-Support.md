@@ -1,5 +1,5 @@
 ---
-title: # C++/WinRT Plus: Bringing C++ Standard Modules to Windows Development
+title: "C++/WinRT Plus: Bringing C++ Standard Modules to Windows Development"
 date: "2026-02-24 0:00:00"
 tags: [C++,docs,Windows]
 category: blog
@@ -34,7 +34,7 @@ However, C++/WinRT still needed significant improvements to achieve modularizati
 
 Finally, C++/WinRT actually chose the wrong path when attempting to support modules by having all header files share a single module, which leads to terrible results. This would make the BMI (or .ifc) file 260MB in size—9 times larger than the STL's 29MB. It's foreseeable that with such a design, compilation will slow down.
 
-### The Solution
+## The Solution
 
 Therefore, I implemented a more complicated approach:
 
@@ -145,6 +145,10 @@ target_sources(main
 target_include_directories(main PRIVATE "${CPPWINRT_OUT_DIR}")
 target_link_libraries(main PRIVATE runtimeobject synchronization)
 ```
+
+### XAML Support
+
+Currently, XAML support for modules is unclear. I'm quite exhausted at the moment, so this issue will need to be considered at a later time. The good news is that the WinUI3 repository has the source code for the XAML compiler and is preparing to accept external contributions, which means it might be possible to write WinUI3 using modules in the future.
 
 ## Best Practices for C++ Modules
 
