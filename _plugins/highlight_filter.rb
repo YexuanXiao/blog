@@ -38,11 +38,14 @@ module Jekyll
       
       case lang.downcase
       when 'asm' then 'Assembly'
+      when 'cmake' then 'CMake'
       when 'cpp', 'c++', 'cxx' then 'C++'
       when 'cuda' then 'CUDA C++'
       when 'cs', 'csharp' then 'C#'
       when 'fs', 'fsharp' then 'F#'
+      when 'idl' then 'IDL'
       when 'js', 'javascript' then 'JavaScript'
+      when 'midl' then 'MIDL'
       when 'ts', 'typescript' then 'TypeScript'
       when 'plaintext' then 'Text'
       when 'powershell' then 'PowerShell'
