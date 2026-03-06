@@ -4,7 +4,7 @@
 	// search
 	const panel = document.getElementById('search-panel')
 	panel.classList.remove('is-hidden')
-	const input = panel.querySelector('input')
+	const input = panel.firstElementChild
 	const callback = async () => {
 		const SimpleJekyllSearch = await import('//static.nykz.org/blog/deps/SEngine.js');
 		const search = new SimpleJekyllSearch.default({

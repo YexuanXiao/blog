@@ -82,11 +82,18 @@ for (const sup of document.body.querySelectorAll('sup.footnote-ref')) {
 {
 	const panel = document.getElementById('search-panel')
 	const input = panel.firstElementChild
-	panel.querySelector('input').addEventListener('input', () => {
+	input.addEventListener('input', () => {
 		closeMenu(2)
 		const inputValue = input.value
 		render(`{% if site.i18n.l2dmessage.search %}{{ site.i18n.l2dmessage.search }}{% else %}Searching{% endif %} ${inputValue} ...`)
 		closeMenu(inputValue ? 1 : 0)
+	})
+	const list = const input = panel.lastElementChild.querySelector('ul')
+	input.addEventListener('focus', () => {
+		if (list.childElementCount !== 0)
+		{
+			closeMenu(1)
+		}
 	})
 }
 
