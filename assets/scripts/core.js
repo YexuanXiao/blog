@@ -88,7 +88,7 @@ for (const sup of document.body.querySelectorAll('sup.footnote-ref')) {
 		render(`{% if site.i18n.l2dmessage.search %}{{ site.i18n.l2dmessage.search }}{% else %}Searching{% endif %} ${inputValue} ...`)
 		closeMenu(inputValue ? 1 : 0)
 	})
-	const list = const input = panel.lastElementChild.querySelector('ul')
+	const list = panel.lastElementChild.querySelector('ul')
 	input.addEventListener('focus', () => {
 		if (list.childElementCount !== 0)
 		{
