@@ -1,12 +1,12 @@
 ---
-layout: null
+	layout: null
 ---
-/* 2020-2026 YexuanXiao under the MIT License */
+	/* 2020-2026 YexuanXiao under the MIT License */
 
-// live2D dialog
-function render(text) {
-	window.Noire ? window.Noire.Message(text) : console.warn("Noire doesn't exist!")
-}
+	// live2D dialog
+	function render(text) {
+		window.Noire ? window.Noire.Message(text) : console.warn("Noire doesn't exist!")
+	}
 
 // for the random quote in the title
 {
@@ -79,15 +79,23 @@ for (const sup of document.body.querySelectorAll('sup.footnote-ref')) {
 }
 
 // check search bar value to display search-menu
-const checkInput = (() => {
-	const input = document.getElementById('search-panel').firstElementChild
-	return () => {
+{
+	const panel = document.getElementById('search-panel')
+	const input = panel.firstElementChild
+	input.addEventListener('input', () => {
 		closeMenu(2)
 		const inputValue = input.value
 		render(`{% if site.i18n.l2dmessage.search %}{{ site.i18n.l2dmessage.search }}{% else %}Searching{% endif %} ${inputValue} ...`)
 		closeMenu(inputValue ? 1 : 0)
-	}
-})()
+	})
+	const list = panel.lastElementChild.querySelector('ul')
+	input.addEventListener('focus', () => {
+		if (list.childElementCount !== 0)
+		{
+			closeMenu(1)
+		}
+	})
+}
 
 // tap blank area to close search menu and navbar
 document.body.addEventListener('click', (event) => {
