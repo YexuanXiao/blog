@@ -1,7 +1,7 @@
 ---
 title: C/C++取模运算
 date: "2020-09-20 22:00:00"
-updated: "2022-01-30 21:30:00"
+update: "2022-01-30 21:30:00"
 tags: [Windows,C++,C]
 category: blog
 ---
