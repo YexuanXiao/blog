@@ -86,15 +86,24 @@ class mutex
 		return mutexes[static_cast<std::size_t>(hash >> (int(sizeof(hash)) * 8 - exponent))];
 	}
 
-	thread_id_t tid{};
+    // 注意此处需要使用OS的API以获得一个整数或者指针类型的id而不是std::thread::id，
+	// 因为std::thread::id的构造函数不是constexpr的。
+	thread_id_t owner{};
 
-	void verify() noexcept
+	void verify_and_set() noexcept
 	{
-		if (tid == get_thread_id())
+		auto tid = get_thread_id();
+		if (owner == tid)
 		{
             // 发生重入
 			std::abort();
 		}
+		owner = tid;
+	}
+
+	void reset() noexcept
+	{
+		owner = {};
 	}
 
 public:
@@ -103,8 +112,7 @@ public:
 	{
 		if (get().try_lock())
 		{
-			verify();
-			tid = get_thread_id();
+			verify_and_set();
 			return true;
 		}
 		else
@@ -116,13 +124,13 @@ public:
 	void lock()
 	{
 		get().lock();
-		verify();
-        tid = get_thread_id();
+		verify_and_set();
 	}
 
 	void unlock()
 	{
-		tid = 0;
+		// 先reset再unlock
+		reset();
 		get().unlock();
 	}
 };
@@ -137,27 +145,27 @@ class recursive_mutex
 {
     std::mutex mtx;
 	std::condition_variable cv;
-	thread_id_t owner = 0;
-	unsigned int count = 0;
+	thread_id_t owner{};
+	unsigned int count{};
 
 public:
 
 	void lock()
 	{
-		thread_id_t tid = get_thread_id();
+		auto tid = get_thread_id();
 		std::unique_lock<std::mutex> lk(mtx);
-		cv.wait(lk, [&] { return owner == 0 || owner == tid; });
+		cv.wait(lk, [&] { return owner == thread_id_t{} || owner == tid; });
 		owner = tid;
 		++count;
 	}
 
 	bool try_lock()
 	{
-		thread_id_t tid = get_thread_id();
+		auto tid = get_thread_id();
 		std::unique_lock<std::mutex> lk(mtx, std::try_to_lock);
 		if (!lk)
 		    return false;
-		if (owner != 0 && owner != tid)
+		if (owner != thread_id_t{} && owner != tid)
 		    return false;
 		owner = tid;
 		++count;
@@ -169,7 +177,7 @@ public:
 		std::unique_lock<std::mutex> lk(mtx);
 		if (--count == 0)
 		{
-			owner = 0;
+			owner = {};
 			lk.unlock();
 			cv.notify_one();
 		}
