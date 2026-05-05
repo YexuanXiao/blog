@@ -29,7 +29,7 @@ class mutex
 
 	std::mutex& get() noexcept
 	{
-		int exponent = std::countr_zero(mutexes.size());
+		auto exponent = std::countr_zero(mutexes.size());
 		auto addr = static_cast<unsigned long long>(reinterpret_cast<std::uintptr_t>(this));
 		auto golden = 0x9e3779b97f4a7c15ULL;
 		auto hash = addr * golden;
@@ -79,7 +79,7 @@ class mutex
 
 	std::recursive_mutex& get() noexcept
 	{
-		int exponent = std::countr_zero(mutexes.size());
+		auto exponent = std::countr_zero(mutexes.size());
 		auto addr = static_cast<unsigned long long>(reinterpret_cast<std::uintptr_t>(this));
 		auto golden = 0x9e3779b97f4a7c15ULL;
 		auto hash = addr * golden;
