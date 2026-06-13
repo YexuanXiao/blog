@@ -1,7 +1,7 @@
 ---
 title: Strategies for Implementing POSIX Condition Variables on Win32
 date: "2026-04-23 01:07:00"
-tags: [C++, coroutines, docs]
+tags: [C++, Windows, docs]
 category: blog
 ---
 
