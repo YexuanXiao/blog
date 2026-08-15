@@ -1,12 +1,12 @@
 ---
-title: WSL 2和VS Code C++开发环境
+title: WSL2和VS Code C++开发环境
 date: "2021-04-23 18:54:00"
 tags: [Windows,VSCode,C++,GCC,docs,WSL]
 category: blog
 ---
-WSL 2最近支持在Explorer中简单管理文件，并且WSL 2还可以自动配置端口转发，正巧我想把博客里的Liquid代码整理一下，但Github Page不给Jeklly解析错误的错误信息，Ruby for Windows又过于臃肿。
+WSL2最近支持在Explorer中简单管理文件，并且WSL2还可以自动配置端口转发，正巧我想把博客里的Liquid代码整理一下，但Github Page不给Jeklly解析错误的错误信息，Ruby for Windows又过于臃肿。
 
-我在几年前用过一段时间Ubuntu，对Linux不陌生，便趁此机会转投WSL 2，使用VSCode Server + VSCode进行开发。
+我在几年前用过一段时间Ubuntu，对Linux不陌生，便趁此机会转投WSL2，使用VSCode Server + VSCode进行开发。
 
 <!-- more -->
 
@@ -14,35 +14,29 @@ WSL 2最近支持在Explorer中简单管理文件，并且WSL 2还可以自动�
 
 1. PowerShell执行 `wsl --install`
 
-这个是WSL 2傻瓜化安装方法，不过多数会失败。
+这个是WSL2傻瓜化安装方法，如果遇到问题可以使用以下步骤手动安装：
 
-下面是手动安装步骤：
-
-1. WSL 2首先要在BIOS中开启虚拟化。
+1. 首先要在BIOS中开启虚拟化。
 
 2. PowerShell执行如下命令，给Windows 10添加WSL功能
 
    ```powershell
-   
    dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
-   
    ```
 
-3. PowerShell执行如下命令，给Windows 10添加 虚拟机平台 功能
+3. PowerShell执行如下命令，给Windows 10添加 虚拟机平台功能
 
    ```powershell
-   
    dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
-   
    ```
 
-4. 点击链接下载WSL 2更新并安装：[WSL2 Linux kernel update package for x64 machines](https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi)
+4. 点击链接下载WSL2更新并安装：[WSL2 Linux kernel update package for x64 machines](https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi)
 
 5. 去Github下载WSLg [Realease](https://github.com/microsoft/wslg/releases)
 
 准备步骤如下：
 
-1. PowerShell执行 `wsl --set-default-version 2`，设置默认使用WSL 2
+1. PowerShell执行 `wsl --set-default-version 2`，设置默认使用WSL2
 
 2. 去Microsoft Store下载Linux发行版，有以下系统可供选择：
 
@@ -58,15 +52,11 @@ WSL 2最近支持在Explorer中简单管理文件，并且WSL 2还可以自动�
 
 4. 第一次会提示你创建用户名和密码，注意用户名不能有空格，并且一定记住密码
 
-5. 使用WSL 2上的Linux发行版
+5. 使用WSL2上的Linux发行版
 
 参考：[Windows Subsystem for Linux Installation Guide for Windows 10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 
-G++ 安装部署：
-
-这里我选择安装gcc-11和g++-11
-
-PowerShell执行如下内容：
+bash执行如下命令安装gcc-11和g++-11：
 
 1. `sudo add-apt-repository ppa:ubuntu-toolchain-r/test`
 2. `sudo apt-get update`
