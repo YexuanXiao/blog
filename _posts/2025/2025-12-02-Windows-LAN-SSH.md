@@ -4,7 +4,7 @@ date: "2025-12-01 00:05:00"
 tags: [Windows, docs]
 category: blog
 ---
-Windows 10 1809起，自带可选的OpenSSH服务器功能，经过简单配置即可作为SSH服务器使用。
+Windows10 1809起，自带可选的OpenSSH服务器功能，经过简单配置即可作为SSH服务器使用。
 
 <!-- more -->
 

@@ -16,7 +16,7 @@ UWP使用 `AppWindow` 和 `CoreWindow` 管理标题栏，对于深度定制来�
 
 2. `Microsoft.UI.Xaml.Window` 类，扩展内容到标题栏
 
-   Window虽然支持扩展内容到标题栏，但窗口管理按钮的左侧有一小部分无法定制，参考Windows 11的多标签文件文件资源管理器，该位置强制保留用于拖拽窗口使用
+   Window虽然支持扩展内容到标题栏，但窗口管理按钮的左侧有一小部分无法定制，参考Windows11的多标签文件文件资源管理器，该位置强制保留用于拖拽窗口使用
 
    同时窗口管理按钮贴靠窗口顶部并且不能占满整个标题栏的高度，在标题栏底部和按钮之间有间隙
 
@@ -26,7 +26,7 @@ UWP使用 `AppWindow` 和 `CoreWindow` 管理标题栏，对于深度定制来�
 
 3. `Microsoft.UI.Windowing.AppWindow` 类，扩展内容到标题栏
 
-   对标题栏定制能力最强的方式，除了按钮本身都可以定制，并且支持各种调整，可以视为用Win32模仿UWP行为，但只能Windows 11用，我个人推测可能是依赖只有Windows 11可用的DWM属性[DWMWINDOWATTRIBUTE](https://learn.microsoft.com/en-us/windows/win32/api/dwmapi/ne-dwmapi-dwmwindowattribute)
+   对标题栏定制能力最强的方式，除了按钮本身都可以定制，并且支持各种调整，可以视为用Win32模仿UWP行为，但只能Windows11用，我个人推测可能是依赖只有Windows11可用的DWM属性[DWMWINDOWATTRIBUTE](https://learn.microsoft.com/en-us/windows/win32/api/dwmapi/ne-dwmapi-dwmwindowattribute)
 
    存在的问题是无法在顶部调整窗口大小，该问题有待解决
 
@@ -72,7 +72,7 @@ UWP使用 `AppWindow` 和 `CoreWindow` 管理标题栏，对于深度定制来�
 void App::OnLaunched(LaunchActivatedEventArgs const&) {
     auto appTitleBar{ window_.Content().as<Page>().GetAppTitleBar() };
     if (AppWindowTitleBar::IsCustomizationSupported()){
-        // 检测是否支持，Windows 11
+        // 检测是否支持，Windows11
         auto appWindow{ window_.AppWindow() };
         appWindow.TitleBar().ExtendsContentIntoTitleBar(true);
         appWindow.Changed({ this,&App::AppWindow_Changed });

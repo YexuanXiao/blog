@@ -18,13 +18,13 @@ WSL2最近支持在Explorer中简单管理文件，并且WSL2还可以自动配�
 
 1. 首先要在BIOS中开启虚拟化。
 
-2. PowerShell执行如下命令，给Windows 10添加WSL功能
+2. PowerShell执行如下命令，给Windows10添加WSL功能
 
    ```powershell
    dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
    ```
 
-3. PowerShell执行如下命令，给Windows 10添加 虚拟机平台功能
+3. PowerShell执行如下命令，给Windows10添加 虚拟机平台功能
 
    ```powershell
    dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
@@ -54,7 +54,7 @@ WSL2最近支持在Explorer中简单管理文件，并且WSL2还可以自动配�
 
 5. 使用WSL2上的Linux发行版
 
-参考：[Windows Subsystem for Linux Installation Guide for Windows 10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
+参考：[Windows Subsystem for Linux Installation Guide for Windows10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 
 bash执行如下命令安装gcc-11和g++-11：
 

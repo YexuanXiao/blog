@@ -9,7 +9,7 @@ category: blog
 <!-- more -->
 
 
-## 删除Windows 10中的OneDrive上下文菜单
+## 删除Windows10中的OneDrive上下文菜单
 
 方案：[Winaero](https://winaero.com/remove-onedrive-context-menu-windows-10/)
 

@@ -1,10 +1,10 @@
 ---
-title: Windows 10开启DNS over Https
+title: Windows10开启DNS over Https
 date: "2020-10-02 12:57:00"
 tags: [Windows,Github,Net]
 category: blog
 ---
-Windows 10目前支持了DNS over Https这一先进技术。它可以保证更安全的访问互联网而不用担心一些额外的信息泄露，也可以可以防止恶意网络服务商将网站跳转到不正确的网站。
+Windows10目前支持了DNS over Https这一先进技术。它可以保证更安全的访问互联网而不用担心一些额外的信息泄露，也可以可以防止恶意网络服务商将网站跳转到不正确的网站。
 
 <!-- more -->
 
