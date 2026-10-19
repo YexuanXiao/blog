@@ -5,11 +5,13 @@ tags: [C++,Windows,docs]
 category: blog
 ---
 
-Windows XP开始提供了一个函数 `AttachConsole`，它的用途是使得Subsystem为Windows的GUI/后台程序，在使用控制台执行时可以获得控制台的输入输出句柄，使得它们既可以独立使用也可以和控制台配合使用。但该函数实际上存在缺陷使得它不能很好完成该任务。
+Windows XP开始提供了一个函数 `AttachConsole`，它的用途是使得Subsystem为Windows的GUI/后台程序，在使用控制台执行时可以获得控制台的输入输出句柄，使得它们既可以独立使用也可以和控制台配合使用。但仅仅使用该函数不能很好完成该任务。
 
 <!-- more -->
 
 Windows长期以来的习惯是，Shell不应该等待GUI应用的结束，也就是说，在Shell启动GUI应用后，GUI应用就脱离Shell存在了，可以任意关闭终端。
+
+通过对[Wine](https://github.com/wine-mirror/wine/blob/7298a818b79446bae153b8d5aa27235ab3703bf9/programs/cmd/wcmdmain.c#L1794-L1862)和[PowerShell](https://github.com/PowerShell/PowerShell/blob/fbb4fd5f7be2107100c113e1fb0de94b6808b608/src/System.Management.Automation/engine/NativeCommandProcessor.cs#L1411-L1439)源码的分析，我发现它们都使用的[SHGetFileInfoW](https://learn.microsoft.com/zh-cn/windows/win32/api/shellapi/nf-shellapi-shgetfileinfow)来判断的是否是Windows程序，然后再根据结果决定是否等待。
 
 该行为通常不造成问题，并被很多程序依赖：很多程序使用Shell来间接启动一些GUI程序，在Shell完成工作后，终端会退出，但GUI程序仍然保留。该方法的一个重要缺陷是它会启动一个一闪而过的终端窗口，但无论如何，这种模式长期存在。
 
